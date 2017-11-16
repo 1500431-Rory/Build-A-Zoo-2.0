@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 9dabc0eb58d01504a93a088452eb72c2
+timeCreated: 1509015382
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Museo Sans Rounded
+  fontNames:
+  - Museo Sans Rounded
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
