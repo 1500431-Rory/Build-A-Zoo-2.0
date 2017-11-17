@@ -8,6 +8,9 @@ TagManager:
   - text
   - EnclosureMarker
   - Window
+  - Animal
+  - Shelter
+  - Happiness
   layers:
   - Default
   - TransparentFX
