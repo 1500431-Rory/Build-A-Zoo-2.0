@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,13 +7,14 @@ using UnityEngine;
 
 public class AnimalHappiness : MonoBehaviour {
 
+	// Enums
+	//
 	// For food types
 	enum FoodType
 	{
-		MEAT,
-		VEG,
+		//VEG,
 		FISH,
-		FRUIT,
+		//FRUIT,
 		NONE
 	}
 
@@ -36,7 +37,8 @@ public class AnimalHappiness : MonoBehaviour {
 	{
 		GLASS,
 		STONE,
-		MESH
+		MESH,
+		NONE
 	}
 
 	// For terrain types
@@ -45,7 +47,8 @@ public class AnimalHappiness : MonoBehaviour {
 		WATER,
 		STONE,
 		GRASS,
-		SAND
+		SAND,
+		NONE
 	}
 
 	//  For toy types
@@ -53,14 +56,18 @@ public class AnimalHappiness : MonoBehaviour {
 	{
 		SHINYBOTTLE,
 		SHINYDISC,
-		ROPES
+		ROPES,
+		NONE
 	}
 
+	// Variables
 	public int happiness;
 	public int shelterNum;
 	public int animalNum;
 	public int foodNum;
 	public int maxHappiness;
+
+	public bool isLonley;
 
 	AnimalType animal;
 	FoodType food;
@@ -72,16 +79,23 @@ public class AnimalHappiness : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		// Initualise variables
 		shelterNum = 0;
 		animalNum = 0;
 		foodNum = 0;
-		maxHappiness = 5;
+		maxHappiness = 40;
 		happiness = 0;
 
+		// Set is lonely to false;
+		isLonley = false;
+
+		// set enum types to none
 		food = FoodType.NONE;
 		animal = AnimalType.NONE;
-		food = FoodType.NONE;
 		diet = DietType.NONE;
+		fence = FenceType.NONE;
+		toy = ToyType.NONE;
+		terrain = TerrainType.NONE;
 	}
 	
 	// Update is called once per frame
@@ -89,9 +103,53 @@ public class AnimalHappiness : MonoBehaviour {
 	{
 
 		// Call to checks
-		FoodCheck();
 		Animal();
+		Lonley();
 
+		// Food type given
+		if(foodNum < 10)
+		{
+			// Check for f being pressed
+			if(Input.GetKeyDown("f"))
+			{
+				// Set food|Type to fish
+				food = FoodType.FISH;
+				// Check that happiness is less than maxHappiness
+				if(happiness <maxHappiness)
+				{
+					// Add 1 to foodNum
+					foodNum ++;
+				}
+
+				// Call to FoodCall
+				FoodCheck();
+
+				// Print out foodType
+				print("F: " + food);
+			}
+		}
+
+		// Check foodNum is > 0
+		if(foodNum > 0)
+		{
+			// Check for "g" being pressed
+			if(Input.GetKeyDown("g"))
+			{
+				if(happiness > 0)
+				{
+					// Subrtact 1 from foodNum
+					foodNum --;
+				}
+
+				// Call to FoodCall
+				FoodCheck();
+
+				// Print out foodType
+				print("F: " + food);
+			}
+		}
+
+		// Check shelter number is less than 10
 		if(shelterNum < 10)
 		{
 			// Check if "s" key has been pressed
@@ -99,11 +157,12 @@ public class AnimalHappiness : MonoBehaviour {
 			{
 				// Add 1 to shelterNum
 				shelterNum ++;
-				// Call to ShleterCheck()
+				// Call to ShelterCheck()
 				ShelterCheck();
 			}
 		}
 
+		// Check shelterNUm > 0
 		if(shelterNum > 0)
 		{
 			// Check if "d" key is pressed
@@ -115,6 +174,131 @@ public class AnimalHappiness : MonoBehaviour {
 				ShelterCheck();
 			}
 		}
+
+		// Check if 't' key is pressed
+		if (Input.GetKeyDown("t")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set terrain to be TerrainType Stone
+				terrain = TerrainType.STONE;
+			}
+			// Call TerrainCheck()
+			TerrainCheck();
+		}
+
+		// Check if 'w' key is pressed
+		if (Input.GetKeyDown("w")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set terrain to be TerrainType Water
+				terrain = TerrainType.WATER;
+			}
+
+			// Call TerrainCheck()
+			TerrainCheck();
+		}
+
+		// Check if 'e' key is pressed
+		if (Input.GetKeyDown("e")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set terrain to be TerrainType sand
+				terrain = TerrainType.SAND;
+			}
+
+			// Call TerrainCheck()
+			TerrainCheck();
+		}
+
+		// Check if 'r' key is pressed
+		if (Input.GetKeyDown("r")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set terrain to be TerrainType grass
+				terrain = TerrainType.GRASS;
+			}
+
+			// Call TerrainCheck()
+			TerrainCheck();
+		}
+
+		// Check if 'l' key is pressed
+		if (Input.GetKeyDown("l")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set toy to ToyType Shinny Bottle
+				toy = ToyType.SHINYBOTTLE;
+			}
+
+			// Call ToyCheck()
+			ToyCheck();
+		}
+
+		// Check if 'm' key is pressed
+		if (Input.GetKeyDown("k")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set toy to ToyType rope
+				toy = ToyType.ROPES;
+			}
+
+			// Call ToyCheck()
+			ToyCheck();
+		}
+
+		// Check if 'm' key is pressed
+		if (Input.GetKeyDown("m")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set fence type to type glass 
+				fence = FenceType.GLASS;
+			}
+
+			// Call FenceCheck()
+			FenceCheck();
+		}
+
+		// Check if 'n' key is pressed
+		if (Input.GetKeyDown("n")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set fence type to type stone 
+				fence = FenceType.STONE;
+			}
+
+			// Call FenceCheck()
+			FenceCheck();
+		}
+
+		// Check if 'j' key is pressed
+		if (Input.GetKeyDown("j")) 
+		{
+			// Check animal type = penguin
+			if(animal == AnimalType.PENGUIN)
+			{
+				//  Set fence type to type mesh
+				fence = FenceType.MESH;
+			}
+
+			// Call FenceCheck()
+			FenceCheck();
+		}
 	}
 		
 	void Animal()
@@ -122,15 +306,21 @@ public class AnimalHappiness : MonoBehaviour {
 		// Check if "p" key has been pressed
 		if(animalNum < 10)
 		{
+			// Check if "p" key is pressed
 			if(Input.GetKeyDown("p"))
 			{
 				// Set the animal type to penguin
 				animal = AnimalType.PENGUIN;
-				//  Add 1 to  animalNum
-				animalNum ++;
+				// Check if happiness < maxHappiness
+				if(happiness < maxHappiness)
+				{
+					//  Add 1 to  animalNum
+					animalNum ++;
+				}
 			}
 		}
 
+		// Check if animal is > 0
 		if(animalNum > 0)
 		{
 			// Check if "o" key has been pressed
@@ -151,68 +341,62 @@ public class AnimalHappiness : MonoBehaviour {
 
 	}
 
+	// Check if animal is lonley
+	void Lonley()
+	{
+		// Check if anialNum is == 1
+		if(animalNum == 1)
+		{
+			// Set isLonley = true;
+			isLonley = true;
+		}else
+		{
+			// Set isLonely = false
+			isLonley = false;
+		}
+			
+
+		// Check isLonley == true
+		if(isLonley == true)
+		{
+			// CHeck if hapiness is > 0
+			if(happiness > 0)
+			{
+				// SUbtract 1 from happiness 
+				happiness--;
+			}
+		}
+	}
+
 	// For checking the food given is the right food
 	void FoodCheck()
 	{
-		// Food type given
-		if(foodNum < 10)
-		{
-			// Check for f being pressed
-			// Test
-			if(Input.GetKeyDown("f"))
-			{
-				// Set food|Type to fish
-				food = FoodType.FISH;
-				// Add 1 to foodNum
-				foodNum ++;
-				// Check that foodType and animaType match
-				/*if (food == FoodType.FISH && animal == AnimalType.PENGUIN)
-				{
-					//  Add 1 to happiness
-					happiness ++;
-
-				} */
-
-				// Print out foodType
-				print("F: " + food);
-			}
-		}
-
-		if(foodNum > 0)
-		{
-			// Check for "g" being pressed
-			if(Input.GetKeyDown("g"))
-			{
-				// Subrtact 1 from foodNum
-				foodNum --;
-
-				// Print out foodType
-				print("F: " + food);
-			}
-		}
 
 		// Check foodType and dietType match
 		if (food == FoodType.FISH && diet == DietType.CARNIVOROUS)
 		{
-			//  Add 1 to happiness
-			happiness  ++;
-			// Set food and diet to NULL
-			food = FoodType.NONE;
-			diet = DietType.NONE;
+			// Check happiness is less than maxHappiness
+			if(happiness < maxHappiness)
+			{
+				//  Add 1 to happiness
+				happiness  ++;
+			}
 		}
 
 		// Check that foodNum is not greater than animalNum
-		if(foodNum > animalNum)
+		if(animalNum > foodNum)
 		{
-			happiness --;
+			// Check if happiness is > 0
+			if(happiness > 0)
+			{
+				// Subtract happiness
+				happiness --;
+			}
 		}
 
 		// Print animalType and diet
 		print("AT: " + animal);
 		print("D: " + diet);
-
-		// Number of food needed for the number of animals
-		// Check animalNum
 	
 	}
 
@@ -222,48 +406,113 @@ public class AnimalHappiness : MonoBehaviour {
 	{
 		// Fence height
 
-		// Fence type
+		// check if fence type matches animal type
+		if(animal == AnimalType.PENGUIN && fence == FenceType.STONE || animal == AnimalType.PENGUIN && fence == FenceType.GLASS)
+		{
+			// Check if happiness < maxHappiness
+			if(happiness < maxHappiness)
+			{
+				// Add 1 to happiness
+				happiness++;
+			}
+		}
 
+		// Check if animal and fence type doesn't match
+		if(animal == AnimalType.PENGUIN && fence == FenceType.MESH)
+		{
+			// CHeck if happiness > 0
+			if(happiness > 0)
+			{
+				// Subtract 1 from happiness
+				happiness--;
+			}
+		}
 		// Enclosure size
 	}
 
 	// Check if the toy is correct for the animal
 	void ToyCheck()
 	{
-		// Check type of animal for type of toy
+		
+		// Check type of animal matches type of toy
+		if(animal == AnimalType.PENGUIN && toy == ToyType.SHINYBOTTLE)
+		{
+			// Check if happiness < maxHappiness
+			if(happiness < maxHappiness)
+			{
+				// Add 1 to happiness
+				happiness++;
+			}
+		}
 
-		// Check number of animals for number of toys
+		// check animal and toy type doesnt match
+		if(animal == AnimalType.PENGUIN && toy == ToyType.ROPES)
+		{
+			// Check if animal happiness is > 0
+			if(happiness > 0)
+			{
+				// Subtract 1 from happiness
+				happiness--;
+			}
+		}
+
 	}
 
 	// Check the right terrain is given to the animal
 	void TerrainCheck()
 	{
-		// Check animal type
+
+		if(happiness < maxHappiness)
+		{
+			// Check if terrain and animal type match
+			if(animal == AnimalType.PENGUIN && terrain == TerrainType.STONE || animal == AnimalType.PENGUIN && terrain == TerrainType.WATER)
+			{
+				// Check if happiness < maxHappiness
+				if(happiness < maxHappiness)
+				{
+					// Add 1 to happiness
+					happiness++;
+				}
+
+			}
+		}
+
+
+		// Check if animal and terrain type don't match
+		if(animal == AnimalType.PENGUIN  && terrain == TerrainType.SAND || animal == AnimalType.PENGUIN && terrain == TerrainType.GRASS)
+		{
+			// CHeck if happiness is > 0
+			if(happiness > 0)
+			{
+				// Subtract 1 from happiness
+				happiness--;
+			}
+		}
+			
 
 	}
 
 	// check the shelter is the correct number compared to the animalNum
 	void ShelterCheck()
 	{ 
-
-		//if(shelterNum != animalNum)
-		//{
-			//happieness = maxNum - Mathf.Abs(shelterNum - animalNum);
-		//}
-
 		// Check if shelterNum = animalNum
-		if (shelterNum == animalNum) 
+		if (animalNum == shelterNum) 
 		{
-			// Add 1 to happiness
-			happiness ++;
+			// Check if happiness < maxHappiness
+			if(happiness < maxHappiness)
+			{
+				// Add 1 to happiness
+				happiness ++;
+			}
 		}
+			
 
 		// *** Note *** encluser will require at least one shelter for the star
 		// Only remove happiness if it is > 0
 		if(happiness > 0)
 		{
-			// Check if shelterNum > animalNum || shelterNum < animalNum
-			if(shelterNum > animalNum)
+			// Check if animalNUm > shelterNum
+			if(animalNum > shelterNum)
 			{
 				// Subtract 1 from happiness
 				happiness --;
@@ -272,7 +521,7 @@ public class AnimalHappiness : MonoBehaviour {
 		}
 
 		//print("H: " + happieness);
-		//print("S: " + shelterNum);
+		print("S: " + shelterNum);
 		print("A: " + animalNum);
 
 	}
