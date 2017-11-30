@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class Level_SaveLoad : MonoBehaviour {
 
-    public List<String> availableLevels = new List<string>();
+   /* public List<String> availableLevels = new List<string>();
 
     private List<SaveableLevelObject> saveLevelObjects_List = new List<SaveableLevelObject>();
     private List<SaveableLevelObject> saveStackableLevelObjects_List = new List<SaveableLevelObject>();
@@ -275,6 +275,6 @@ public class Level_SaveLoad : MonoBehaviour {
         LoadAllFileLevels();
     }
 
-
+    */
 }
 

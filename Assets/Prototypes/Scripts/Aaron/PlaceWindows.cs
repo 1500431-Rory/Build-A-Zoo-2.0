@@ -6,7 +6,7 @@ namespace LevelEditor
 {
     public class PlaceWindows : MonoBehaviour
     {
-        LevelManager manager;
+       /* LevelManager manager;
         InterfaceManager ui;
 
         public GameObject Wall;
@@ -125,6 +125,6 @@ namespace LevelEditor
         #endregion
 
 
-
+    */
     }
 }

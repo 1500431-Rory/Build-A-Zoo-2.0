@@ -199,5 +199,7 @@ MonoBehaviour:
   worldRotation: {x: 0, y: 0, z: 0}
   isStackableObj: 0
   isWallObject: 0
+  isEnclosureObject: 0
+  isCornerObject: 0
   rotateDegrees: 90
   price: 200

@@ -5,11 +5,14 @@ using UnityEngine;
 namespace LevelEditor {
     public class ResourcesManager : MonoBehaviour {
 
-        public List<LevelGameObjectBase> LevelGameObjects = new List<LevelGameObjectBase>();
-        public List<LevelStackedObjsBase> LevelGameObjects_Stacking = new List<LevelStackedObjsBase>();
-        public List<LevelWallObjsBase> LevelGameObjects_Wall = new List<LevelWallObjsBase>();
+        public List<LevelFoliageBase> LevelFoliageObjects = new List<LevelFoliageBase>();
+        public List<LevelCareBase> LevelCareObjects = new List<LevelCareBase>();
+        public List<LevelEnrichmentBase> LevelEnrichmentObjects = new List<LevelEnrichmentBase>();
+        public List<LevelAnimalBase> LevelAnimalObjects = new List<LevelAnimalBase>();
+        public List<LevelFenceBase> LevelFenceObjects = new List<LevelFenceBase>();
+
         public List<Material> LevelMaterials = new List<Material>();
-        public GameObject wallPrefab;
+       
 
         private static ResourcesManager instance = null;
 
@@ -23,15 +26,15 @@ namespace LevelEditor {
             return instance;
         }
 
-        public LevelGameObjectBase GetObjBase(string objId)
+        public LevelFoliageBase GetFoliageBase(string foliageId)
         {
-            LevelGameObjectBase retVal = null;
+            LevelFoliageBase retVal = null;
 
-            for (int i = 0; i < LevelGameObjects.Count; i++)
+            for (int i = 0; i < LevelFoliageObjects.Count; i++)
             {
-                if (objId.Equals(LevelGameObjects[i].obj_id))
+                if (foliageId.Equals(LevelFoliageObjects[i].foliage_id))
                 {
-                    retVal = LevelGameObjects[i];
+                    retVal = LevelFoliageObjects[i];
                     break;
                 }
             }
@@ -39,15 +42,15 @@ namespace LevelEditor {
             return retVal;
         }
 
-        public LevelStackedObjsBase GetStackObjBase(string stack_id)
+        public LevelCareBase GetCareBase(string careId)
         {
-            LevelStackedObjsBase retVal = null;
+            LevelCareBase retVal = null;
 
-            for (int i = 0; i < LevelGameObjects_Stacking.Count; i++)
+            for (int i = 0; i < LevelCareObjects.Count; i++)
             {
-                if (stack_id.Equals(LevelGameObjects_Stacking[i].stack_id))
+                if (careId.Equals(LevelCareObjects[i].care_id))
                 {
-                    retVal = LevelGameObjects_Stacking[i];
+                    retVal = LevelCareObjects[i];
                     break;
                 }
             }
@@ -55,15 +58,47 @@ namespace LevelEditor {
             return retVal;
         }
 
-        public LevelWallObjsBase GetWallObjBase(string objId)
+        public LevelEnrichmentBase GetEnrichmentBase(string enrichmentId)
         {
-            LevelWallObjsBase retVal = null;
+            LevelEnrichmentBase retVal = null;
 
-            for (int i = 0; i < LevelGameObjects_Wall.Count; i++)
+            for (int i = 0; i < LevelEnrichmentObjects.Count; i++)
             {
-                if (objId.Equals(LevelGameObjects_Wall[i].wallObj_id))
+                if (enrichmentId.Equals(LevelEnrichmentObjects[i].enrichment_id))
                 {
-                    retVal = LevelGameObjects_Wall[i];
+                    retVal = LevelEnrichmentObjects[i];
+                    break;
+                }
+            }
+
+            return retVal;
+        }
+
+        public LevelAnimalBase GetAnimalBase(string animalId)
+        {
+            LevelAnimalBase retVal = null;
+
+            for (int i = 0; i < LevelAnimalObjects.Count; i++)
+            {
+                if (animalId.Equals(LevelAnimalObjects[i].animal_id))
+                {
+                    retVal = LevelAnimalObjects[i];
+                    break;
+                }
+            }
+
+            return retVal;
+        }
+
+        public LevelFenceBase GetFenceBase(string fenceId)
+        {
+            LevelFenceBase retVal = null;
+
+            for (int i = 0; i < LevelFenceObjects.Count; i++)
+            {
+                if (fenceId.Equals(LevelFenceObjects[i].fence_id))
+                {
+                    retVal = LevelFenceObjects[i];
                     break;
                 }
             }
@@ -101,22 +136,35 @@ namespace LevelEditor {
         }
     }
 
+    
     [System.Serializable]
-    public class LevelGameObjectBase
+    public class LevelFoliageBase
     {
-        public string obj_id;
-        public GameObject objPrefab;
+        public string foliage_id;
+        public GameObject foliagePrefab;
     }
     [System.Serializable]
-    public class LevelStackedObjsBase
+    public class LevelCareBase
     {
-        public string stack_id;
-        public GameObject objPrefab;
+        public string care_id;
+        public GameObject carePrefab;
     }
     [System.Serializable]
-    public class LevelWallObjsBase
+    public class LevelEnrichmentBase
     {
-        public string wallObj_id;
-        public GameObject objPrefab;
+        public string enrichment_id;
+        public GameObject enrichmentPrefab;
+    }
+    [System.Serializable]
+    public class LevelAnimalBase
+    {
+        public string animal_id;
+        public GameObject animalPrefab;
+    }
+    [System.Serializable]
+    public class LevelFenceBase
+    {
+        public string fence_id;
+        public GameObject fencePrefab;
     }
 }

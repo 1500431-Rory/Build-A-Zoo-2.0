@@ -8,10 +8,12 @@ public class LevelManager : MonoBehaviour {
 
     GridBase gridBase;
 
-    public List<GameObject> inSceneGameObjects = new List<GameObject>();
-    public List<GameObject> inSceneWalls = new List<GameObject>();
-    public List<GameObject> inSceneStackObjects = new List<GameObject>();
-    public List<GameObject> inSceneWallObjects = new List<GameObject>();
+    public List<GameObject> inSceneFoliage = new List<GameObject>();
+    public List<GameObject> inSceneEnrichment = new List<GameObject>();
+    public List<GameObject> inSceneFences = new List<GameObject>();
+    public List<GameObject> inSceneAnimals = new List<GameObject>();
+    public List<GameObject> inSceneCare = new List<GameObject>();
+
 
     [HideInInspector]
     public GameObject wallHolder;
@@ -41,7 +43,8 @@ public class LevelManager : MonoBehaviour {
         //InitLevelObjects();
     }
 
-    void InitLevelObjects()
+    //Initialse pre placed objects
+    /*void InitLevelObjects()
     {
         if(inSceneGameObjects.Count > 0)
         {
@@ -51,31 +54,36 @@ public class LevelManager : MonoBehaviour {
                 obj.UpdateNode(gridBase.grid);
             }
         }
-    }
+    }*/
 
     public void ClearLevel()
     {
-        foreach(GameObject g in inSceneGameObjects)
+        foreach(GameObject g in inSceneFoliage)
         {
             Destroy(g);
         }
-        foreach (GameObject g in inSceneStackObjects)
+        foreach (GameObject g in inSceneEnrichment)
         {
             Destroy(g);
         }
-        foreach (GameObject g in inSceneWalls)
+        foreach (GameObject g in inSceneFences)
         {
             Destroy(g);
         }
-        foreach (GameObject g in inSceneWallObjects)
+        foreach (GameObject g in inSceneAnimals)
+        {
+            Destroy(g);
+        }
+        foreach (GameObject g in inSceneCare)
         {
             Destroy(g);
         }
 
-        inSceneGameObjects.Clear();
-        inSceneStackObjects.Clear();
-        inSceneWalls.Clear();
-        inSceneWallObjects.Clear();
+        inSceneFoliage.Clear();
+        inSceneEnrichment.Clear();
+        inSceneFences.Clear();
+        inSceneAnimals.Clear();
+        inSceneCare.Clear();
 
     }
 

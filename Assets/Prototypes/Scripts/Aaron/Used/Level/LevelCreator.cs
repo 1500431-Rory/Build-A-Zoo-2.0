@@ -12,26 +12,45 @@ namespace LevelEditor
         GridBase gridBase;
         InterfaceManager ui;
 
-
-
         public float totalMoney;
 
-        //place obj variables
-        bool hasObj;
-        GameObject objToPlace;
-        GameObject cloneObj;
-        Level_Object objProperties;
         Vector3 mousePosition;
         Vector3 worldPosition;
-        bool deleteObj;
 
-        //place obj variables
-        bool hasWallObj;
-        GameObject wallObjToPlace;
-        GameObject cloneWallObj;
-        Level_Object wallObjProperties;
-        bool deleteWallObj;
+        //place foliage variables
+        bool foliageHas;
+        GameObject foliageToPlace;
+        GameObject foliageClone;
+        Level_Object foliageProperties;
+        bool foliageDelete;
 
+        //place enrichment variables
+        bool enrichmentHas;
+        GameObject enrichmentToPlace;
+        GameObject enrichmentClone;
+        Level_Object enrichmentProperties;
+        bool enrichmentDelete;
+
+        //place fence variables
+        bool fenceHas;
+        GameObject fenceToPlace;
+        GameObject fenceClone;
+        Level_Object fenceProperties;
+        bool fenceDelete;
+
+        //place Animal variables
+        bool animalHas;
+        GameObject animalToPlace;
+        GameObject animalClone;
+        Level_Object animalProperties;
+        bool animalDelete;
+
+        //place care variables
+        bool careHas;
+        GameObject careToPlace;
+        GameObject careClone;
+        Level_Object careProperties;
+        bool careDelete;
 
         //Terrain variable
         bool hasMaterial;
@@ -42,13 +61,6 @@ namespace LevelEditor
         Quaternion targetRot;
         Quaternion prevRotation;
 
-        //place stack objs variables
-        bool placeStackObj;
-        GameObject stackObjToPlace;
-        GameObject stackCloneObj;
-        Level_Object stackObjProperties;
-        bool deleteStackObj;
-
         /*//Wall creator variables
         bool createWall;
         
@@ -58,6 +70,7 @@ namespace LevelEditor
         // public Material[] wallPlacementMat;
         bool deleteWall;
         */
+
         //place ecnlsoure variables
         bool hasEnclosure;
         GameObject enclosureToPlace;
@@ -84,8 +97,6 @@ namespace LevelEditor
 
         bool cornerCheck;
 
-        
-
         RaycastHit hit;
 
         void Start()
@@ -105,19 +116,53 @@ namespace LevelEditor
 
         void Update()
         {
-            PlaceObject();
+            PlaceFoliage();
+            DeleteFoliage();
+
+            PlaceCare();
+            DeleteCare();
+
+            PlaceEnrichment();
+            DeleteEnrichment();
+
+            PlaceFence();
+            DeleteFence();
+
+            PlaceAnimal();
+            DeleteAnimal();
+
+            //PlaceEnclosure();
+            //DeleteEnclosures();
+
             PaintTile();
-            DeleteObjs();
-            PlaceStackedObj();
-            //CreateWall();
-            DeleteStackedObjs();
-            //DeleteWallsActual();
-            PlaceWallObject();
-            DeleteWallObjs();
-            PlaceEnclosure();
-            DeleteEnclosures();
 
         }
+
+        void CloseAll()
+        {
+            foliageHas = false;
+            foliageDelete = false;
+
+            careHas = false;
+            careDelete = false;
+
+            enrichmentHas = false;
+            enrichmentDelete = false;
+
+            fenceHas = false;
+            fenceDelete = false;
+
+            animalHas = false;
+            animalDelete = false;
+
+
+            deleteEnclosure = false;
+            hasEnclosure = false;
+
+            paintTile = false;
+            hasMaterial = false;
+        }
+
 
         void UpdateMousePosition()
         {
@@ -131,10 +176,14 @@ namespace LevelEditor
             }
         }
 
-        #region Place Objects
-        void PlaceObject()
+       
+        // Object Placement for all areas
+        //Currently all work the exact same 
+        //changes to be made to way fence and animals are placed
+        #region Place Foliage
+        void PlaceFoliage()
         {
-            if (hasObj)
+            if (foliageHas)
             {
                 UpdateMousePosition();
 
@@ -142,63 +191,64 @@ namespace LevelEditor
 
                 worldPosition = curNode.vis.transform.position;
 
-                if (cloneObj == null)
+                if (foliageClone == null)
                 {
-                    cloneObj = Instantiate(objToPlace, worldPosition, Quaternion.identity) as GameObject;
-                    objProperties = cloneObj.GetComponent<Level_Object>();
+                    foliageClone = Instantiate(foliageToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    foliageProperties = foliageClone.GetComponent<Level_Object>();
                 }
                 else
                 {
-                    cloneObj.transform.position = worldPosition;
+                    foliageClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
                         if (curNode.placedObj != null)
                         {
-                            manager.inSceneGameObjects.Remove(curNode.placedObj.gameObject);
+                            manager.inSceneFoliage.Remove(curNode.placedObj.gameObject);
                             Destroy(curNode.placedObj.gameObject);
                             curNode.placedObj = null;
                         }
 
-                        GameObject actualObjPlaced = Instantiate(objToPlace, worldPosition, cloneObj.transform.rotation) as GameObject;
-                        Level_Object placedObjProperties = actualObjPlaced.GetComponent<Level_Object>();
+                        GameObject foliageActualPlaced = Instantiate(foliageToPlace, worldPosition, foliageClone.transform.rotation) as GameObject;
+                        Level_Object foliagePlacedProperties = foliageActualPlaced.GetComponent<Level_Object>();
 
-                        placedObjProperties.gridPosX = curNode.nodePosX;
-                        placedObjProperties.gridPosZ = curNode.nodePosZ;
-                        curNode.placedObj = placedObjProperties;
-                        manager.inSceneGameObjects.Add(actualObjPlaced);
-                        totalMoney -= placedObjProperties.price;
+                        foliagePlacedProperties.gridPosX = curNode.nodePosX;
+                        foliagePlacedProperties.gridPosZ = curNode.nodePosZ;
+                        curNode.placedObj = foliagePlacedProperties;
+                        manager.inSceneFoliage.Add(foliageActualPlaced);
+                        totalMoney -= foliagePlacedProperties.price;
                     }
+
 
                     if (Input.GetMouseButtonDown(1))
                     {
-                        objProperties.ChangeRotation();
+                       foliageProperties.ChangeRotation();
                     }
                 }
             }
             else
             {
-                if (cloneObj != null)
+                if (foliageClone != null)
                 {
-                    Destroy(cloneObj);
+                    Destroy(foliageClone);
                 }
             }
         }
 
-        public void PassGameObjectToPlace(string objId)
+        public void PassFoliageToPlace(string foliageId)
         {
-            if (cloneObj != null)
+            if (foliageClone != null)
             {
-                Destroy(cloneObj);
+                Destroy(foliageClone);
             }
 
             CloseAll();
-            hasObj = true;
-            cloneObj = null;
-            objToPlace = ResourcesManager.GetInstance().GetObjBase(objId).objPrefab;
+            foliageHas = true;
+            foliageClone = null;
+            foliageToPlace = ResourcesManager.GetInstance().GetFoliageBase(foliageId).foliagePrefab;
         }
-        void DeleteObjs()
+        void DeleteFoliage()
         {
-            if (deleteObj)
+            if (foliageDelete)
             {
                 UpdateMousePosition();
 
@@ -208,42 +258,27 @@ namespace LevelEditor
                 {
                     if (curNode.placedObj != null)
                     {
-                        if (manager.inSceneGameObjects.Contains(curNode.placedObj.gameObject))
+                        if (manager.inSceneFoliage.Contains(curNode.placedObj.gameObject))
                         {
-                            manager.inSceneGameObjects.Remove(curNode.placedObj.gameObject);
+                            manager.inSceneFoliage.Remove(curNode.placedObj.gameObject);
                             Destroy(curNode.placedObj.gameObject);
-                            totalMoney += curNode.placedObj.price;
                         }
                         curNode.placedObj = null;
                     }
                 }
             }
         }
-        public void DeleteObj()
+        public void DeleteFoliages()
         {
             CloseAll();
-            deleteObj = true;
+            foliageDelete = true;
         }
         #endregion
 
-        #region Stack Objects
-
-        public void PassStackedObjectToPlace(string objId)
+        #region Place Enrichment
+        void PlaceEnrichment()
         {
-            if (stackCloneObj != null)
-            {
-                Destroy(stackCloneObj);
-            }
-
-            CloseAll();
-            placeStackObj = true;
-            stackCloneObj = null;
-            stackObjToPlace = ResourcesManager.GetInstance().GetStackObjBase(objId).objPrefab;
-        }
-
-        void PlaceStackedObj()
-        {
-            if (placeStackObj)
+            if (enrichmentHas)
             {
                 UpdateMousePosition();
 
@@ -251,44 +286,64 @@ namespace LevelEditor
 
                 worldPosition = curNode.vis.transform.position;
 
-                if (stackCloneObj == null)
+                if (enrichmentClone == null)
                 {
-                    stackCloneObj = Instantiate(stackObjToPlace, worldPosition, Quaternion.identity) as GameObject;
-                    stackObjProperties = stackCloneObj.GetComponent<Level_Object>();
+                    enrichmentClone = Instantiate(enrichmentToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    enrichmentProperties = enrichmentClone.GetComponent<Level_Object>();
                 }
                 else
                 {
-                    stackCloneObj.transform.position = worldPosition;
-
+                    enrichmentClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
-                        GameObject actualObjPlaced = Instantiate(stackObjToPlace, worldPosition, stackCloneObj.transform.rotation) as GameObject;
-                        Level_Object placedObjProperties = actualObjPlaced.GetComponent<Level_Object>();
+                        if (curNode.placedObj != null)
+                        {
+                            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                            curNode.placedObj = null;
+                        }
 
-                        placedObjProperties.gridPosX = curNode.nodePosX;
-                        placedObjProperties.gridPosZ = curNode.nodePosZ;
-                        curNode.stackedObjs.Add(placedObjProperties);
-                        manager.inSceneStackObjects.Add(actualObjPlaced);
+                        GameObject enrichmentActualPlaced = Instantiate(enrichmentToPlace, worldPosition, enrichmentClone.transform.rotation) as GameObject;
+                        Level_Object enrichmentPlacedProperties = enrichmentActualPlaced.GetComponent<Level_Object>();
+
+                        enrichmentPlacedProperties.gridPosX = curNode.nodePosX;
+                        enrichmentPlacedProperties.gridPosZ = curNode.nodePosZ;
+                        curNode.placedObj = enrichmentPlacedProperties;
+                        manager.inSceneEnrichment.Add(enrichmentActualPlaced);
+                        totalMoney -= enrichmentPlacedProperties.price;
                     }
+
 
                     if (Input.GetMouseButtonDown(1))
                     {
-                        stackObjProperties.ChangeRotation();
+                        enrichmentProperties.ChangeRotation();
                     }
                 }
             }
             else
             {
-                if (stackCloneObj != null)
+                if (enrichmentClone != null)
                 {
-                    Destroy(stackCloneObj);
+                    Destroy(enrichmentClone);
                 }
             }
         }
 
-        void DeleteStackedObjs()
+        public void PassEnrichmentToPlace(string enrichmentId)
         {
-            if (deleteStackObj)
+            if (enrichmentClone != null)
+            {
+                Destroy(enrichmentClone);
+            }
+
+            CloseAll();
+            enrichmentHas = true;
+            enrichmentClone = null;
+            enrichmentToPlace = ResourcesManager.GetInstance().GetEnrichmentBase(enrichmentId).enrichmentPrefab;
+        }
+        void DeleteEnrichment()
+        {
+            if (enrichmentDelete)
             {
                 UpdateMousePosition();
 
@@ -296,25 +351,307 @@ namespace LevelEditor
 
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                 {
-                    if (curNode.stackedObjs.Count > 0)
+                    if (curNode.placedObj != null)
                     {
-                        for (int i = 0; i < curNode.stackedObjs.Count; i++)
+                        if (manager.inSceneEnrichment.Contains(curNode.placedObj.gameObject))
                         {
-                            if (manager.inSceneStackObjects.Contains(curNode.stackedObjs[i].gameObject))
-                            {
-                                manager.inSceneStackObjects.Remove(curNode.stackedObjs[i].gameObject);
-                                Destroy(curNode.stackedObjs[i].gameObject);
-                            }
+                            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
                         }
-                        curNode.stackedObjs.Clear();
+                        curNode.placedObj = null;
                     }
                 }
             }
         }
-        public void DeleteStackedObj()
+        public void DeleteEnrichments()
         {
             CloseAll();
-            deleteStackObj = true;
+            enrichmentDelete = true;
+        }
+        #endregion
+
+        #region Place Care
+        void PlaceCare()
+        {
+            if (careHas)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                worldPosition = curNode.vis.transform.position;
+
+                if (careClone == null)
+                {
+                    careClone = Instantiate(careToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    careProperties = careClone.GetComponent<Level_Object>();
+                }
+                else
+                {
+                    careClone.transform.position = worldPosition;
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                    {
+                        if (curNode.placedObj != null)
+                        {
+                            manager.inSceneCare.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                            curNode.placedObj = null;
+                        }
+
+                        GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                        Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
+
+                        carePlacedProperties.gridPosX = curNode.nodePosX;
+                        carePlacedProperties.gridPosZ = curNode.nodePosZ;
+                        curNode.placedObj = carePlacedProperties;
+                        manager.inSceneCare.Add(careActualPlaced);
+                        totalMoney -= carePlacedProperties.price;
+                    }
+
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        careProperties.ChangeRotation();
+                    }
+                }
+            }
+            else
+            {
+                if (careClone != null)
+                {
+                    Destroy(careClone);
+                }
+            }
+        }
+
+        public void PassCareToPlace(string careId)
+        {
+            if (careClone != null)
+            {
+                Destroy(careClone);
+            }
+
+            CloseAll();
+            careHas = true;
+            careClone = null;
+            careToPlace = ResourcesManager.GetInstance().GetCareBase(careId).carePrefab;
+        }
+        void DeleteCare()
+        {
+            if (careDelete)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                {
+                    if (curNode.placedObj != null)
+                    {
+                        if (manager.inSceneCare.Contains(curNode.placedObj.gameObject))
+                        {
+                            manager.inSceneCare.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                        }
+                        curNode.placedObj = null;
+                    }
+                }
+            }
+        }
+        public void DeleteCares()
+        {
+            CloseAll();
+            careDelete = true;
+        }
+        #endregion
+
+        #region Place Fence
+        void PlaceFence()
+        {
+            if (fenceHas)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                worldPosition = curNode.vis.transform.position;
+
+                if (fenceClone == null)
+                {
+                    fenceClone = Instantiate(fenceToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    fenceProperties = fenceClone.GetComponent<Level_Object>();
+                }
+                else
+                {
+                    fenceClone.transform.position = worldPosition;
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                    {
+                        if (curNode.placedObj != null)
+                        {
+                            manager.inSceneFences.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                            curNode.placedObj = null;
+                        }
+
+                        GameObject fenceActualPlaced = Instantiate(fenceToPlace, worldPosition, fenceClone.transform.rotation) as GameObject;
+                        Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+
+                        fencePlacedProperties.gridPosX = curNode.nodePosX;
+                        fencePlacedProperties.gridPosZ = curNode.nodePosZ;
+                        curNode.placedObj = fencePlacedProperties;
+                        manager.inSceneFences.Add(fenceActualPlaced);
+                        totalMoney -= fencePlacedProperties.price;
+                    }
+
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        fenceProperties.ChangeRotation();
+                    }
+                }
+            }
+            else
+            {
+                if (fenceClone != null)
+                {
+                    Destroy(fenceClone);
+                }
+            }
+        }
+
+        public void PassFenceToPlace(string fenceId)
+        {
+            if (fenceClone != null)
+            {
+                Destroy(fenceClone);
+            }
+
+            CloseAll();
+            fenceHas = true;
+            fenceClone = null;
+            fenceToPlace = ResourcesManager.GetInstance().GetFenceBase(fenceId).fencePrefab;
+        }
+        void DeleteFence()
+        {
+            if (fenceDelete)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                {
+                    if (curNode.placedObj != null)
+                    {
+                        if (manager.inSceneFences.Contains(curNode.placedObj.gameObject))
+                        {
+                            manager.inSceneFences.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                        }
+                        curNode.placedObj = null;
+                    }
+                }
+            }
+        }
+        public void DeleteFences()
+        {
+            CloseAll();
+            fenceDelete = true;
+        }
+        #endregion
+
+        #region Place animal
+        void PlaceAnimal()
+        {
+            if (animalHas)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                worldPosition = curNode.vis.transform.position;
+
+                if (animalClone == null)
+                {
+                    animalClone = Instantiate(animalToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    animalProperties = animalClone.GetComponent<Level_Object>();
+                }
+                else
+                {
+                    animalClone.transform.position = worldPosition;
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                    {
+                        if (curNode.placedObj != null)
+                        {
+                            manager.inSceneAnimals.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                            curNode.placedObj = null;
+                        }
+
+                        GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
+                        Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
+
+                        animalPlacedProperties.gridPosX = curNode.nodePosX;
+                        animalPlacedProperties.gridPosZ = curNode.nodePosZ;
+                        curNode.placedObj = animalPlacedProperties;
+                        manager.inSceneAnimals.Add(animalActualPlaced);
+                        totalMoney -= animalPlacedProperties.price;
+                    }
+
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        animalProperties.ChangeRotation();
+                    }
+                }
+            }
+            else
+            {
+                if (animalClone != null)
+                {
+                    Destroy(animalClone);
+                }
+            }
+        }
+
+        public void PassAnimalToPlace(string animalId)
+        {
+            if (animalClone != null)
+            {
+                Destroy(animalClone);
+            }
+
+            CloseAll();
+            animalHas = true;
+            animalClone = null;
+            animalToPlace = ResourcesManager.GetInstance().GetAnimalBase(animalId).animalPrefab;
+        }
+        void DeleteAnimal()
+        {
+            if (animalDelete)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                {
+                    if (curNode.placedObj != null)
+                    {
+                        if (manager.inSceneAnimals.Contains(curNode.placedObj.gameObject))
+                        {
+                            manager.inSceneAnimals.Remove(curNode.placedObj.gameObject);
+                            Destroy(curNode.placedObj.gameObject);
+                        }
+                        curNode.placedObj = null;
+                    }
+                }
+            }
+        }
+        public void DeleteAnimals()
+        {
+            CloseAll();
+            animalDelete = true;
         }
         #endregion
 
@@ -374,9 +711,7 @@ namespace LevelEditor
 
         public void PassMaterialToPaint(int matId)
         {
-            deleteObj = false;
-            placeStackObj = false;
-            hasObj = false;
+            CloseAll();
             matToPlace = ResourcesManager.GetInstance().GetMaterial(matId);
             hasMaterial = true;
         }
@@ -397,382 +732,8 @@ namespace LevelEditor
 
         #endregion
 
-        /*#region Wall Creator
-
-        public void OpenWallCreation()
-        {
-            CloseAll();
-            createWall = true;
-        }
-
-        void CreateWall()
-        {
-            if (createWall)
-            {
-                UpdateMousePosition();
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-                worldPosition = curNode.vis.transform.position;
-
-                if (startNode_Wall == null)
-                {
-                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
-                    {
-                        startNode_Wall = curNode;
-                    }
-                }
-                else
-                {
-                    if (Input.GetMouseButtonUp(0) && !ui.mouseOverUIElement)
-                    {
-                        endNodeWall = curNode;
-                    }
-                }
-
-                if (startNode_Wall != null && endNodeWall != null)
-                {
-                    int difX = endNodeWall.nodePosX - startNode_Wall.nodePosX;
-                    int difZ = endNodeWall.nodePosZ - startNode_Wall.nodePosZ;
-
-                    CreateWallInNode(startNode_Wall.nodePosX, startNode_Wall.nodePosZ, Level_WallObj.WallDirection.ab);
-
-                    Node finalXNode = null;
-                    Node finalZNode = null;
-
-                    //if (difX == 0 && difZ == 0)
-                    //{
-                    //    CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.all);
-                    //    UpdateWallCorners(endNodeWall, true, true, true);
-                    //}
-
-                    if (difX != 0)
-                    {
-                        bool xHigher = (difX > 0);
-
-                        for (int i = 1; i < Mathf.Abs(difX) + 1; i++)
-                        {
-                            int offset = xHigher ? i : -i;
-                            int posX = startNode_Wall.nodePosX + offset;
-                            int posZ = startNode_Wall.nodePosZ;
-
-                            if (posX < 0)
-                            {
-                                posX = 0;
-                            }
-                            if (posX > gridBase.sizeX)
-                            {
-                                posX = gridBase.sizeX;
-                            }
-                            if (posZ < 0)
-                            {
-                                posZ = 0;
-                            }
-                            if (posZ > gridBase.sizeZ)
-                            {
-                                posZ = gridBase.sizeZ;
-                            }
-
-                            finalXNode = gridBase.grid[posX, posZ];
-                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.ab;
-                            CreateWallInNode(posX, posZ, targetDir);
-                        }
-                        UpdateWallCorners(xHigher ? endNodeWall : startNode_Wall, true, false, false);
-                        UpdateWallCorners(xHigher ? startNode_Wall : endNodeWall, false, true, false);
-
-                    }
-                    if (difZ != 0)
-                    {
-                        bool zHigher = (difZ > 0);
-
-                        for (int i = 1; i < Mathf.Abs(difZ) + 1; i++)
-                        {
-                            int offset = zHigher ? i : -i;
-                            int posX = startNode_Wall.nodePosX;
-                            int posZ = startNode_Wall.nodePosZ + offset;
-
-                            if (posX < 0)
-                            {
-                                posX = 0;
-                            }
-                            if (posX > gridBase.sizeX)
-                            {
-                                posX = gridBase.sizeX;
-                            }
-                            if (posZ < 0)
-                            {
-                                posZ = 0;
-                            }
-                            if (posZ > gridBase.sizeZ)
-                            {
-                                posZ = gridBase.sizeZ;
-                            }
-
-                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.bc;
-
-                            finalZNode = gridBase.grid[posX, posZ];
-                            CreateWallInNode(posX, posZ, targetDir);
-                        }
-                        UpdateWallNode(startNode_Wall, Level_WallObj.WallDirection.bc);
-
-                        UpdateWallCorners(zHigher ? startNode_Wall : finalZNode, false, true, false);
-                        UpdateWallCorners(zHigher ? finalZNode : startNode_Wall, false, false, true);
-                    }
-                    if (difZ != 0 && difX != 0)
-                    {
-                        bool xHigher = (difX > 0);
-                        bool zHigher = (difZ > 0);
-
-                        for (int i = 1; i < Mathf.Abs(difX) + 1; i++)
-                        {
-                            int offset = xHigher ? i : -i;
-                            int posX = startNode_Wall.nodePosX + offset;
-                            int posZ = endNodeWall.nodePosZ;
-
-                            if (posX < 0)
-                            {
-                                posX = 0;
-                            }
-                            if (posX > gridBase.sizeX)
-                            {
-                                posX = gridBase.sizeX;
-                            }
-                            if (posZ < 0)
-                            {
-                                posZ = 0;
-                            }
-                            if (posZ > gridBase.sizeZ)
-                            {
-                                posZ = gridBase.sizeZ;
-                            }
-
-                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.ab;
-                            CreateWallInNode(posX, posZ, targetDir);
-                        }
-                        for (int i = 1; i < Mathf.Abs(difZ) + 1; i++)
-                        {
-                            int offset = zHigher ? i : -i;
-                            int posX = endNodeWall.nodePosX;
-                            int posZ = startNode_Wall.nodePosZ + offset;
-
-                            if (posX < 0)
-                            {
-                                posX = 0;
-                            }
-                            if (posX > gridBase.sizeX)
-                            {
-                                posX = gridBase.sizeX;
-                            }
-                            if (posZ < 0)
-                            {
-                                posZ = 0;
-                            }
-                            if (posZ > gridBase.sizeZ)
-                            {
-                                posZ = gridBase.sizeZ;
-                            }
-
-                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.bc;
-                            CreateWallInNode(posX, posZ, targetDir);
-                        }
-                        if (startNode_Wall.nodePosZ > endNodeWall.nodePosZ)
-                        {
-                            #region Up to down
-                            manager.inSceneWalls.Remove(finalXNode.wallObj.gameObject);
-                            Destroy(finalXNode.wallObj.gameObject);
-                            finalXNode.wallObj = null;
-
-                            UpdateWallNode(finalZNode, Level_WallObj.WallDirection.all);
-                            UpdateWallNode(endNodeWall, Level_WallObj.WallDirection.bc);
-
-                            if (startNode_Wall.nodePosX > endNodeWall.nodePosX)
-                            {
-                                #region End node is SW of Start
-                                //the furthest node on the x
-                                CreateWallOrUpdateNode(finalXNode, Level_WallObj.WallDirection.ab);
-                                UpdateWallCorners(finalXNode, false, true, false);
-                                //the end furthest to south
-                                CreateWallOrUpdateNode(finalZNode, Level_WallObj.WallDirection.bc);
-                                UpdateWallCorners(finalZNode, false, true, false);
-                                //first node clicked
-                                //destroy node and get on next to it
-                                Node nextToStartNode = DestroyCurrentNodeAndGetPrevious(startNode_Wall, true);
-                                UpdateWallCorners(nextToStartNode, true, false, false);
-                                //the end node clicked
-                                CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.all);
-                                UpdateWallCorners(endNodeWall, false, true, false);
-                                #endregion
-                            }
-                            else
-                            {
-                                #region End node is SE of start
-                                //the furthest node on the x
-                                Node beforeFinalX = DestroyCurrentNodeAndGetPrevious(finalXNode, true);
-                                UpdateWallCorners(beforeFinalX, true, false, false);
-                                //the end node furthest south
-                                CreateWallOrUpdateNode(finalZNode, Level_WallObj.WallDirection.all);
-                                UpdateWallCorners(finalZNode, false, true, false);
-                                //first node clicked
-                                //destroy and get on next to it
-                                CreateWallOrUpdateNode(startNode_Wall, Level_WallObj.WallDirection.ab);
-                                UpdateWallCorners(startNode_Wall, false, true, false);
-                                //the end node
-                                CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.bc);
-                                UpdateWallCorners(endNodeWall, false, true, false);
-                                #endregion
-                            }
-                            #endregion
-                        }
-                        else
-                        {
-                            #region Down to up
-                            if (startNode_Wall.nodePosX > endNodeWall.nodePosX)
-                            {
-                                #region End node is NW of Start
-                                //the furthest node on the north east
-                                Node northWestNode = DestroyCurrentNodeAndGetPrevious(finalZNode, true);
-                                UpdateWallCorners(northWestNode, true, false, false);
-                                //the end furthest to south west
-                                CreateWallOrUpdateNode(finalXNode, Level_WallObj.WallDirection.all);
-                                UpdateWallCorners(finalXNode, false, true, false);
-                                //first node clicked
-                                //destroy node and get on next to it
-                                CreateWallOrUpdateNode(startNode_Wall, Level_WallObj.WallDirection.bc);
-                                UpdateWallCorners(startNode_Wall, false, true, false);
-                                //the end node clicked
-                                CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.ab);
-                                UpdateWallCorners(endNodeWall, false, true, false);
-                                #endregion
-                            }
-                            else
-                            {
-                                #region End node is NE of start
-                                //the furthest node on the north west
-                                CreateWallOrUpdateNode(finalZNode, Level_WallObj.WallDirection.ab);
-                                UpdateWallCorners(finalZNode, false, true, false);
-                                //the end node furthest south east
-                                CreateWallOrUpdateNode(finalXNode, Level_WallObj.WallDirection.bc);
-                                UpdateWallCorners(finalXNode, false, true, false);
-                                //first node clicked
-                                CreateWallOrUpdateNode(startNode_Wall, Level_WallObj.WallDirection.all);
-                                UpdateWallCorners(startNode_Wall, false, true, false);
-                                //the end node
-                                Node nextToEndNode = DestroyCurrentNodeAndGetPrevious(endNodeWall, true);
-                                UpdateWallCorners(nextToEndNode, true, false, false);
-                                #endregion
-                            }
-                            #endregion
-                        }
-                    }
-                    startNode_Wall = null;
-                    endNodeWall = null;
-
-                }
-            }
-        }
-
-        void CreateWallOrUpdateNode(Node getNode, Level_WallObj.WallDirection direction)
-        {
-            if (getNode.wallObj == null)
-            {
-                CreateWallInNode(getNode.nodePosX, getNode.nodePosZ, direction);
-            }
-            else
-            {
-                UpdateWallNode(getNode, direction);
-            }
-        }
-
-        Node DestroyCurrentNodeAndGetPrevious(Node curNode, bool positive)
-        {
-            int i = (positive) ? 1 : -1;
-
-            Node beforeCurNode = gridBase.grid[curNode.nodePosX - i, curNode.nodePosZ];
-
-            if (curNode.wallObj != null)
-            {
-                if (manager.inSceneWalls.Contains(curNode.wallObj.gameObject))
-                {
-                    manager.inSceneWalls.Remove(curNode.wallObj.gameObject);
-                    Destroy(curNode.wallObj.gameObject);
-                    curNode.wallObj = null;
-                }
-            }
-            return beforeCurNode;
-        }
-
-        void CreateWallInNode(int posX, int posZ, Level_WallObj.WallDirection direction)
-        {
-            Node getNode = gridBase.grid[posX, posZ];
-            Vector3 wallPosition = getNode.vis.transform.position;
-            if (getNode.wallObj == null)
-            {
-                GameObject actualObjPlaced = Instantiate(wallPrefab, wallPosition, Quaternion.identity) as GameObject;
-                actualObjPlaced.transform.parent = manager.wallHolder.transform;
-
-                Level_Object placedObjProperties = actualObjPlaced.GetComponent<Level_Object>();
-                Level_WallObj placedWallProperties = actualObjPlaced.GetComponent<Level_WallObj>();
-
-                placedObjProperties.gridPosX = posX;
-                placedObjProperties.gridPosZ = posZ;
-                manager.inSceneWalls.Add(actualObjPlaced);
-                getNode.wallObj = placedWallProperties;
-
-                UpdateWallNode(getNode, direction);
-            }
-            else
-            {
-                UpdateWallNode(getNode, direction);
-            }
-            UpdateWallCorners(getNode, false, false, false);
-        }
-
-        void UpdateWallNode(Node getNode, Level_WallObj.WallDirection direction)
-        {
-            // for loop not neccessary??
-            //for (int i = 0; i<getNode.wallObj.wallsList.Count;i++)
-            // {
-            getNode.wallObj.UpdateWall(direction);
-            // }
-        }
-
-        void UpdateWallCorners(Node getNode, bool a, bool b, bool c)
-        {
-            if (getNode.wallObj != null)
-            {
-                getNode.wallObj.UpdateCorners(a, b, c);
-            }
-        }
-
-        public void DeleteWall()
-        {
-            CloseAll();
-            deleteWall = true;
-        }
-
-        void DeleteWallsActual()
-        {
-            if (deleteWall)
-            {
-                UpdateMousePosition();
-
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
-                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
-                {
-                    if (curNode.wallObj != null)
-                    {
-                        if (manager.inSceneWalls.Contains(curNode.wallObj.gameObject))
-                        {
-                            manager.inSceneWalls.Remove(curNode.wallObj.gameObject);
-                            Destroy(curNode.wallObj.gameObject);
-                        }
-                        curNode.wallObj = null;
-                    }
-                }
-            }
-        }
-
-        #endregion*/
-
+        
+        /*
         #region Wall Object Placers
         void PlaceWallObject()
         {
@@ -871,24 +832,9 @@ namespace LevelEditor
             deleteWallObj = true;
         }
         #endregion
-        void CloseAll()
-        {
-            hasObj = false;
-            deleteObj = false;
-            paintTile = false;
-            placeStackObj = false;
-           // createWall = false;
-            hasMaterial = false;
-            deleteStackObj = false;
-            //deleteWall = false;
-            hasWallObj = false;
-            deleteWallObj = false;
-            deleteEnclosure = false;
-            hasEnclosure = false;
-        }
-
-
-        #region Place Enclosure
+       
+        */
+        /*#region Place Enclosure
         void PlaceEnclosure()
         {
             if (hasEnclosure)
@@ -1170,7 +1116,7 @@ namespace LevelEditor
 
 
 
-
+        /*
 
                 }
                 else
@@ -1824,7 +1770,7 @@ namespace LevelEditor
                                 }
                             }
                         }
-                    
+                    */
                 
             
 
@@ -1974,11 +1920,11 @@ namespace LevelEditor
                                              nodeSW.placedObj = placedNodeSWProperties;
                                              manager.inSceneGameObjects.Add(actualWallPlaced2);*/
                             /*     }
-                             }*/
+                             }
 
 
                         }
-        #endregion
+        #endregion*/
 
 
         void OnGUI()
@@ -1989,3 +1935,568 @@ namespace LevelEditor
        
     }
 }
+
+//Place Objects Code for Copy Paste amendments
+/*#region Place Objects
+void PlaceObject()
+{
+    if (hasObj)
+    {
+        UpdateMousePosition();
+
+        Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+        worldPosition = curNode.vis.transform.position;
+
+        if (cloneObj == null)
+        {
+            cloneObj = Instantiate(objToPlace, worldPosition, Quaternion.identity) as GameObject;
+            objProperties = cloneObj.GetComponent<Level_Object>();
+        }
+        else
+        {
+            cloneObj.transform.position = worldPosition;
+            if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+            {
+                if (curNode.placedObj != null)
+                {
+                    manager.inSceneGameObjects.Remove(curNode.placedObj.gameObject);
+                    Destroy(curNode.placedObj.gameObject);
+                    curNode.placedObj = null;
+                }
+
+                GameObject actualObjPlaced = Instantiate(objToPlace, worldPosition, cloneObj.transform.rotation) as GameObject;
+                Level_Object placedObjProperties = actualObjPlaced.GetComponent<Level_Object>();
+
+                placedObjProperties.gridPosX = curNode.nodePosX;
+                placedObjProperties.gridPosZ = curNode.nodePosZ;
+                curNode.placedObj = placedObjProperties;
+                manager.inSceneGameObjects.Add(actualObjPlaced);
+                totalMoney -= placedObjProperties.price;
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                objProperties.ChangeRotation();
+            }
+        }
+    }
+    else
+    {
+        if (cloneObj != null)
+        {
+            Destroy(cloneObj);
+        }
+    }
+}
+
+public void PassGameObjectToPlace(string objId)
+{
+    if (cloneObj != null)
+    {
+        Destroy(cloneObj);
+    }
+
+    CloseAll();
+    hasObj = true;
+    cloneObj = null;
+    objToPlace = ResourcesManager.GetInstance().GetObjBase(objId).objPrefab;
+}
+void DeleteObjs()
+{
+    if (deleteObj)
+    {
+        UpdateMousePosition();
+
+        Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+        if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+        {
+            if (curNode.placedObj != null)
+            {
+                if (manager.inSceneGameObjects.Contains(curNode.placedObj.gameObject))
+                {
+                    manager.inSceneGameObjects.Remove(curNode.placedObj.gameObject);
+                    Destroy(curNode.placedObj.gameObject);
+                    totalMoney += curNode.placedObj.price;
+                }
+                curNode.placedObj = null;
+            }
+        }
+    }
+}
+public void DeleteObj()
+{
+    CloseAll();
+    deleteObj = true;
+}
+#endregion
+
+ #region Stack Objects
+
+        public void PassStackedObjectToPlace(string objId)
+        {
+            if (stackCloneObj != null)
+            {
+                Destroy(stackCloneObj);
+            }
+
+            CloseAll();
+            placeStackObj = true;
+            stackCloneObj = null;
+            stackObjToPlace = ResourcesManager.GetInstance().GetStackObjBase(objId).objPrefab;
+        }
+
+        void PlaceStackedObj()
+        {
+            if (placeStackObj)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                worldPosition = curNode.vis.transform.position;
+
+                if (stackCloneObj == null)
+                {
+                    stackCloneObj = Instantiate(stackObjToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    stackObjProperties = stackCloneObj.GetComponent<Level_Object>();
+                }
+                else
+                {
+                    stackCloneObj.transform.position = worldPosition;
+
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                    {
+                        GameObject actualObjPlaced = Instantiate(stackObjToPlace, worldPosition, stackCloneObj.transform.rotation) as GameObject;
+                        Level_Object placedObjProperties = actualObjPlaced.GetComponent<Level_Object>();
+
+                        placedObjProperties.gridPosX = curNode.nodePosX;
+                        placedObjProperties.gridPosZ = curNode.nodePosZ;
+                        curNode.stackedObjs.Add(placedObjProperties);
+                        manager.inSceneStackObjects.Add(actualObjPlaced);
+                    }
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        stackObjProperties.ChangeRotation();
+                    }
+                }
+            }
+            else
+            {
+                if (stackCloneObj != null)
+                {
+                    Destroy(stackCloneObj);
+                }
+            }
+        }
+
+        void DeleteStackedObjs()
+        {
+            if (deleteStackObj)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                {
+                    if (curNode.stackedObjs.Count > 0)
+                    {
+                        for (int i = 0; i < curNode.stackedObjs.Count; i++)
+                        {
+                            if (manager.inSceneStackObjects.Contains(curNode.stackedObjs[i].gameObject))
+                            {
+                                manager.inSceneStackObjects.Remove(curNode.stackedObjs[i].gameObject);
+                                Destroy(curNode.stackedObjs[i].gameObject);
+                            }
+                        }
+                        curNode.stackedObjs.Clear();
+                    }
+                }
+            }
+        }
+        public void DeleteStackedObj()
+        {
+            CloseAll();
+            deleteStackObj = true;
+        }
+        #endregion */
+
+
+/*#region Wall Creator
+
+        public void OpenWallCreation()
+        {
+            CloseAll();
+            createWall = true;
+        }
+
+        void CreateWall()
+        {
+            if (createWall)
+            {
+                UpdateMousePosition();
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+                worldPosition = curNode.vis.transform.position;
+
+                if (startNode_Wall == null)
+                {
+                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
+                    {
+                        startNode_Wall = curNode;
+                    }
+                }
+                else
+                {
+                    if (Input.GetMouseButtonUp(0) && !ui.mouseOverUIElement)
+                    {
+                        endNodeWall = curNode;
+                    }
+                }
+
+                if (startNode_Wall != null && endNodeWall != null)
+                {
+                    int difX = endNodeWall.nodePosX - startNode_Wall.nodePosX;
+                    int difZ = endNodeWall.nodePosZ - startNode_Wall.nodePosZ;
+
+                    CreateWallInNode(startNode_Wall.nodePosX, startNode_Wall.nodePosZ, Level_WallObj.WallDirection.ab);
+
+                    Node finalXNode = null;
+                    Node finalZNode = null;
+
+                    //if (difX == 0 && difZ == 0)
+                    //{
+                    //    CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.all);
+                    //    UpdateWallCorners(endNodeWall, true, true, true);
+                    //}
+
+                    if (difX != 0)
+                    {
+                        bool xHigher = (difX > 0);
+
+                        for (int i = 1; i < Mathf.Abs(difX) + 1; i++)
+                        {
+                            int offset = xHigher ? i : -i;
+                            int posX = startNode_Wall.nodePosX + offset;
+                            int posZ = startNode_Wall.nodePosZ;
+
+                            if (posX < 0)
+                            {
+                                posX = 0;
+                            }
+                            if (posX > gridBase.sizeX)
+                            {
+                                posX = gridBase.sizeX;
+                            }
+                            if (posZ < 0)
+                            {
+                                posZ = 0;
+                            }
+                            if (posZ > gridBase.sizeZ)
+                            {
+                                posZ = gridBase.sizeZ;
+                            }
+
+                            finalXNode = gridBase.grid[posX, posZ];
+                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.ab;
+                            CreateWallInNode(posX, posZ, targetDir);
+                        }
+                        UpdateWallCorners(xHigher ? endNodeWall : startNode_Wall, true, false, false);
+                        UpdateWallCorners(xHigher ? startNode_Wall : endNodeWall, false, true, false);
+
+                    }
+                    if (difZ != 0)
+                    {
+                        bool zHigher = (difZ > 0);
+
+                        for (int i = 1; i < Mathf.Abs(difZ) + 1; i++)
+                        {
+                            int offset = zHigher ? i : -i;
+                            int posX = startNode_Wall.nodePosX;
+                            int posZ = startNode_Wall.nodePosZ + offset;
+
+                            if (posX < 0)
+                            {
+                                posX = 0;
+                            }
+                            if (posX > gridBase.sizeX)
+                            {
+                                posX = gridBase.sizeX;
+                            }
+                            if (posZ < 0)
+                            {
+                                posZ = 0;
+                            }
+                            if (posZ > gridBase.sizeZ)
+                            {
+                                posZ = gridBase.sizeZ;
+                            }
+
+                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.bc;
+
+                            finalZNode = gridBase.grid[posX, posZ];
+                            CreateWallInNode(posX, posZ, targetDir);
+                        }
+                        UpdateWallNode(startNode_Wall, Level_WallObj.WallDirection.bc);
+
+                        UpdateWallCorners(zHigher ? startNode_Wall : finalZNode, false, true, false);
+                        UpdateWallCorners(zHigher ? finalZNode : startNode_Wall, false, false, true);
+                    }
+                    if (difZ != 0 && difX != 0)
+                    {
+                        bool xHigher = (difX > 0);
+                        bool zHigher = (difZ > 0);
+
+                        for (int i = 1; i < Mathf.Abs(difX) + 1; i++)
+                        {
+                            int offset = xHigher ? i : -i;
+                            int posX = startNode_Wall.nodePosX + offset;
+                            int posZ = endNodeWall.nodePosZ;
+
+                            if (posX < 0)
+                            {
+                                posX = 0;
+                            }
+                            if (posX > gridBase.sizeX)
+                            {
+                                posX = gridBase.sizeX;
+                            }
+                            if (posZ < 0)
+                            {
+                                posZ = 0;
+                            }
+                            if (posZ > gridBase.sizeZ)
+                            {
+                                posZ = gridBase.sizeZ;
+                            }
+
+                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.ab;
+                            CreateWallInNode(posX, posZ, targetDir);
+                        }
+                        for (int i = 1; i < Mathf.Abs(difZ) + 1; i++)
+                        {
+                            int offset = zHigher ? i : -i;
+                            int posX = endNodeWall.nodePosX;
+                            int posZ = startNode_Wall.nodePosZ + offset;
+
+                            if (posX < 0)
+                            {
+                                posX = 0;
+                            }
+                            if (posX > gridBase.sizeX)
+                            {
+                                posX = gridBase.sizeX;
+                            }
+                            if (posZ < 0)
+                            {
+                                posZ = 0;
+                            }
+                            if (posZ > gridBase.sizeZ)
+                            {
+                                posZ = gridBase.sizeZ;
+                            }
+
+                            Level_WallObj.WallDirection targetDir = Level_WallObj.WallDirection.bc;
+                            CreateWallInNode(posX, posZ, targetDir);
+                        }
+                        if (startNode_Wall.nodePosZ > endNodeWall.nodePosZ)
+                        {
+                            #region Up to down
+                            manager.inSceneWalls.Remove(finalXNode.wallObj.gameObject);
+                            Destroy(finalXNode.wallObj.gameObject);
+                            finalXNode.wallObj = null;
+
+                            UpdateWallNode(finalZNode, Level_WallObj.WallDirection.all);
+                            UpdateWallNode(endNodeWall, Level_WallObj.WallDirection.bc);
+
+                            if (startNode_Wall.nodePosX > endNodeWall.nodePosX)
+                            {
+                                #region End node is SW of Start
+                                //the furthest node on the x
+                                CreateWallOrUpdateNode(finalXNode, Level_WallObj.WallDirection.ab);
+                                UpdateWallCorners(finalXNode, false, true, false);
+                                //the end furthest to south
+                                CreateWallOrUpdateNode(finalZNode, Level_WallObj.WallDirection.bc);
+                                UpdateWallCorners(finalZNode, false, true, false);
+                                //first node clicked
+                                //destroy node and get on next to it
+                                Node nextToStartNode = DestroyCurrentNodeAndGetPrevious(startNode_Wall, true);
+                                UpdateWallCorners(nextToStartNode, true, false, false);
+                                //the end node clicked
+                                CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.all);
+                                UpdateWallCorners(endNodeWall, false, true, false);
+                                #endregion
+                            }
+                            else
+                            {
+                                #region End node is SE of start
+                                //the furthest node on the x
+                                Node beforeFinalX = DestroyCurrentNodeAndGetPrevious(finalXNode, true);
+                                UpdateWallCorners(beforeFinalX, true, false, false);
+                                //the end node furthest south
+                                CreateWallOrUpdateNode(finalZNode, Level_WallObj.WallDirection.all);
+                                UpdateWallCorners(finalZNode, false, true, false);
+                                //first node clicked
+                                //destroy and get on next to it
+                                CreateWallOrUpdateNode(startNode_Wall, Level_WallObj.WallDirection.ab);
+                                UpdateWallCorners(startNode_Wall, false, true, false);
+                                //the end node
+                                CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.bc);
+                                UpdateWallCorners(endNodeWall, false, true, false);
+                                #endregion
+                            }
+                            #endregion
+                        }
+                        else
+                        {
+                            #region Down to up
+                            if (startNode_Wall.nodePosX > endNodeWall.nodePosX)
+                            {
+                                #region End node is NW of Start
+                                //the furthest node on the north east
+                                Node northWestNode = DestroyCurrentNodeAndGetPrevious(finalZNode, true);
+                                UpdateWallCorners(northWestNode, true, false, false);
+                                //the end furthest to south west
+                                CreateWallOrUpdateNode(finalXNode, Level_WallObj.WallDirection.all);
+                                UpdateWallCorners(finalXNode, false, true, false);
+                                //first node clicked
+                                //destroy node and get on next to it
+                                CreateWallOrUpdateNode(startNode_Wall, Level_WallObj.WallDirection.bc);
+                                UpdateWallCorners(startNode_Wall, false, true, false);
+                                //the end node clicked
+                                CreateWallOrUpdateNode(endNodeWall, Level_WallObj.WallDirection.ab);
+                                UpdateWallCorners(endNodeWall, false, true, false);
+                                #endregion
+                            }
+                            else
+                            {
+                                #region End node is NE of start
+                                //the furthest node on the north west
+                                CreateWallOrUpdateNode(finalZNode, Level_WallObj.WallDirection.ab);
+                                UpdateWallCorners(finalZNode, false, true, false);
+                                //the end node furthest south east
+                                CreateWallOrUpdateNode(finalXNode, Level_WallObj.WallDirection.bc);
+                                UpdateWallCorners(finalXNode, false, true, false);
+                                //first node clicked
+                                CreateWallOrUpdateNode(startNode_Wall, Level_WallObj.WallDirection.all);
+                                UpdateWallCorners(startNode_Wall, false, true, false);
+                                //the end node
+                                Node nextToEndNode = DestroyCurrentNodeAndGetPrevious(endNodeWall, true);
+                                UpdateWallCorners(nextToEndNode, true, false, false);
+                                #endregion
+                            }
+                            #endregion
+                        }
+                    }
+                    startNode_Wall = null;
+                    endNodeWall = null;
+
+                }
+            }
+        }
+
+        void CreateWallOrUpdateNode(Node getNode, Level_WallObj.WallDirection direction)
+        {
+            if (getNode.wallObj == null)
+            {
+                CreateWallInNode(getNode.nodePosX, getNode.nodePosZ, direction);
+            }
+            else
+            {
+                UpdateWallNode(getNode, direction);
+            }
+        }
+
+        Node DestroyCurrentNodeAndGetPrevious(Node curNode, bool positive)
+        {
+            int i = (positive) ? 1 : -1;
+
+            Node beforeCurNode = gridBase.grid[curNode.nodePosX - i, curNode.nodePosZ];
+
+            if (curNode.wallObj != null)
+            {
+                if (manager.inSceneWalls.Contains(curNode.wallObj.gameObject))
+                {
+                    manager.inSceneWalls.Remove(curNode.wallObj.gameObject);
+                    Destroy(curNode.wallObj.gameObject);
+                    curNode.wallObj = null;
+                }
+            }
+            return beforeCurNode;
+        }
+
+        void CreateWallInNode(int posX, int posZ, Level_WallObj.WallDirection direction)
+        {
+            Node getNode = gridBase.grid[posX, posZ];
+            Vector3 wallPosition = getNode.vis.transform.position;
+            if (getNode.wallObj == null)
+            {
+                GameObject actualObjPlaced = Instantiate(wallPrefab, wallPosition, Quaternion.identity) as GameObject;
+                actualObjPlaced.transform.parent = manager.wallHolder.transform;
+
+                Level_Object placedObjProperties = actualObjPlaced.GetComponent<Level_Object>();
+                Level_WallObj placedWallProperties = actualObjPlaced.GetComponent<Level_WallObj>();
+
+                placedObjProperties.gridPosX = posX;
+                placedObjProperties.gridPosZ = posZ;
+                manager.inSceneWalls.Add(actualObjPlaced);
+                getNode.wallObj = placedWallProperties;
+
+                UpdateWallNode(getNode, direction);
+            }
+            else
+            {
+                UpdateWallNode(getNode, direction);
+            }
+            UpdateWallCorners(getNode, false, false, false);
+        }
+
+        void UpdateWallNode(Node getNode, Level_WallObj.WallDirection direction)
+        {
+            // for loop not neccessary??
+            //for (int i = 0; i<getNode.wallObj.wallsList.Count;i++)
+            // {
+            getNode.wallObj.UpdateWall(direction);
+            // }
+        }
+
+        void UpdateWallCorners(Node getNode, bool a, bool b, bool c)
+        {
+            if (getNode.wallObj != null)
+            {
+                getNode.wallObj.UpdateCorners(a, b, c);
+            }
+        }
+
+        public void DeleteWall()
+        {
+            CloseAll();
+            deleteWall = true;
+        }
+
+        void DeleteWallsActual()
+        {
+            if (deleteWall)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
+                {
+                    if (curNode.wallObj != null)
+                    {
+                        if (manager.inSceneWalls.Contains(curNode.wallObj.gameObject))
+                        {
+                            manager.inSceneWalls.Remove(curNode.wallObj.gameObject);
+                            Destroy(curNode.wallObj.gameObject);
+                        }
+                        curNode.wallObj = null;
+                    }
+                }
+            }
+        }
+
+        #endregion*/
