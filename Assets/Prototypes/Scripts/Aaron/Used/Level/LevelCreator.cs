@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace LevelEditor
 {
+
+    //Code for All Level Creation/Editing
     public class LevelCreator : MonoBehaviour
     {
         LevelManager manager;
