@@ -3,6 +3,7 @@ using System.Collections.Generic;
 //using EpPathFinding.cs;
 using UnityEngine;
 
+//Creates The Grid Base for the Level(all the cubes)
 public class GridBase : MonoBehaviour {
 
     
@@ -12,6 +13,8 @@ public class GridBase : MonoBehaviour {
     public GameObject grassPrefab;
     public int sizeX;
     public int sizeZ;
+
+    //Offset changed depending on scale of cubes
     public int offset = 1;
 
     public Node[,] grid;
@@ -29,6 +32,7 @@ public class GridBase : MonoBehaviour {
         CreateMouseCollision();
     }
 
+    //Generates an Array of Objects to use as the floor of the Level
     void CreateGrid()
     {
         grid = new Node[sizeX, sizeZ];
@@ -37,6 +41,7 @@ public class GridBase : MonoBehaviour {
         {
             for (int z = 0; z < sizeZ; z++)
             {
+
                 float posX = x * offset;
                 float posZ = z * offset;
 
@@ -54,16 +59,11 @@ public class GridBase : MonoBehaviour {
                 node.nodePosX = x;
                 node.nodePosZ = z;
                 grid[x, z] = node;
-
-
-
-
-
             }
         }
 
         //spawning grass blades
-        for (int s = 0; s < 2; s++)
+        /*for (int s = 0; s < 2; s++)
         {
             for (int x = 0; x < sizeX - 10; x++)
             {
@@ -77,9 +77,10 @@ public class GridBase : MonoBehaviour {
                     GameObject grassBlades = Instantiate(grassPrefab, new Vector3(Random.Range(0, sizeX * offset), 0, Random.Range(0, sizeZ * offset)), Quaternion.Euler(0, randomRot[Random.Range(0, randomRot.Length)], 0)) as GameObject;
                 }
             }
-        }
+        }*/
     }
 
+    //Creates a box collider on top of the Cubes as generating a collider on each cube would cause more "stress"
     void CreateMouseCollision()
     {
         GameObject go = new GameObject();
@@ -88,6 +89,7 @@ public class GridBase : MonoBehaviour {
         go.transform.position = new Vector3((sizeX * offset) / 2 - 1, 0, (sizeZ * offset) / 2 - 1);
     }
 
+    //Finds Location of each Cube, to be used for finding mousepositions
     public Node NodeFromWorldPosition(Vector3 worldPosition)
     {
         float worldX = worldPosition.x;

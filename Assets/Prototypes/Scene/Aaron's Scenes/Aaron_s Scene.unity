@@ -1178,13 +1178,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalMoney: 20000
-  matToPlace: {fileID: 2100000, guid: 496fa7f225959074e9f2c1f257294eb5, type: 2}
-  wallPrefab: {fileID: 1550589945851530, guid: 2f36d79f79dde414e9742408c13ee016, type: 2}
-  wallCornerPrefab: {fileID: 1333649979166332, guid: 4478db6c569cfe34f9c77f4dc8e94283,
-    type: 2}
+  matToPlace: {fileID: 2100000, guid: b83c9449836bd2641ad697890ecd01b6, type: 2}
   enclosureObject: {fileID: 1619393458941038, guid: bcf96a438e19a4942aa9365076ccf5d2,
     type: 2}
   enclosure: []
+  wallPrefab: {fileID: 1550589945851530, guid: 2f36d79f79dde414e9742408c13ee016, type: 2}
+  wallCornerPrefab: {fileID: 1333649979166332, guid: 4478db6c569cfe34f9c77f4dc8e94283,
+    type: 2}
 --- !u!114 &280298880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1241,7 +1241,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 280298877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.091024, y: -12.043195, z: 20.509306}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 253508686}
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   dimLight: {fileID: 955237856}
   cycle: 20
   fadeSpeed: 4
-  nightTimeIntensity: 0
+  nightTimeIntensity: 1
   dayTimeIntensity: 1
   dayTime: 6
 --- !u!114 &280298885

@@ -31,7 +31,7 @@ namespace LevelEditor
         bool deleteWallObj;
 
 
-        //paint tile variable
+        //Terrain variable
         bool hasMaterial;
         bool paintTile;
         public Material matToPlace;
@@ -47,16 +47,15 @@ namespace LevelEditor
         Level_Object stackObjProperties;
         bool deleteStackObj;
 
-        //Wall creator variables
+        /*//Wall creator variables
         bool createWall;
-        public GameObject wallPrefab;
-        public GameObject wallCornerPrefab;
+        
         GameObject wallObject;
         Node startNode_Wall;
         Node endNodeWall;
         // public Material[] wallPlacementMat;
         bool deleteWall;
-
+        */
         //place ecnlsoure variables
         bool hasEnclosure;
         GameObject enclosureToPlace;
@@ -68,6 +67,8 @@ namespace LevelEditor
         int totalPlaced;
         GameObject actualWallPlaced;
         GameObject actualCornerPlaced;
+        public GameObject wallPrefab;
+        public GameObject wallCornerPrefab;
 
         Vector3 nodePosN;
         Vector3 nodePosS;
@@ -81,17 +82,7 @@ namespace LevelEditor
 
         bool cornerCheck;
 
-        Vector3[] wallPos = {
-        new Vector3(6,0,10),
-        new Vector3(8,0,10),
-        new Vector3(10,0,10),
-        new Vector3(12,0,10),
-        new Vector3(14,0,10),
-        new Vector3(16,0,10),
-        new Vector3(18,0,10),
-        new Vector3(20,0,10),
-        new Vector3(22,0,10),
-        };
+        
 
         RaycastHit hit;
 
@@ -104,10 +95,10 @@ namespace LevelEditor
             PaintAll();
 
 
-            for (int i = 0; i < 9; i++)
+            /*for (int i = 0; i < 9; i++)
             {
                 wallObject = Instantiate(wallPrefab, wallPos[i], Quaternion.identity) as GameObject;
-            }
+            }*/
         }
 
         void Update()
@@ -116,9 +107,9 @@ namespace LevelEditor
             PaintTile();
             DeleteObjs();
             PlaceStackedObj();
-            CreateWall();
+            //CreateWall();
             DeleteStackedObjs();
-            DeleteWallsActual();
+            //DeleteWallsActual();
             PlaceWallObject();
             DeleteWallObjs();
             PlaceEnclosure();
@@ -404,7 +395,7 @@ namespace LevelEditor
 
         #endregion
 
-        #region Wall Creator
+        /*#region Wall Creator
 
         public void OpenWallCreation()
         {
@@ -778,7 +769,7 @@ namespace LevelEditor
             }
         }
 
-        #endregion
+        #endregion*/
 
         #region Wall Object Placers
         void PlaceWallObject()
@@ -884,10 +875,10 @@ namespace LevelEditor
             deleteObj = false;
             paintTile = false;
             placeStackObj = false;
-            createWall = false;
+           // createWall = false;
             hasMaterial = false;
             deleteStackObj = false;
-            deleteWall = false;
+            //deleteWall = false;
             hasWallObj = false;
             deleteWallObj = false;
             deleteEnclosure = false;
