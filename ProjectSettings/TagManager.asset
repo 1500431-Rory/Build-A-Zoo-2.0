@@ -4,13 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Wall
   - text
   - EnclosureMarker
   - Window
   - Animal
   - Shelter
   - Happiness
+  - preplacedFence
+  - fence
+  - preplacedFence2
+  - Wall
   layers:
   - Default
   - TransparentFX

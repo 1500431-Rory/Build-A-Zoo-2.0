@@ -10,8 +10,10 @@ public class Node {
     public MeshRenderer tileRenderer;
     public bool isWalkable;
    public LevelEditor.Level_Object placedObj;
-  
+
+    public LevelEditor.Level_Object fenceObj;
+
     public List<LevelEditor.Level_Object> stackedObjs = new List<LevelEditor.Level_Object>();
-   public LevelEditor.Level_WallObj wallObj;
+    public LevelEditor.Level_WallObj wallObj;
     public LevelEditor.Level_Wall wall;
 }

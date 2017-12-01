@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace LevelEditor
 {
+
+    //Class to describe and assign values for every object (place on all manipulatable objects)
     public class Level_Object : MonoBehaviour
     {
 
@@ -41,6 +43,7 @@ namespace LevelEditor
             transform.localRotation = Quaternion.Euler(eulerAngles);
         }
 
+        //save level remnants
         public SaveableLevelObject GetSaveableObject()
         {
             SaveableLevelObject savedObj = new SaveableLevelObject();

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // *** Note *** Key press code is for testing only. 
 // This will need to be chancged for the prototype once there is UI and we have merged the project.
@@ -76,6 +77,8 @@ public class AnimalHappiness : MonoBehaviour {
 	TerrainType terrain;
 	ToyType toy;
 
+	public Text welfareText;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -105,6 +108,9 @@ public class AnimalHappiness : MonoBehaviour {
 		// Call to checks
 		Animal();
 		Lonley();
+
+		// Display animal welfare on canvas
+		welfareText.text = "Happiness: " + happiness + " Max Happiness: " + maxHappiness + " Shelter Number: " + shelterNum + " Animal Number: " + animalNum + " Food Type: " + food + " Toy Type: " + toy + " Fence Type: " + fence + " Terrain Type: " + terrain + " Diet Type " + diet;
 
 		// Food type given
 		if(foodNum < 10)

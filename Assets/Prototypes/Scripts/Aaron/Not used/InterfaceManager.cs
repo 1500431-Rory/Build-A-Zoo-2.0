@@ -26,7 +26,7 @@ namespace LevelEditor
 
 
 
-        void Start()
+        /*void Start()
         {
             saveLevelDialog.gameObject.SetActive(false);
             CloseLoadLevelGrid();
@@ -46,14 +46,14 @@ namespace LevelEditor
                 b.levelName = s;
                 b.txt.text = s;
             }
-        }
+        }*/
 
         void Update()
         {
             mouseOverUIElement = EventSystem.current.IsPointerOverGameObject();
         }
 
-        public void OpenCloseLevelGrid()
+       /* public void OpenCloseLevelGrid()
         {
             if (loadLevelGrid.gameObject.activeInHierarchy)
             {
@@ -95,7 +95,7 @@ namespace LevelEditor
 
             loadLevelGrid.gameObject.SetActive(true);
         }
-
+        */
         private static InterfaceManager instance = null;
         public static InterfaceManager GetInstance()
         {
@@ -111,7 +111,7 @@ namespace LevelEditor
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         }
 
-        public void ReloadFiles()
+        /*public void ReloadFiles()
         {
             Button[] prevB = loadLevelGrid.GetComponentsInChildren<Button>();
             foreach (Button b in prevB)
@@ -122,10 +122,10 @@ namespace LevelEditor
 
             sl.LoadAllFileLevels();
             CreateUIButtonsForAvailableLevels();
-        }
+        }*/
 
 
-        public void TogglePauseMenu()
+       /* public void TogglePauseMenu()
         {
             // not the optimal way but for the sake of readability
             if (btnObjects.GetComponentInChildren<Canvas>().enabled)
@@ -140,6 +140,6 @@ namespace LevelEditor
             }
 
             Debug.Log("GAMEMANAGER:: TimeScale: " + Time.timeScale);
-        }
+        }*/
     }
 }
