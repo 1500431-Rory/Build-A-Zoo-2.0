@@ -40,21 +40,21 @@ public class LevelManager : MonoBehaviour {
 
         gridBase = GridBase.GetInstance();
 
-        //InitLevelObjects();
+        InitLevelObjects();
     }
 
     //Initialse pre placed objects
-    /*void InitLevelObjects()
+    void InitLevelObjects()
     {
-        if(inSceneGameObjects.Count > 0)
+        if(inSceneFences.Count > 0)
         {
-            for (int i =0; i < inSceneGameObjects.Count; i++)
+            for (int i =0; i < inSceneFences.Count; i++)
             {
-                Level_Object obj = inSceneGameObjects[i].GetComponent<Level_Object>();
+                Level_Object obj = inSceneFences[i].GetComponent<Level_Object>();
                 obj.UpdateNode(gridBase.grid);
             }
         }
-    }*/
+    }
 
     public void ClearLevel()
     {
