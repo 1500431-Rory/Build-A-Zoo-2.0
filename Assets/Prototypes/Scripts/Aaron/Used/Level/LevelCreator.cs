@@ -100,7 +100,7 @@ namespace LevelEditor
         RaycastHit hit;
 
         public GameObject[] fences;
-
+ 
         void Start()
         {
             gridBase = GridBase.GetInstance();
@@ -313,6 +313,11 @@ namespace LevelEditor
                         curNode.placedObj = enrichmentPlacedProperties;
                         manager.inSceneEnrichment.Add(enrichmentActualPlaced);
                         totalMoney -= enrichmentPlacedProperties.price;
+
+                        if (enrichmentActualPlaced.tag == "bottle")
+                        {
+                            GameObject.Find("Welfare").GetComponent<AnimalHappiness>().ToyCheck();
+                        }
                     }
 
 
@@ -408,6 +413,9 @@ namespace LevelEditor
                         curNode.placedObj = carePlacedProperties;
                         manager.inSceneCare.Add(careActualPlaced);
                         totalMoney -= carePlacedProperties.price;
+
+                        
+
                     }
 
 
@@ -564,7 +572,7 @@ namespace LevelEditor
         #endregion
 
         #region Place animal
-        void PlaceAnimal()
+        public void PlaceAnimal()
         {
             if (animalHas)
             {
@@ -584,21 +592,17 @@ namespace LevelEditor
                     animalClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
-                        if (curNode.placedObj != null)
-                        {
-                            manager.inSceneAnimals.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                            curNode.placedObj = null;
-                        }
-
+                       
                         GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
                         Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
 
-                        animalPlacedProperties.gridPosX = curNode.nodePosX;
-                        animalPlacedProperties.gridPosZ = curNode.nodePosZ;
-                        curNode.placedObj = animalPlacedProperties;
                         manager.inSceneAnimals.Add(animalActualPlaced);
                         totalMoney -= animalPlacedProperties.price;
+
+                        if(animalActualPlaced.tag == "penguin")
+                        {
+                            GameObject.Find("Welfare").GetComponent<AnimalHappiness>().Animal();
+                        }
                     }
 
 

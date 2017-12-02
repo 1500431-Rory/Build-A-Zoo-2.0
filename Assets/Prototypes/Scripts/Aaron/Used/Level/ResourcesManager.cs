@@ -15,6 +15,7 @@ namespace LevelEditor {
        
 
         private static ResourcesManager instance = null;
+        public static string animalId;
 
         void Awake()
         {

@@ -12,7 +12,6 @@ public class Cameramovement : MonoBehaviour
     public float xMod;
     public float zMod;
 
-
     // Use this for initialization
     void Start ()
     {
@@ -20,13 +19,18 @@ public class Cameramovement : MonoBehaviour
         xPos = cam.position.x;
         zPos = cam.position.z;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
 
+    // Update is called once per frame
+    void Update()
+    {
+        Move();
+    }
+    private void Move()
+    {
+     
         xMod = Input.GetAxis("Horizontal");
         zMod = Input.GetAxis("Vertical");
+
         xPos = cam.position.x;
         zPos = cam.position.z;
         if (xPos >= 90 && xMod > 0)
