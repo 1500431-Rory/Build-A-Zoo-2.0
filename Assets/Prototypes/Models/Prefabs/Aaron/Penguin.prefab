@@ -38,6 +38,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4376915758863330}
   - component: {fileID: 114781085595885344}
+  - component: {fileID: 143362782997686342}
+  - component: {fileID: 114434417991940390}
+  - component: {fileID: 65274663742309798}
   m_Layer: 0
   m_Name: Penguin
   m_TagString: Untagged
@@ -111,6 +114,36 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1451037150842388}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &65274663742309798
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1984682146727760}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114434417991940390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1984682146727760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abbdb538e741324498e6159f0b8215c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  dirChangeInt: 5
+  maxDirChange: 30
+  timePassed: 0
+  diceRoll: 0
+  diceMax: 3
+  direc: 0
 --- !u!114 &114781085595885344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -147,3 +180,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!143 &143362782997686342
+CharacterController:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1984682146727760}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 0.5
+  m_Radius: 0.15
+  m_SlopeLimit: 15
+  m_StepOffset: 0.2
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.24, z: 0}

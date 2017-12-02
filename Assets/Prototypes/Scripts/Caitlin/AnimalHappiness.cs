@@ -111,7 +111,7 @@ public class AnimalHappiness : MonoBehaviour {
 
 		// Display animal welfare on canvas
 		welfareText.text = "Happiness: " + happiness + " Max Happiness: " + maxHappiness + " Shelter Number: " + shelterNum + " Animal Number: " + animalNum + " Food Type: " + food + " Toy Type: " + toy + " Fence Type: " + fence + " Terrain Type: " + terrain + " Diet Type " + diet;
-
+        
 		// Food type given
 		if(foodNum < 10)
 		{

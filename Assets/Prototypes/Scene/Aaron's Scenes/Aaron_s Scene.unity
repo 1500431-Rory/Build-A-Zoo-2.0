@@ -1724,6 +1724,7 @@ MonoBehaviour:
   wallPrefab: {fileID: 1550589945851530, guid: 2f36d79f79dde414e9742408c13ee016, type: 2}
   wallCornerPrefab: {fileID: 1333649979166332, guid: 4478db6c569cfe34f9c77f4dc8e94283,
     type: 2}
+  fences: []
 --- !u!114 &280298880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1801,7 +1802,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 280298877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d5a9252f9c61942aa983dc217bd20e, type: 3}
+  m_Script: {fileID: 11500000, guid: c54c3eb84fe6a7242b2ed8be28630582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cam1: {fileID: 4830794}
