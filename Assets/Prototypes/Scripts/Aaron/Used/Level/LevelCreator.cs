@@ -592,13 +592,7 @@ namespace LevelEditor
                     animalClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
-                        if (curNode.placedObj != null)
-                        {
-                            manager.inSceneAnimals.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                            curNode.placedObj = null;
-                        }
-
+                       
                         GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
                         Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
 
