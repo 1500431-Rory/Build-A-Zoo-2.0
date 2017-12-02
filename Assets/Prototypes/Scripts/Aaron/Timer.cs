@@ -77,6 +77,6 @@ public class Clock
 
     void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 150, 20), clock.GetTime().ToString());
+       GUI.Label(new Rect(10, 10, 150, 20), clock.GetTime().ToString());
     }
 }
