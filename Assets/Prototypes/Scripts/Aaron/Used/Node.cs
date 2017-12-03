@@ -12,6 +12,7 @@ public class Node {
    public LevelEditor.Level_Object placedObj;
 
     public LevelEditor.Level_Object fenceObj;
+    public LevelEditor.Level_Object animalObj;
 
     public List<LevelEditor.Level_Object> stackedObjs = new List<LevelEditor.Level_Object>();
     public LevelEditor.Level_WallObj wallObj;

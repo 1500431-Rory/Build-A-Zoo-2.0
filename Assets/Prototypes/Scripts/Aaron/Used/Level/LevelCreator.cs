@@ -639,18 +639,17 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+               Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                 {
-                    if (curNode.placedObj != null)
+                    if (hit.collider.tag == "penguin")
                     {
-                        if (manager.inSceneAnimals.Contains(curNode.placedObj.gameObject))
-                        {
-                            manager.inSceneAnimals.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                        }
-                        curNode.placedObj = null;
+                            manager.inSceneAnimals.Remove(GameObject.Find(hit.collider.gameObject.name));
+                            Destroy(GameObject.Find(hit.collider.gameObject.name));
+                            
+                            //need to do something fancy with this code later
+                            //GameObject.Find("Welfare").GetComponent<AnimalHappiness>().Animal();
                     }
                 }
             }
