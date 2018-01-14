@@ -10,6 +10,7 @@ namespace LevelEditor {
         public List<LevelEnrichmentBase> LevelEnrichmentObjects = new List<LevelEnrichmentBase>();
         public List<LevelAnimalBase> LevelAnimalObjects = new List<LevelAnimalBase>();
         public List<LevelFenceBase> LevelFenceObjects = new List<LevelFenceBase>();
+        public List<LevelTileBase> LevelTileObjects = new List<LevelTileBase>();
 
         public List<Material> LevelMaterials = new List<Material>();
        
@@ -107,6 +108,22 @@ namespace LevelEditor {
             return retVal;
         }
 
+        public LevelTileBase GetTileBase(string tileId)
+        {
+            LevelTileBase retVal = null;
+
+            for (int i = 0; i < LevelTileObjects.Count; i++)
+            {
+                if (tileId.Equals(LevelTileObjects[i].tile_id))
+                {
+                    retVal = LevelTileObjects[i];
+                    break;
+                }
+            }
+
+            return retVal;
+        }
+
         public Material GetMaterial(int matId)
         {
             Material retVal = null;
@@ -167,5 +184,11 @@ namespace LevelEditor {
     {
         public string fence_id;
         public GameObject fencePrefab;
+    }
+    [System.Serializable]
+    public class LevelTileBase
+    {
+        public string tile_id;
+        public GameObject tilePrefab;
     }
 }

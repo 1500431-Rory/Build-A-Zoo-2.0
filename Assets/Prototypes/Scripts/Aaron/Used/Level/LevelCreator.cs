@@ -11,7 +11,9 @@ namespace LevelEditor
         LevelManager manager;
         GridBase gridBase;
         InterfaceManager ui;
-
+        //Happiness happy;
+        
+        
         public float totalMoney;
 
         Vector3 mousePosition;
@@ -29,11 +31,13 @@ namespace LevelEditor
         GameObject enrichmentToPlace;
         GameObject enrichmentClone;
         Level_Object enrichmentProperties;
+        ToyClass enrichmentToyClass;
         bool enrichmentDelete;
 
         //place fence variables
         bool fenceHas;
         GameObject fenceToPlace;
+        GameObject fenceToPlace2;
         GameObject fenceClone;
         Level_Object fenceProperties;
         bool fenceDelete;
@@ -60,6 +64,13 @@ namespace LevelEditor
         Material prevMaterial;
         Quaternion targetRot;
         Quaternion prevRotation;
+
+        //place Tile variables
+        bool tileHas;
+        NodeObject tileToPlace;
+        NodeObject tileClone;
+        Ground_Object tileProperties;
+        bool tileDelete;
 
         /*//Wall creator variables
         bool createWall;
@@ -100,14 +111,24 @@ namespace LevelEditor
         RaycastHit hit;
 
         public GameObject[] fences;
- 
+
+    
+        //Enums
+        // ToyEnum.ToyTypes toys;
+        // CareEnum.CareTypes care;
+        // FenceEnum.FenceTypes fence;
+        // TerrainEnum.TerrainTypes terrain;
+        // FoliageEnum.FoliageTypes foliage;
+
+
         void Start()
         {
             gridBase = GridBase.GetInstance();
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
-
-            PaintAll();
+           // happy = Happiness.GetInstance();
+  
+           // PaintAll();
 
 
             /*for (int i = 0; i < 9; i++)
@@ -136,6 +157,8 @@ namespace LevelEditor
             //PlaceEnclosure();
             //DeleteEnclosures();
 
+           // PlaceTiles();
+
             PaintTile();
 
         }
@@ -157,12 +180,14 @@ namespace LevelEditor
             animalHas = false;
             animalDelete = false;
 
-
             deleteEnclosure = false;
             hasEnclosure = false;
 
             paintTile = false;
             hasMaterial = false;
+
+            tileHas = false;
+           
         }
 
 
@@ -172,13 +197,12 @@ namespace LevelEditor
 
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-                mousePosition = hit.point;
-
+            {   
+                    mousePosition = hit.point;          
             }
         }
 
-       
+      
         // Object Placement for all areas
         //Currently all work the exact same 
         //changes to be made to way fence and animals are placed
@@ -203,21 +227,28 @@ namespace LevelEditor
                     foliageClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
-                        if (curNode.placedObj != null)
+                        if (hit.collider.tag == "EnclosureMarker")
                         {
-                            manager.inSceneFoliage.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                            curNode.placedObj = null;
+                            if (curNode.placedObj != null)
+                            {
+                                manager.inSceneFoliage.Remove(curNode.placedObj.gameObject);
+                                Destroy(curNode.placedObj.gameObject);
+                                curNode.placedObj = null;
+                            }
+
+                            GameObject foliageActualPlaced = Instantiate(foliageToPlace, worldPosition, foliageClone.transform.rotation) as GameObject;
+                            Level_Object foliagePlacedProperties = foliageActualPlaced.GetComponent<Level_Object>();
+
+                            foliagePlacedProperties.gridPosX = curNode.nodePosX;
+                            foliagePlacedProperties.gridPosZ = curNode.nodePosZ;
+                            curNode.placedObj = foliagePlacedProperties;
+                            manager.inSceneFoliage.Add(foliageActualPlaced);
+                            totalMoney -= foliagePlacedProperties.price;
                         }
-
-                        GameObject foliageActualPlaced = Instantiate(foliageToPlace, worldPosition, foliageClone.transform.rotation) as GameObject;
-                        Level_Object foliagePlacedProperties = foliageActualPlaced.GetComponent<Level_Object>();
-
-                        foliagePlacedProperties.gridPosX = curNode.nodePosX;
-                        foliagePlacedProperties.gridPosZ = curNode.nodePosZ;
-                        curNode.placedObj = foliagePlacedProperties;
-                        manager.inSceneFoliage.Add(foliageActualPlaced);
-                        totalMoney -= foliagePlacedProperties.price;
+                        else
+                        {
+                            Debug.Log("Not Valid");
+                        }
                     }
 
 
@@ -280,6 +311,7 @@ namespace LevelEditor
         #region Place Enrichment
         void PlaceEnrichment()
         {
+
             if (enrichmentHas)
             {
                 UpdateMousePosition();
@@ -292,31 +324,53 @@ namespace LevelEditor
                 {
                     enrichmentClone = Instantiate(enrichmentToPlace, worldPosition, Quaternion.identity) as GameObject;
                     enrichmentProperties = enrichmentClone.GetComponent<Level_Object>();
+                    enrichmentToyClass = enrichmentClone.GetComponent<ToyClass>();
                 }
                 else
                 {
                     enrichmentClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
-                        if (curNode.placedObj != null)
+
+                        if (hit.collider.tag == "EnclosureMarker")
                         {
-                            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                            curNode.placedObj = null;
+                            if (curNode.placedObj != null)
+                            {
+                                if (curNode.placedObj.isEnrichmentObject == true)
+                                {
+                                    deletingEnrichment();
+                                    placingEnrichment();
+                                }
+                                else
+                                {
+                                    Debug.Log("Not an enrichment object so cant replace");
+                                }
+
+                            }
+                            else
+                            { 
+                                    //Water current texture id = 2, be sure to change when rearranging textures
+                                    if (curNode.vis.GetComponent<NodeObject>().textureid == 2 && enrichmentToyClass.isWaterObject == true)
+                                    {
+                                        placingEnrichment();
+                                    }
+                                    else if (curNode.vis.GetComponent<NodeObject>().textureid == 2 && enrichmentToyClass.isWaterObject == false)
+                                    {
+                                        Debug.Log("Cant place in Water");
+                                    }
+                                    else if (curNode.vis.GetComponent<NodeObject>().textureid != 2 && enrichmentToyClass.isWaterObject == false)
+                                    {
+                                        placingEnrichment();
+                                    }
+                                    else if (curNode.vis.GetComponent<NodeObject>().textureid != 2 && enrichmentToyClass.isWaterObject == true)
+                                    {
+                                        Debug.Log("Can only be placed in Water");
+                                    }           
+                            }
                         }
-
-                        GameObject enrichmentActualPlaced = Instantiate(enrichmentToPlace, worldPosition, enrichmentClone.transform.rotation) as GameObject;
-                        Level_Object enrichmentPlacedProperties = enrichmentActualPlaced.GetComponent<Level_Object>();
-
-                        enrichmentPlacedProperties.gridPosX = curNode.nodePosX;
-                        enrichmentPlacedProperties.gridPosZ = curNode.nodePosZ;
-                        curNode.placedObj = enrichmentPlacedProperties;
-                        manager.inSceneEnrichment.Add(enrichmentActualPlaced);
-                        totalMoney -= enrichmentPlacedProperties.price;
-
-                        if (enrichmentActualPlaced.tag == "bottle")
+                        else
                         {
-                            GameObject.Find("Welfare").GetComponent<AnimalHappiness>().ToyCheck();
+                            Debug.Log("cant place outside of enclosure");
                         }
                     }
 
@@ -334,6 +388,59 @@ namespace LevelEditor
                     Destroy(enrichmentClone);
                 }
             }
+        }
+
+        void deletingEnrichment()
+        {
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+           
+            ToyClass toyEnumComponents = curNode.placedObj.gameObject.GetComponent<ToyClass>(); //get the Enum before Deleting
+            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
+            Destroy(curNode.placedObj.gameObject);
+            curNode.placedObj = null;
+
+            //Subtract from No. trackers based on enum
+            switch (toyEnumComponents.toyType)
+            {
+                case ToyClass.ToyTypes.SHINYBOTTLE:
+                    Happiness.noShinyBottle--;
+                    break;
+                case ToyClass.ToyTypes.SHINYCD:
+                    Happiness.noShinyCd--;
+                    break;
+                case ToyClass.ToyTypes.WATERFLOAT:
+                    Happiness.noWaterFloat--;
+                    break;
+            }
+            Happiness.maxAnimalsHappy -= toyEnumComponents.animalsKeptHappy;
+        }
+        void placingEnrichment()
+        {
+
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+            GameObject enrichmentActualPlaced = Instantiate(enrichmentToPlace, worldPosition, enrichmentClone.transform.rotation) as GameObject;
+            Level_Object enrichmentPlacedProperties = enrichmentActualPlaced.GetComponent<Level_Object>();
+            ToyClass toyEnumComponent = enrichmentActualPlaced.GetComponent<ToyClass>(); //get the Enum
+
+            enrichmentPlacedProperties.gridPosX = curNode.nodePosX;
+            enrichmentPlacedProperties.gridPosZ = curNode.nodePosZ;
+            curNode.placedObj = enrichmentPlacedProperties;
+            manager.inSceneEnrichment.Add(enrichmentActualPlaced);
+            //totalMoney -= enrichmentPlacedProperties.price;
+            switch (toyEnumComponent.toyType)
+            {
+                case ToyClass.ToyTypes.SHINYBOTTLE:
+                    Happiness.noShinyBottle++;
+                    break;
+                case ToyClass.ToyTypes.SHINYCD:
+                    Happiness.noShinyCd++;
+                    break;
+                case ToyClass.ToyTypes.WATERFLOAT:
+                    Happiness.noWaterFloat++;
+                    break;
+            }
+            Happiness.maxAnimalsHappy += toyEnumComponent.animalsKeptHappy;
         }
 
         public void PassEnrichmentToPlace(string enrichmentId)
@@ -360,12 +467,30 @@ namespace LevelEditor
                 {
                     if (curNode.placedObj != null)
                     {
+                        deletingEnrichment();
+                        /*ToyClass toyEnumComponent = curNode.placedObj.gameObject.GetComponent<ToyClass>(); //get the script#1
+
                         if (manager.inSceneEnrichment.Contains(curNode.placedObj.gameObject))
                         {
                             manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
                             Destroy(curNode.placedObj.gameObject);
                         }
                         curNode.placedObj = null;
+                       
+
+                        switch (toyEnumComponent.toyType)
+                        {
+                            case ToyClass.ToyTypes.SHINYBOTTLE:
+                                Happiness.noShinyBottle--;
+                                break;
+                            case ToyClass.ToyTypes.SHINYCD:
+                                Happiness.noShinyCd--;
+                                break;
+                            case ToyClass.ToyTypes.WATERFLOAT:
+                                Happiness.noWaterFloat--;
+                                break;
+                        }
+                        Happiness.maxAnimalsHappy -= toyEnumComponent.animalsKeptHappy;*/
                     }
                 }
             }
@@ -398,27 +523,58 @@ namespace LevelEditor
                     careClone.transform.position = worldPosition;
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
-                        if (curNode.placedObj != null)
+                        if (hit.collider.tag == "EnclosureMarker")
                         {
-                            manager.inSceneCare.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                            curNode.placedObj = null;
+                            if (curNode.placedObj != null)
+                            {
+                                CareClass careEnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>(); //get the Enum before Deleting
+
+                                manager.inSceneCare.Remove(curNode.placedObj.gameObject);
+                                Destroy(curNode.placedObj.gameObject);
+                                curNode.placedObj = null;
+
+                                //Subtract from No. trackers based on enum
+                                switch (careEnumComponents.careType)
+                                {
+                                    case CareClass.CareTypes.AID:
+                                        Happiness.noAid--;
+                                        break;
+                                    case CareClass.CareTypes.FOOD:
+                                        Happiness.noFood--;
+                                        break;
+                                    case CareClass.CareTypes.SHELTER:
+                                        Happiness.noShelter--;
+                                        break;
+                                }
+                            }
+
+                            GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                            Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
+                            CareClass careEnumComponent = careActualPlaced.GetComponent<CareClass>(); //get the Enum
+
+                            carePlacedProperties.gridPosX = curNode.nodePosX;
+                            carePlacedProperties.gridPosZ = curNode.nodePosZ;
+                            curNode.placedObj = carePlacedProperties;
+                            manager.inSceneCare.Add(careActualPlaced);
+                            totalMoney -= carePlacedProperties.price;
+
+                            switch (careEnumComponent.careType)
+                            {
+                                case CareClass.CareTypes.AID:
+                                    Happiness.noAid++;
+                                    break;
+                                case CareClass.CareTypes.FOOD:
+                                    Happiness.noFood++;
+                                    break;
+                                case CareClass.CareTypes.SHELTER:
+                                    Happiness.noShelter++;
+                                    break;
+                            }
+
                         }
 
-                        GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
-                        Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
-
-                        carePlacedProperties.gridPosX = curNode.nodePosX;
-                        carePlacedProperties.gridPosZ = curNode.nodePosZ;
-                        curNode.placedObj = carePlacedProperties;
-                        manager.inSceneCare.Add(careActualPlaced);
-                        totalMoney -= carePlacedProperties.price;
-
-                        
-
                     }
-
-
+                    //rotate
                     if (Input.GetMouseButtonDown(1))
                     {
                         careProperties.ChangeRotation();
@@ -458,12 +614,28 @@ namespace LevelEditor
                 {
                     if (curNode.placedObj != null)
                     {
+                        CareClass careEnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>(); //get the Enum before Deleting
+
                         if (manager.inSceneCare.Contains(curNode.placedObj.gameObject))
                         {
                             manager.inSceneCare.Remove(curNode.placedObj.gameObject);
                             Destroy(curNode.placedObj.gameObject);
                         }
                         curNode.placedObj = null;
+
+                        //Subtract from No. trackers based on enum
+                        switch (careEnumComponents.careType)
+                        {
+                            case CareClass.CareTypes.AID:
+                                Happiness.noAid--;
+                                break;
+                            case CareClass.CareTypes.FOOD:
+                                Happiness.noFood--;
+                                break;
+                            case CareClass.CareTypes.SHELTER:
+                                Happiness.noShelter--;
+                                break;
+                        }
                     }
                 }
             }
@@ -492,33 +664,32 @@ namespace LevelEditor
                     {
                         if (hit.collider.tag == "preplacedFence")
                         {
-                            Vector3 fencePos = hit.collider.transform.position;
+                            Vector3 fencePos = hit.collider.gameObject.transform.position;
 
-                            GameObject fenceActualPlaced = Instantiate(fenceToPlace, new Vector3(fencePos.x, fencePos.y-0.5f, fencePos.z-0.5f*gridBase.offset), Quaternion.Euler(0, 0, 0)) as GameObject;
+                            GameObject fenceActualPlaced = Instantiate(fenceToPlace,fencePos, Quaternion.identity) as GameObject;
+                            fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
                             Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-
                             fencePlacedProperties.gridPosX = curNode.nodePosX;
                             fencePlacedProperties.gridPosZ = curNode.nodePosZ;
                             curNode.fenceObj = fencePlacedProperties;
                             manager.inSceneFences.Add(fenceActualPlaced);
                             totalMoney -= fencePlacedProperties.price;
                         }
-
-                        if (hit.collider.tag == "preplacedFence2")
+                        if (hit.collider.tag == "preplacedFenceAngled")
                         {
-                            Vector3 fencePos = hit.collider.transform.position;
-
-                            GameObject fenceActualPlaced = Instantiate(fenceToPlace, new Vector3(fencePos.x - 0.5f*gridBase.offset, fencePos.y-.5f, fencePos.z), Quaternion.Euler(0,90,0)) as GameObject;
+                            Vector3 fencePos = hit.collider.gameObject.transform.position;
+    
+                            GameObject fenceActualPlaced = Instantiate(fenceToPlace,fencePos, Quaternion.identity) as GameObject;
+                            fenceActualPlaced.transform.localScale += new Vector3(0.7284f,0,0); 
+                            fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
                             Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-
                             fencePlacedProperties.gridPosX = curNode.nodePosX;
                             fencePlacedProperties.gridPosZ = curNode.nodePosZ;
                             curNode.fenceObj = fencePlacedProperties;
                             manager.inSceneFences.Add(fenceActualPlaced);
                             totalMoney -= fencePlacedProperties.price;
                         }
-
-                    }
+                }
                 
             }
             else
@@ -571,6 +742,7 @@ namespace LevelEditor
         }
         #endregion
 
+        //Going to change Animal Placement so it just adds in a penguin without you placing it, this will make it easier for deleting.
         #region Place animal
         public void PlaceAnimal()
         {
@@ -593,15 +765,19 @@ namespace LevelEditor
                     if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                     {
                        
-                        GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
-                        Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
-
-                        manager.inSceneAnimals.Add(animalActualPlaced);
-                        totalMoney -= animalPlacedProperties.price;
-
-                        if(animalActualPlaced.tag == "penguin")
+                        if (hit.collider.tag == "EnclosureMarker")
                         {
-                            GameObject.Find("Welfare").GetComponent<AnimalHappiness>().Animal();
+                            GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
+                            Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
+
+                            manager.inSceneAnimals.Add(animalActualPlaced);
+                            //totalMoney -= animalPlacedProperties.price;
+
+                            Happiness.noAnimals++;
+                        }
+                        else
+                        {
+                            Debug.Log("Not ANIMAL Valid");
                         }
                     }
 
@@ -647,9 +823,9 @@ namespace LevelEditor
                     {
                             manager.inSceneAnimals.Remove(GameObject.Find(hit.collider.gameObject.name));
                             Destroy(GameObject.Find(hit.collider.gameObject.name));
-                            
-                            //need to do something fancy with this code later
-                            //GameObject.Find("Welfare").GetComponent<AnimalHappiness>().Animal();
+
+                            Happiness.noAnimals--;
+                        //need to do something fancy with this code later
                     }
                 }
             }
@@ -662,7 +838,7 @@ namespace LevelEditor
         #endregion
 
         #region Tile Painting
-
+        
         void PaintTile()
         {
             if (hasMaterial)
@@ -703,7 +879,10 @@ namespace LevelEditor
 
                 if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
                 {
-                    paintTile = true;
+                    if (hit.collider.tag == "EnclosureMarker")
+                    {
+                        paintTile = true;
+                    }
                 }
 
                 if (Input.GetMouseButtonUp(1))
