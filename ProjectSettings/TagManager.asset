@@ -11,10 +11,10 @@ TagManager:
   - Happiness
   - preplacedFence
   - fence
-  - preplacedFence2
   - Wall
   - penguin
   - bottle
+  - preplacedFenceAngled
   layers:
   - Default
   - TransparentFX

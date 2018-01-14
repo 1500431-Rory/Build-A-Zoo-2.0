@@ -12,9 +12,12 @@ public class Cameramovement : MonoBehaviour
     public float xMod;
     public float zMod;
 
+    GridBase gridBase;
+
     // Use this for initialization
     void Start ()
     {
+        gridBase = GridBase.GetInstance();
         cam = GetComponent<Transform>();
         xPos = cam.position.x;
         zPos = cam.position.z;
@@ -28,12 +31,13 @@ public class Cameramovement : MonoBehaviour
     private void Move()
     {
      
+
         xMod = Input.GetAxis("Horizontal");
         zMod = Input.GetAxis("Vertical");
 
         xPos = cam.position.x;
         zPos = cam.position.z;
-        if (xPos >= 90 && xMod > 0)
+        if (xPos >= gridBase.sizeX && xMod > 0)
         {
             xMod = 0;
         }
@@ -42,7 +46,7 @@ public class Cameramovement : MonoBehaviour
             xMod = 0;
         }
 
-        if (zPos >= 90 && zMod > 0)
+        if (zPos >= gridBase.sizeZ && zMod > 0)
         {
             zMod = 0;
         }

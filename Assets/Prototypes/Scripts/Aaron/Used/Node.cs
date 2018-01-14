@@ -9,8 +9,10 @@ public class Node {
     public GameObject vis;
     public MeshRenderer tileRenderer;
     public bool isWalkable;
-   public LevelEditor.Level_Object placedObj;
 
+    public LevelEditor.Level_Object placedObj;
+    //public LevelEditor.Ground_Object groundObj;
+    
     public LevelEditor.Level_Object fenceObj;
     public LevelEditor.Level_Object animalObj;
 
