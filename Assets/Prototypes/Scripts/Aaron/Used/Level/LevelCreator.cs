@@ -24,6 +24,7 @@ namespace LevelEditor
         GameObject foliageToPlace;
         GameObject foliageClone;
         Level_Object foliageProperties;
+        FoliageClass foliageFoliageClass;
         bool foliageDelete;
 
         //place enrichment variables
@@ -40,6 +41,7 @@ namespace LevelEditor
         GameObject fenceToPlace2;
         GameObject fenceClone;
         Level_Object fenceProperties;
+        FenceClass fenceFenceClass;
         bool fenceDelete;
 
         //place Animal variables
@@ -54,6 +56,7 @@ namespace LevelEditor
         GameObject careToPlace;
         GameObject careClone;
         Level_Object careProperties;
+        CareClass careCareClass;
         bool careDelete;
 
         //Terrain variable
@@ -65,13 +68,7 @@ namespace LevelEditor
         Quaternion targetRot;
         Quaternion prevRotation;
 
-        //place Tile variables
-        bool tileHas;
-        NodeObject tileToPlace;
-        NodeObject tileClone;
-        Ground_Object tileProperties;
-        bool tileDelete;
-
+       
         /*//Wall creator variables
         bool createWall;
         
@@ -185,8 +182,6 @@ namespace LevelEditor
 
             paintTile = false;
             hasMaterial = false;
-
-            tileHas = false;
            
         }
 
@@ -221,6 +216,7 @@ namespace LevelEditor
                 {
                     foliageClone = Instantiate(foliageToPlace, worldPosition, Quaternion.identity) as GameObject;
                     foliageProperties = foliageClone.GetComponent<Level_Object>();
+                    foliageFoliageClass = foliageClone.GetComponent<FoliageClass>();
                 }
                 else
                 {
@@ -231,19 +227,19 @@ namespace LevelEditor
                         {
                             if (curNode.placedObj != null)
                             {
-                                manager.inSceneFoliage.Remove(curNode.placedObj.gameObject);
-                                Destroy(curNode.placedObj.gameObject);
-                                curNode.placedObj = null;
+                                Debug.Log("Cannot Place Object in the way");
                             }
-
-                            GameObject foliageActualPlaced = Instantiate(foliageToPlace, worldPosition, foliageClone.transform.rotation) as GameObject;
-                            Level_Object foliagePlacedProperties = foliageActualPlaced.GetComponent<Level_Object>();
-
-                            foliagePlacedProperties.gridPosX = curNode.nodePosX;
-                            foliagePlacedProperties.gridPosZ = curNode.nodePosZ;
-                            curNode.placedObj = foliagePlacedProperties;
-                            manager.inSceneFoliage.Add(foliageActualPlaced);
-                            totalMoney -= foliagePlacedProperties.price;
+                            else
+                            {
+                                if (curNode.vis.GetComponent<NodeObject>().textureid == 2)
+                                {
+                                    Debug.Log("Cannot Place Object in water");
+                                }
+                                else
+                                {
+                                    placingFoliage();
+                                }
+                            }           
                         }
                         else
                         {
@@ -266,6 +262,56 @@ namespace LevelEditor
                 }
             }
         }
+
+        void deletingFoliage()
+        {
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+            FoliageClass foliageEnumComponents = curNode.placedObj.gameObject.GetComponent<FoliageClass>(); //get the Enum before Deleting
+            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
+            Destroy(curNode.placedObj.gameObject);
+            curNode.placedObj = null;
+
+            //Subtract from No. trackers based on enum
+            switch (foliageEnumComponents.foliageType)
+            {
+                case FoliageClass.FoliageTypes.BUSH:
+                    
+                    break;
+                case FoliageClass.FoliageTypes.ROCK:
+                    
+                    break;
+                case FoliageClass.FoliageTypes.OTHER:
+                    break;
+            }
+        }
+        void placingFoliage()
+        {
+
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+            GameObject foliageActualPlaced = Instantiate(foliageToPlace, worldPosition, foliageClone.transform.rotation) as GameObject;
+            Level_Object foliagePlacedProperties = foliageActualPlaced.GetComponent<Level_Object>();
+            FoliageClass foliageEnumComponent = foliageActualPlaced.GetComponent<FoliageClass>(); //get the Enum
+
+            foliagePlacedProperties.gridPosX = curNode.nodePosX;
+            foliagePlacedProperties.gridPosZ = curNode.nodePosZ;
+            curNode.placedObj = foliagePlacedProperties;
+            manager.inSceneEnrichment.Add(foliageActualPlaced);
+            //totalMoney -= enrichmentPlacedProperties.price;
+            switch (foliageEnumComponent.foliageType)
+            {
+                case FoliageClass.FoliageTypes.BUSH:
+
+                    break;
+                case FoliageClass.FoliageTypes.ROCK:
+
+                    break;
+                case FoliageClass.FoliageTypes.OTHER:
+                    break;
+            }
+        }
+
 
         public void PassFoliageToPlace(string foliageId)
         {
@@ -291,12 +337,7 @@ namespace LevelEditor
                 {
                     if (curNode.placedObj != null)
                     {
-                        if (manager.inSceneFoliage.Contains(curNode.placedObj.gameObject))
-                        {
-                            manager.inSceneFoliage.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                        }
-                        curNode.placedObj = null;
+                        deletingFoliage();
                     }
                 }
             }
@@ -336,7 +377,9 @@ namespace LevelEditor
                         {
                             if (curNode.placedObj != null)
                             {
-                                if (curNode.placedObj.isEnrichmentObject == true)
+                                Debug.Log("Cannot Place Object in the way");
+                                //Replace?
+                                /*if (curNode.placedObj.isEnrichmentObject == true)
                                 {
                                     deletingEnrichment();
                                     placingEnrichment();
@@ -344,7 +387,7 @@ namespace LevelEditor
                                 else
                                 {
                                     Debug.Log("Not an enrichment object so cant replace");
-                                }
+                                }*/
 
                             }
                             else
@@ -815,7 +858,7 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-               Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+              // Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                 {
