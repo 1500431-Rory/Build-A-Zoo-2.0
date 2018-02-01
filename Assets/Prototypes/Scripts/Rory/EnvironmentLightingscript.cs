@@ -26,27 +26,27 @@ public class EnvironmentLightingscript : MonoBehaviour
         NowTime = NowTime + Time.deltaTime;
         CheckTime = (int)NowTime;
 
-        //decides colour of light based on time (case statement would be better)
+        //decides colour of light based on time(case statement would be better)
         if (CheckTime == 0)
         {
-            mod.color = new Vector4(1, 0.5f, 0.5f, 1);
+            mod.color = new Vector4(0.5f, 0.5f, 0.5f, 1);
             Morning = true;
         }
 
-        else if (CheckTime == 15)
-        {
-            mod.color = new Vector4(0.8f, 0.8f, 0.8f, 1);
-        }
+        //else if (CheckTime == 15)
+        //{
+        //    mod.color = new Vector4(0.5f, 0.5f, 0.5f, 1);
+        //}
 
         else if (CheckTime == 30)
         {
             Morning = false;
         }
 
-        else if (CheckTime == 45)
-        {
-            mod.color = new Vector4(0.5f, 0.5f, 1.0f, 1);
-        }
+        //else if (CheckTime == 45)
+        //{
+        //    mod.color = new Vector4(0.5f, 0.5f, 0.5f, 1);
+        //}
 
         else if (NowTime >= 60)
         {
@@ -56,11 +56,11 @@ public class EnvironmentLightingscript : MonoBehaviour
         //checks whether to increase or decrease intensity based on time
         if (Morning)
         {
-            period = (NowTime / 30);
+            period = (NowTime / 120);
         }
         else
         {
-            period = (1 - ((NowTime-30) /30));
+            period = (0.25f - ((NowTime-30) /120));
         }
         //sets the light variables
         mod.intensity = period;

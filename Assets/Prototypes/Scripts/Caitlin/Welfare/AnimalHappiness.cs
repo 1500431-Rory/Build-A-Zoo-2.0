@@ -97,7 +97,7 @@ public class AnimalHappiness : MonoBehaviour {
 		animal = AnimalType.NONE;
 		diet = DietType.NONE;
 		fence = FenceType.NONE;
-		toy = ToyType.NONE;
+		toy = ToyType.SHINYBOTTLE;
 		terrain = TerrainType.NONE;
 	}
 	
@@ -106,12 +106,12 @@ public class AnimalHappiness : MonoBehaviour {
 	{
 
 		// Call to checks
-		Animal();
+		//Animal();
 		Lonley();
 
 		// Display animal welfare on canvas
-		welfareText.text = "Happiness: " + happiness + " Max Happiness: " + maxHappiness + " Shelter Number: " + shelterNum + " Animal Number: " + animalNum + " Food Type: " + food + " Toy Type: " + toy + " Fence Type: " + fence + " Terrain Type: " + terrain + " Diet Type " + diet;
-
+		welfareText.text = " Happiness: " + happiness + "\n Max Happiness: " + maxHappiness + "\n Shelter Number: " + shelterNum + "\n Animal Number: " + animalNum + "\n Food Type: " + food + "\n Toy Type: " + toy + "\n Fence Type: " + fence + "\n Terrain Type: " + terrain + "\n Diet Type " + diet;
+        welfareText.color = new Color(1f, 1f, 1f);
 		// Food type given
 		if(foodNum < 10)
 		{
@@ -307,14 +307,14 @@ public class AnimalHappiness : MonoBehaviour {
 		}
 	}
 		
-	void Animal()
+	public void Animal()
 	{
 		// Check if "p" key has been pressed
 		if(animalNum < 10)
 		{
 			// Check if "p" key is pressed
-			if(Input.GetKeyDown("p"))
-			{
+			//if(Input.GetKeyDown("p"))
+			//{
 				// Set the animal type to penguin
 				animal = AnimalType.PENGUIN;
 				// Check if happiness < maxHappiness
@@ -323,7 +323,7 @@ public class AnimalHappiness : MonoBehaviour {
 					//  Add 1 to  animalNum
 					animalNum ++;
 				}
-			}
+			//}
 		}
 
 		// Check if animal is > 0
@@ -437,7 +437,7 @@ public class AnimalHappiness : MonoBehaviour {
 	}
 
 	// Check if the toy is correct for the animal
-	void ToyCheck()
+	public void ToyCheck()
 	{
 		
 		// Check type of animal matches type of toy
