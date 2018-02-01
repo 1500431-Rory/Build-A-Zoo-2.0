@@ -32,5 +32,6 @@ public class UI_Manager : MonoBehaviour {
 	void TaskOnClick()
 	{
 		
+
 	}
 }
