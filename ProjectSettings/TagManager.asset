@@ -11,6 +11,7 @@ TagManager:
   - Animal
   - Shelter
   - Happiness
+  - Button
   layers:
   - Default
   - TransparentFX
