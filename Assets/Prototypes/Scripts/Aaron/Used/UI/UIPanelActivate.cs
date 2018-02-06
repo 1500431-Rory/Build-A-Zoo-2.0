@@ -3,41 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPanelActivate : MonoBehaviour {
+public class UIPanelActivate : MonoBehaviour
+{
 
     //public Button yourButton;
-    public GameObject Panel;
-
+    public GameObject UIBackDrop;
+    public GameObject ObjectSelectionMenu;
+    public GameObject CloseMenuButton;
     //void Start()
     //{
     //    Button btn = yourButton.GetComponent<Button>();
-   //     btn.onClick.AddListener(TaskOnClick);
-   // }
+    //     btn.onClick.AddListener(TaskOnClick);
+    // }
 
-   // void TaskOnClick()
+    // void TaskOnClick()
     //{
-        
-   // }
+
+    // }
 
     public void panelManagement()
     {
-        if(Panel.activeInHierarchy == true)
+        if (UIBackDrop.activeInHierarchy == true)
         {
             hidePanel();
         }
-        else if (Panel.activeInHierarchy == false)
+        else if (UIBackDrop.activeInHierarchy == false)
         {
             showPanel();
         }
-    } 
+    }
 
-   void showPanel()
+    void showPanel()
     {
-        Panel.gameObject.SetActive(true);
+        UIBackDrop.gameObject.SetActive(true);
+        ObjectSelectionMenu.gameObject.SetActive(true);
+       CloseMenuButton.gameObject.SetActive(true);
     }
     void hidePanel()
     {
-        Panel.gameObject.SetActive(false);
+        UIBackDrop.gameObject.SetActive(false);
+        ObjectSelectionMenu.gameObject.SetActive(false);
+        CloseMenuButton.gameObject.SetActive(false);
     }
 
 }
+
+
