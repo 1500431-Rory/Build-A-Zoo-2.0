@@ -25,12 +25,6 @@ namespace LevelEditor
 
         public float price = 0;
 
-
-
-
-
-
-
         public void UpdateNode(Node[,] grid)
         {
             Node node = grid[gridPosX, gridPosZ];

@@ -11,7 +11,7 @@ namespace LevelEditor
         LevelManager manager;
         GridBase gridBase;
         InterfaceManager ui;
-        //Happiness happy;
+        Happiness happy;
         
         
         public float totalMoney;
@@ -49,6 +49,7 @@ namespace LevelEditor
         GameObject animalToPlace;
         GameObject animalClone;
         Level_Object animalProperties;
+        AnimalClass animalAnimalClass;
         bool animalDelete;
 
         //place care variables
@@ -607,10 +608,19 @@ namespace LevelEditor
                                     Happiness.noAid++;
                                     break;
                                 case CareClass.CareTypes.FOOD:
-                                    Happiness.noFood++;
+                                    switch(careEnumComponent.foodType)
+                                    {
+                                        case CareClass.FoodType.CARNIVOUROUS:
+                                            happy.carnivourous = true;
+                                            break;
+                                        case CareClass.FoodType.HERBIVOROUS:
+                                            happy.herbivourous = true;
+                                            break;
+                                    }
                                     break;
                                 case CareClass.CareTypes.SHELTER:
                                     Happiness.noShelter++;
+                                    Happiness.animalsSheltered += careEnumComponent.noAnimalsPerShelter;
                                     break;
                             }
 
@@ -812,11 +822,13 @@ namespace LevelEditor
                         {
                             GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
                             Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
+                            AnimalClass animalClass = animalActualPlaced.GetComponent<AnimalClass>();
 
                             manager.inSceneAnimals.Add(animalActualPlaced);
                             //totalMoney -= animalPlacedProperties.price;
 
                             Happiness.noAnimals++;
+
                         }
                         else
                         {

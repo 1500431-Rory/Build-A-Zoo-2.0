@@ -39,6 +39,11 @@ public class Happiness : MonoBehaviour {
     bool correctFood;
     bool isLonely;
 
+    public bool carnivourous = false;
+    public bool herbivourous = false;
+
+    public static float animalsSheltered;
+
 #region EnrichmentHappiness
     void ToyHappinessCalc()
     {
@@ -85,6 +90,13 @@ public class Happiness : MonoBehaviour {
     }
     #endregion
     #region CareHappiness
+    void foodHappiness()
+    {
+        if(carnivourous == true)
+        {
+            ;
+        }
+    }
     #endregion
     #region FoliageHappiness
     #endregion
@@ -123,5 +135,6 @@ public class Happiness : MonoBehaviour {
          GUI.Label(new Rect(100, 130, 150, 20), "Shiny CD: " + noShinyCd.ToString());
          GUI.Label(new Rect(100, 150, 150, 20), "Water Float: " + noWaterFloat.ToString());
         GUI.Label(new Rect(100, 170, 150, 20), "AnimalsHappy: " + maxAnimalsHappy.ToString());
+        GUI.Label(new Rect(100, 170, 150, 20), "Animals Sheltered: " + animalsSheltered.ToString());
     }
 }

@@ -13,18 +13,21 @@ public class CareClass : MonoBehaviour {
     public CareTypes careType;
 
 
-    //Shelter variables
-    public static float noAnimalsPerShelter;
-
+    
     //Aid variables
     //Food variables
     public enum FoodType
     {
         CARNIVOUROUS,
-        HERBIVOROUS
+        HERBIVOROUS,
+        NOTFOOD
     }
     public FoodType foodType;
 
+    //shelter variables
+    public float noAnimalsPerShelter;
+
+    
 
 }
 

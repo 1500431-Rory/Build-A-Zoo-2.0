@@ -217,4 +217,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   careType: 0
-  foodType: 0
+  foodType: 2
+  noAnimalsPerShelter: 15
