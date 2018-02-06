@@ -713,7 +713,7 @@ namespace LevelEditor
 
                 
                     
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
                     {
                         if (hit.collider.tag == "preplacedFence")
                         {

@@ -127,6 +127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4936789622028570}
   - component: {fileID: 114867983467502270}
+  - component: {fileID: 65798996826592292}
   m_Layer: 0
   m_Name: GlassFenceTest
   m_TagString: Untagged
@@ -547,7 +548,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1680402432599270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 63.733856, y: 92.057724, z: -124.17778}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4606324032021796}
@@ -646,6 +647,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1372214865870754}
   m_Mesh: {fileID: 4300000, guid: e2c920e5aa04136408cb8c1b6fae70e0, type: 3}
+--- !u!65 &65798996826592292
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1680402432599270}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 0.4}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &95291378393448604
 Animator:
   serializedVersion: 3

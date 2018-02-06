@@ -8,11 +8,11 @@ public class ESCAPEDPENGUIN : MonoBehaviour
 
     Collision collisionInfo;
 
-    /*private void Update()
-    {
-        OnCollisionExit(collisionInfo);
-        OnCollisionEnter(collisionInfo);
-    }*/
+    //private void Update()
+    //{
+        //OnCollisionExit(collisionInfo);
+        //OnCollisionEnter(collisionInfo);
+    //}
     void OnCollisionExit(Collision collisionInfo)
     {
         if (collisionInfo.gameObject.CompareTag("EnclosureMarker"))
