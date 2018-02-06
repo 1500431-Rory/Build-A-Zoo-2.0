@@ -733,7 +733,7 @@ namespace LevelEditor
                             Vector3 fencePos = hit.collider.gameObject.transform.position;
     
                             GameObject fenceActualPlaced = Instantiate(fenceToPlace,fencePos, Quaternion.identity) as GameObject;
-                            fenceActualPlaced.transform.localScale += new Vector3(0.7284f,0,0); 
+                            fenceActualPlaced.transform.localScale += new Vector3(0.4142f,0,0); 
                             fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
                             Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
                             fencePlacedProperties.gridPosX = curNode.nodePosX;
