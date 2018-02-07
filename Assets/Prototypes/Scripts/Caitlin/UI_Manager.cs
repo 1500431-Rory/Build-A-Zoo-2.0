@@ -2,36 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Manager : MonoBehaviour {
 
-	public Button animal;
-	public Button fence;
-	public Button rock;
-	public Button toy;
-	public Button menu;
+	public GameObject pauseMenuImage;
 
 	void Start()
 	{
-		// Get Button Component
-		Button animalBtn = animal.GetComponent<Button>();
-		Button fenceBtn = fence.GetComponent<Button>();
-		Button rockBtn = rock.GetComponent<Button>();
-		Button toyBtn = toy.GetComponent<Button>();
-		Button menuBtn = menu.GetComponent<Button>();
 
-		// Add a listenr to button
-		animalBtn.onClick.AddListener(TaskOnClick);
-		fenceBtn.onClick.AddListener(TaskOnClick);
-		rockBtn.onClick.AddListener(TaskOnClick);
-		toyBtn.onClick.AddListener(TaskOnClick);
-		menuBtn.onClick.AddListener(TaskOnClick);
 
 	}
 
-	void TaskOnClick()
+	// For pauing the game
+	 void PausetheGame()
+	{
+		// Pause/unpause the game
+		// If time is not 0
+		if(Time.timeScale != 0)
+		{
+			// Set time to equal zero
+			Time.timeScale = 0;
+		} else
+		{
+			// Set time tp equal one
+			Time.timeScale = 1;
+		}
+
+		// Make the game greyscale
+
+	}
+		
+	// Open animal tab
+	void AnimalTab()
 	{
 		
-
 	}
 }
