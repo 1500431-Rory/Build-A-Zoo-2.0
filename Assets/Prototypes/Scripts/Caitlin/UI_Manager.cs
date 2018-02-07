@@ -15,7 +15,7 @@ public class UI_Manager : MonoBehaviour {
 	}
 
 	// For pauing the game
-	 void PausetheGame()
+	public void PausetheGame()
 	{
 		// Pause/unpause the game
 		// If time is not 0
