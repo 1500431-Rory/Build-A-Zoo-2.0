@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4641920102165816}
   - component: {fileID: 114377092790248452}
   - component: {fileID: 114290525047575444}
+  - component: {fileID: 65286666413472092}
   m_Layer: 0
   m_Name: WoodenFence1
   m_TagString: fence
@@ -212,6 +213,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1325821149196808}
   m_Mesh: {fileID: 4300002, guid: fdd39f1c33371f843981d79cb18ae55c, type: 3}
+--- !u!65 &65286666413472092
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1016557605606206}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 0.4}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &95836095794516542
 Animator:
   serializedVersion: 3

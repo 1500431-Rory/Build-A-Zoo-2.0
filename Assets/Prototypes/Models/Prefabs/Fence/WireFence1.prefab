@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4092978006200214}
   - component: {fileID: 114225698900599246}
   - component: {fileID: 114326564063615078}
+  - component: {fileID: 65448584207350354}
   m_Layer: 0
   m_Name: WireFence1
   m_TagString: Untagged
@@ -212,6 +213,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1697175543582668}
   m_Mesh: {fileID: 4300002, guid: eac541100f7701e49897e8e03a1a497e, type: 3}
+--- !u!65 &65448584207350354
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1053068459202448}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 0.4}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &95514928445075134
 Animator:
   serializedVersion: 3

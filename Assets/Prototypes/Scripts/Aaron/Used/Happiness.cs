@@ -135,6 +135,6 @@ public class Happiness : MonoBehaviour {
          GUI.Label(new Rect(100, 130, 150, 20), "Shiny CD: " + noShinyCd.ToString());
          GUI.Label(new Rect(100, 150, 150, 20), "Water Float: " + noWaterFloat.ToString());
         GUI.Label(new Rect(100, 170, 150, 20), "AnimalsHappy: " + maxAnimalsHappy.ToString());
-        GUI.Label(new Rect(100, 170, 150, 20), "Animals Sheltered: " + animalsSheltered.ToString());
+        GUI.Label(new Rect(100, 190, 150, 20), "Animals Sheltered: " + animalsSheltered.ToString());
     }
 }

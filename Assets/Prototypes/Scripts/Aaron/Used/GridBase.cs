@@ -18,6 +18,7 @@ public class GridBase : MonoBehaviour {
     public int offset = 1;
 
     public Node[,] grid;
+    
 
     private static GridBase instance = null;
     public static GridBase GetInstance()

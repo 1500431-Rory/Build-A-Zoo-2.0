@@ -17,6 +17,7 @@ namespace LevelEditor
         public float totalMoney;
 
         Vector3 mousePosition;
+        Vector3 fencePosition;
         Vector3 worldPosition;
 
         //place foliage variables
@@ -110,7 +111,11 @@ namespace LevelEditor
 
         public GameObject[] fences;
 
-    
+        float noFences = 0;
+
+        public GameObject wallBuildArea;
+        public GameObject wallAngledBuildArea;
+
         //Enums
         // ToyEnum.ToyTypes toys;
         // CareEnum.CareTypes care;
@@ -194,8 +199,13 @@ namespace LevelEditor
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {   
-                    mousePosition = hit.point;          
+                    mousePosition = hit.point;  
+                if(hit.collider.CompareTag("preplacedFence")|| hit.collider.CompareTag("preplacedFenceAngled"))
+                {
+                    fencePosition = hit.point;
+                }
             }
+           
         }
 
       
@@ -707,41 +717,38 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+           
+                Node wallBuildArea = gridBase.NodeFromWorldPosition(fencePosition);
 
-                worldPosition = curNode.vis.transform.position;
+                worldPosition = wallBuildArea.vis.transform.position;
 
                 
                     
                     if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
                     {
-                        if (hit.collider.tag == "preplacedFence")
-                        {
+                    if (wallBuildArea.fenceObj == null)
+                    {
+                        
                             Vector3 fencePos = hit.collider.gameObject.transform.position;
+                        if (hit.collider.tag == "preplacedFence"|| hit.collider.tag == "preplacedFenceAngled")
+                        {
+                            GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
+                            if (hit.collider.tag == "preplacedFenceAngled")
+                            {
+                                fenceActualPlaced.transform.localScale += new Vector3(0.4142f, 0, 0);
+                            }
 
-                            GameObject fenceActualPlaced = Instantiate(fenceToPlace,fencePos, Quaternion.identity) as GameObject;
                             fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
                             Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                            fencePlacedProperties.gridPosX = curNode.nodePosX;
-                            fencePlacedProperties.gridPosZ = curNode.nodePosZ;
-                            curNode.fenceObj = fencePlacedProperties;
+                            fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
+                            fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
+                            wallBuildArea.fenceObj = fencePlacedProperties;
                             manager.inSceneFences.Add(fenceActualPlaced);
                             totalMoney -= fencePlacedProperties.price;
+                            noFences++;
+
                         }
-                        if (hit.collider.tag == "preplacedFenceAngled")
-                        {
-                            Vector3 fencePos = hit.collider.gameObject.transform.position;
-    
-                            GameObject fenceActualPlaced = Instantiate(fenceToPlace,fencePos, Quaternion.identity) as GameObject;
-                            fenceActualPlaced.transform.localScale += new Vector3(0.4142f,0,0); 
-                            fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
-                            Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                            fencePlacedProperties.gridPosX = curNode.nodePosX;
-                            fencePlacedProperties.gridPosZ = curNode.nodePosZ;
-                            curNode.fenceObj = fencePlacedProperties;
-                            manager.inSceneFences.Add(fenceActualPlaced);
-                            totalMoney -= fencePlacedProperties.price;
-                        }
+                    }
                 }
                 
             }
@@ -972,7 +979,11 @@ namespace LevelEditor
 
         #endregion
 
-        
+        void OnGUI()
+        {
+            GUI.Label(new Rect(100, 210, 150,20), "Fences" + noFences.ToString());
+        }
+
         /*
         #region Wall Object Placers
         void PlaceWallObject()
@@ -2165,14 +2176,7 @@ namespace LevelEditor
 
                         }
         #endregion*/
-
-
-        void OnGUI()
-        {
-            GUI.Label(new Rect(20, 20, 150, 30), totalPlaced.ToString());
-        }
-
-       
+  
     }
 }
 
