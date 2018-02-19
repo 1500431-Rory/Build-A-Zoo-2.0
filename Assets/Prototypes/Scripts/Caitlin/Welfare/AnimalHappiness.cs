@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class AnimalHappiness : MonoBehaviour {
 
 	// Enums
-	//
 	// For food types
 	enum FoodType
 	{
@@ -61,15 +60,7 @@ public class AnimalHappiness : MonoBehaviour {
 		NONE
 	}
 
-	// Variables
-	public int happiness;
-	public int shelterNum;
-	public int animalNum;
-	public int foodNum;
-	public int maxHappiness;
-
-	public bool isLonley;
-
+	// Variables for enum types
 	AnimalType animal;
 	FoodType food;
 	DietType diet;
@@ -77,7 +68,27 @@ public class AnimalHappiness : MonoBehaviour {
 	TerrainType terrain;
 	ToyType toy;
 
-	public Text welfareText;
+	// General variables
+	// Counters
+	private int currentHappiness;
+	private int shelterNum;
+	private int animalNum;
+	private int foodNum;
+	// Happiness and Stars
+	private int overallMaxHappiness;
+
+	// Stars
+	private bool terrainStarAchieved;
+	private bool fenceStarAchieved;
+	private bool folliageStarAchieved;
+	private bool careStarAchieved;
+	private bool costStarAchieved;
+
+	// Bool for if animal is lonley
+	private bool isLonley;
+
+	// Text for displaying  welfare data.
+	private Text welfareText;
 
 	// Use this for initialization
 	void Start () 
@@ -86,13 +97,18 @@ public class AnimalHappiness : MonoBehaviour {
 		shelterNum = 0;
 		animalNum = 0;
 		foodNum = 0;
-		maxHappiness = 40;
-		happiness = 0;
+		currentHappiness = 0;
+		overallMaxHappiness = 100;
 
-		// Set is lonely to false;
+		// Initulize bools
 		isLonley = false;
+		terrainStarAchieved = false;
+		fenceStarAchieved = false;
+		folliageStarAchieved = false;
+		careStarAchieved = false;
+		costStarAchieved = false;
 
-		// set enum types to none
+		// initualize enum types
 		food = FoodType.NONE;
 		animal = AnimalType.NONE;
 		diet = DietType.NONE;
@@ -110,8 +126,9 @@ public class AnimalHappiness : MonoBehaviour {
 		Lonley();
 
 		// Display animal welfare on canvas
-		welfareText.text = " Happiness: " + happiness + "\n Max Happiness: " + maxHappiness + "\n Shelter Number: " + shelterNum + "\n Animal Number: " + animalNum + "\n Food Type: " + food + "\n Toy Type: " + toy + "\n Fence Type: " + fence + "\n Terrain Type: " + terrain + "\n Diet Type " + diet;
+		welfareText.text = " currentHappiness: " + currentHappiness + "\n Max currentHappiness: " + overallMaxHappiness + "\n Shelter Number: " + shelterNum + "\n Animal Number: " + animalNum + "\n Food Type: " + food + "\n Toy Type: " + toy + "\n Fence Type: " + fence + "\n Terrain Type: " + terrain + "\n Diet Type " + diet;
         welfareText.color = new Color(1f, 1f, 1f);
+
 		// Food type given
 		if(foodNum < 10)
 		{
@@ -120,11 +137,19 @@ public class AnimalHappiness : MonoBehaviour {
 			{
 				// Set food|Type to fish
 				food = FoodType.FISH;
-				// Check that happiness is less than maxHappiness
-				if(happiness <maxHappiness)
+				// Check that currentHappiness is less than overallMaxHappiness
+				if(currentHappiness < overallMaxHappiness)
 				{
 					// Add 1 to foodNum
 					foodNum ++;
+					// Check if current happiness is less than 20
+					if(currentHappiness < 20)
+					{
+						// Add 1 to currentHappiness
+						currentHappiness ++;
+					}
+
+
 				}
 
 				// Call to FoodCall
@@ -141,7 +166,7 @@ public class AnimalHappiness : MonoBehaviour {
 			// Check for "g" being pressed
 			if(Input.GetKeyDown("g"))
 			{
-				if(happiness > 0)
+				if(currentHappiness > 0)
 				{
 					// Subrtact 1 from foodNum
 					foodNum --;
@@ -306,6 +331,11 @@ public class AnimalHappiness : MonoBehaviour {
 			FenceCheck();
 		}
 	}
+
+	void StarSystem()
+	{
+		
+	}
 		
 	public void Animal()
 	{
@@ -317,8 +347,8 @@ public class AnimalHappiness : MonoBehaviour {
 			//{
 				// Set the animal type to penguin
 				animal = AnimalType.PENGUIN;
-				// Check if happiness < maxHappiness
-				if(happiness < maxHappiness)
+				// Check if currentHappiness < overallMaxHappiness
+				if(currentHappiness < overallMaxHappiness)
 				{
 					//  Add 1 to  animalNum
 					animalNum ++;
@@ -366,10 +396,10 @@ public class AnimalHappiness : MonoBehaviour {
 		if(isLonley == true)
 		{
 			// CHeck if hapiness is > 0
-			if(happiness > 0)
+			if(currentHappiness > 0)
 			{
-				// SUbtract 1 from happiness 
-				happiness--;
+				// SUbtract 1 from currentHappiness 
+				currentHappiness--;
 			}
 		}
 	}
@@ -381,22 +411,22 @@ public class AnimalHappiness : MonoBehaviour {
 		// Check foodType and dietType match
 		if (food == FoodType.FISH && diet == DietType.CARNIVOROUS)
 		{
-			// Check happiness is less than maxHappiness
-			if(happiness < maxHappiness)
+			// Check currentHappiness is less than overallMaxHappiness
+			if(currentHappiness < overallMaxHappiness)
 			{
-				//  Add 1 to happiness
-				happiness  ++;
+				//  Add 1 to currentHappiness
+				currentHappiness  ++;
 			}
 		}
 
 		// Check that foodNum is not greater than animalNum
 		if(animalNum > foodNum)
 		{
-			// Check if happiness is > 0
-			if(happiness > 0)
+			// Check if currentHappiness is > 0
+			if(currentHappiness > 0)
 			{
-				// Subtract happiness
-				happiness --;
+				// Subtract currentHappiness
+				currentHappiness --;
 			}
 		}
 
@@ -415,22 +445,22 @@ public class AnimalHappiness : MonoBehaviour {
 		// check if fence type matches animal type
 		if(animal == AnimalType.PENGUIN && fence == FenceType.STONE || animal == AnimalType.PENGUIN && fence == FenceType.GLASS)
 		{
-			// Check if happiness < maxHappiness
-			if(happiness < maxHappiness)
+			// Check if currentHappiness < overallMaxHappiness
+			if(currentHappiness < overallMaxHappiness)
 			{
-				// Add 1 to happiness
-				happiness++;
+				// Add 1 to currentHappiness
+				currentHappiness++;
 			}
 		}
 
 		// Check if animal and fence type doesn't match
 		if(animal == AnimalType.PENGUIN && fence == FenceType.MESH)
 		{
-			// CHeck if happiness > 0
-			if(happiness > 0)
+			// CHeck if currentHappiness > 0
+			if(currentHappiness > 0)
 			{
-				// Subtract 1 from happiness
-				happiness--;
+				// Subtract 1 from currentHappiness
+				currentHappiness--;
 			}
 		}
 		// Enclosure size
@@ -443,22 +473,22 @@ public class AnimalHappiness : MonoBehaviour {
 		// Check type of animal matches type of toy
 		if(animal == AnimalType.PENGUIN && toy == ToyType.SHINYBOTTLE)
 		{
-			// Check if happiness < maxHappiness
-			if(happiness < maxHappiness)
+			// Check if currentHappiness < overallMaxHappiness
+			if(currentHappiness < overallMaxHappiness)
 			{
-				// Add 1 to happiness
-				happiness++;
+				// Add 1 to currentHappiness
+				currentHappiness++;
 			}
 		}
 
 		// check animal and toy type doesnt match
 		if(animal == AnimalType.PENGUIN && toy == ToyType.ROPES)
 		{
-			// Check if animal happiness is > 0
-			if(happiness > 0)
+			// Check if animal currentHappiness is > 0
+			if(currentHappiness > 0)
 			{
-				// Subtract 1 from happiness
-				happiness--;
+				// Subtract 1 from currentHappiness
+				currentHappiness--;
 			}
 		}
 
@@ -468,16 +498,16 @@ public class AnimalHappiness : MonoBehaviour {
 	void TerrainCheck()
 	{
 
-		if(happiness < maxHappiness)
+		if(currentHappiness < overallMaxHappiness)
 		{
 			// Check if terrain and animal type match
 			if(animal == AnimalType.PENGUIN && terrain == TerrainType.STONE || animal == AnimalType.PENGUIN && terrain == TerrainType.WATER)
 			{
-				// Check if happiness < maxHappiness
-				if(happiness < maxHappiness)
+				// Check if currentHappiness < overallMaxHappiness
+				if(currentHappiness < overallMaxHappiness)
 				{
-					// Add 1 to happiness
-					happiness++;
+					// Add 1 to currentHappiness
+					currentHappiness++;
 				}
 
 			}
@@ -487,11 +517,11 @@ public class AnimalHappiness : MonoBehaviour {
 		// Check if animal and terrain type don't match
 		if(animal == AnimalType.PENGUIN  && terrain == TerrainType.SAND || animal == AnimalType.PENGUIN && terrain == TerrainType.GRASS)
 		{
-			// CHeck if happiness is > 0
-			if(happiness > 0)
+			// CHeck if currentHappiness is > 0
+			if(currentHappiness > 0)
 			{
-				// Subtract 1 from happiness
-				happiness--;
+				// Subtract 1 from currentHappiness
+				currentHappiness--;
 			}
 		}
 			
@@ -504,24 +534,24 @@ public class AnimalHappiness : MonoBehaviour {
 		// Check if shelterNum = animalNum
 		if (animalNum == shelterNum) 
 		{
-			// Check if happiness < maxHappiness
-			if(happiness < maxHappiness)
+			// Check if currentHappiness < overallMaxHappiness
+			if(currentHappiness < overallMaxHappiness)
 			{
-				// Add 1 to happiness
-				happiness ++;
+				// Add 1 to currentHappiness
+				currentHappiness ++;
 			}
 		}
 			
 
 		// *** Note *** encluser will require at least one shelter for the star
-		// Only remove happiness if it is > 0
-		if(happiness > 0)
+		// Only remove currentHappiness if it is > 0
+		if(currentHappiness > 0)
 		{
 			// Check if animalNUm > shelterNum
 			if(animalNum > shelterNum)
 			{
-				// Subtract 1 from happiness
-				happiness --;
+				// Subtract 1 from currentHappiness
+				currentHappiness --;
 			}
 
 		}
