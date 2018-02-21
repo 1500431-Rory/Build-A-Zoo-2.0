@@ -5099,7 +5099,7 @@ MonoBehaviour:
     fencePrefab: {fileID: 1053068459202448, guid: 333ac3239c93cd643a614f2ad50d3fd2,
       type: 2}
   - fence_id: GlassFence1
-    fencePrefab: {fileID: 1672949503925534, guid: 307ef98c0c7c7994c9890f5709f54c96,
+    fencePrefab: {fileID: 1151866813531156, guid: 04f9c7c7dbc09734bbf4f969ee5bf664,
       type: 2}
   - fence_id: WoodenFence1
     fencePrefab: {fileID: 1016557605606206, guid: e79bdad658a780d4ea4d67d95aa9c3f1,
@@ -5116,7 +5116,7 @@ MonoBehaviour:
   LevelMaterials:
   - {fileID: 2100000, guid: b83c9449836bd2641ad697890ecd01b6, type: 2}
   - {fileID: 2100000, guid: 24737c4441cdb674e935414370bf32f5, type: 2}
-  - {fileID: 2100000, guid: 496fa7f225959074e9f2c1f257294eb5, type: 2}
+  - {fileID: 2100000, guid: d2c251aec69fff2498ae0cd4565f393b, type: 2}
 --- !u!1 &569801001
 GameObject:
   m_ObjectHideFlags: 0
@@ -6089,7 +6089,7 @@ Transform:
   - {fileID: 441111412}
   - {fileID: 639596746}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &639885582
 MonoBehaviour:
@@ -6712,13 +6712,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab74bad1b9b9e6e459ded2dc7ccfef36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  happiness: 0
-  shelterNum: 0
-  animalNum: 0
-  foodNum: 0
-  maxHappiness: 0
-  isLonley: 0
-  welfareText: {fileID: 1502454498}
 --- !u!4 &710650026
 Transform:
   m_ObjectHideFlags: 0
@@ -6730,7 +6723,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &715292422
 GameObject:
@@ -10845,7 +10838,7 @@ Transform:
   - {fileID: 233594604}
   - {fileID: 200039668}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1189776149
 MonoBehaviour:
@@ -12422,7 +12415,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1347297948
 GameObject:
@@ -13880,7 +13873,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1467749514
 GameObject:
@@ -16136,6 +16129,52 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1649666153}
+--- !u!1001 &1652754498
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 25.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 51.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300004, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a6454635463b1044ba7305fed6452240, type: 2}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 97284a6a8378b3e49af68fbfa8511669, type: 3}
+  m_IsPrefabParent: 0
 --- !u!1 &1685884084
 GameObject:
   m_ObjectHideFlags: 0
@@ -19768,8 +19807,8 @@ MonoBehaviour:
   animalList: []
   totalWealth: 0
   wealthChange: 0
-  totalMaxHappiness: 0
-  currentHappiness: 0
+  totalMaxcurrentHappiness: 0
+  currentcurrentHappiness: 0
   animalTotal: 0
   shelterTotal: 0
   foodTotal: 0
@@ -19786,7 +19825,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2039578000
 GameObject:
@@ -20820,7 +20859,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!1 &2115658208
 GameObject:

@@ -125,7 +125,7 @@ public class CameraMovement : MonoBehaviour
     void KeyboardControl()
     {
         // Left (screen-wise)
-        if ((Input.GetKey(KeyCode.A)))
+       /* if ((Input.GetKey(KeyCode.A)))
         {
             TranslateLeft();
         }
@@ -143,7 +143,7 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
         {
             TranslateDown();
-        }
+        }*/
         // rotate left one step when key pressed
         if (Input.GetKeyDown(KeyCode.Q))
         {
