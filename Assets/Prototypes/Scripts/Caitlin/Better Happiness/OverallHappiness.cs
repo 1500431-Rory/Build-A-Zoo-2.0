@@ -107,12 +107,14 @@ public class OverallHappiness : MonoBehaviour {
 		SetFoliage();
 		SetTerrain();
 
-		//print(animalType);
-		//print(terrainType);
-
-
-		// Add type happiness to the current happiness
-		currentHappiness += terrainStar.terrainHappiness;
+		// Check if terrain star is complete
+		if(terrainStar.terrainStarAchived == true)
+		{
+			// Add type happiness to the current happiness
+			currentHappiness += terrainStar.terrainHappiness;
+			// Reset the terrainHappiness to 0
+			terrainStar.terrainHappiness = 0;
+		}
 		
 	}
 

@@ -24,8 +24,6 @@ public class TerrainStar : MonoBehaviour {
 	void Update () 
 	{
 		TerrainHappiness();
-		print(overallVariables.animalType);
-		print(overallVariables.terrainType);
 
 		if(currentTerrainHappiness == 20)
 		{
