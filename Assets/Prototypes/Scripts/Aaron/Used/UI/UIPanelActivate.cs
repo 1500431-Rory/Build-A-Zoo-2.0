@@ -37,7 +37,7 @@ public class UIPanelActivate : MonoBehaviour
     {
         UIBackDrop.gameObject.SetActive(true);
         ObjectSelectionMenu.gameObject.SetActive(true);
-       CloseMenuButton.gameObject.SetActive(true);
+        CloseMenuButton.gameObject.SetActive(true);
     }
     void hidePanel()
     {
