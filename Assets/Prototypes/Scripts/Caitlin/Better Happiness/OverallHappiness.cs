@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,21 +6,21 @@ public class OverallHappiness : MonoBehaviour {
 
 	// Enums
 	// For animal types
-	enum AnimalType
+	public enum AnimalType
 	{
 		PENGUIN,
 		OTHER,
 		NONE
 	}
 	// For diet types
-	enum DietType
+	public enum DietType
 	{
 		CARNIVOROUS,
 		OTHER,
 		NONE
 	}
 	// For fence types
-	enum FenceType
+	public enum FenceType
 	{
 		GLASS,
 		STONE,
@@ -28,21 +28,21 @@ public class OverallHappiness : MonoBehaviour {
 		NONE
 	}
 	// For food types
-	enum FoodType
+	public enum FoodType
 	{
 		FISH,
 		OTHER,
 		NONE
 	}
 	// For foliage types
-	enum FoliageType
+	public enum FoliageType
 	{
 		ROCK,
 		BUSH,
 		NONE
 	}
 	// For terrain types
-	enum TerrainType
+	public enum TerrainType
 	{
 		WATER,
 		STONE,
@@ -51,7 +51,7 @@ public class OverallHappiness : MonoBehaviour {
 		NONE
 	}
 	//  For toy types
-	enum ToyType
+	public enum ToyType
 	{
 		SHINYBOTTLE,
 		SHINYDISC,
@@ -66,21 +66,31 @@ public class OverallHappiness : MonoBehaviour {
 	private int foodNum;
 
 	// Happiness variables
-	private int currentHappiness;
+	public int currentHappiness;
 	private int maxAnimalHappiness;
 
 	// Bool for if animal is lonley
 	private bool isLonley;
+
+	// For other class varaibles
+	public TerrainStar terrainStar;
 
 	// Use this for initialization
 	void Start () 
 	{
 		// Initualise variables
 		shelterNum = 0;
-		animalNum = 0;
+		animalNum = 2;
 		foodNum = 0;
 		currentHappiness = 0;
 		maxAnimalHappiness = 100;
+
+		// Set all enums to NONE
+		animalType = AnimalType.NONE;
+		fenceType = FenceType.NONE;
+		foliageType = FoliageType.NONE;
+		terrainType = TerrainType.NONE;
+		toyType = ToyType.NONE;
 	
 	}
 	
@@ -88,8 +98,22 @@ public class OverallHappiness : MonoBehaviour {
 	void Update () 
 	{
 		// Call to AnimalisLonley()
-		AnimalisLonely();
+		//AnimalisLonely();
+		// Call to set type functions
 		SetAnimal();
+		SetCare();
+		SetCost();
+		SetFence();
+		SetFoliage();
+		SetTerrain();
+
+		//print(animalType);
+		//print(terrainType);
+
+
+		// Add type happiness to the current happiness
+		currentHappiness += terrainStar.terrainHappiness;
+		
 	}
 
 	void AnimalisLonely()
@@ -109,7 +133,7 @@ public class OverallHappiness : MonoBehaviour {
 	}
 
 	// Public animal type veraibles
-	AnimalType animalType;
+	public AnimalType animalType;
 	// Set animal
 	public void SetAnimal()
 	{
@@ -119,21 +143,17 @@ public class OverallHappiness : MonoBehaviour {
 		switch(input)
 		{
 			case "p" :
+				// Set the animal type to penguin
 				animalType = AnimalType.PENGUIN;
 				break;
 			case "o" :
+				// Set the animal type to other
 				animalType = AnimalType.OTHER;
 				break;
 			default :
-				animalType = AnimalType.NONE;
+				print("default A");
 				break;
 		}
-	}
-	// Get animal
-	public void GetAnimal()
-	{
-		AnimalType animal;
-		animal = animalType;
 	}
 
 	// Public care type variables
@@ -145,10 +165,10 @@ public class OverallHappiness : MonoBehaviour {
 	{
 		
 	}
-	// Get care
-	public void GetCare()
-	{
 
+	public void SetCost()
+	{
+		
 	}
 
 	// Public fence type variables
@@ -158,11 +178,6 @@ public class OverallHappiness : MonoBehaviour {
 	{
 		
 	}
-	// Get Fence
-	public void GetFence()
-	{
-
-	}
 
 	// Public foliage type variables
 	FoliageType foliageType;
@@ -171,14 +186,9 @@ public class OverallHappiness : MonoBehaviour {
 	{
 		
 	}
-	// Get Foliage
-	public void GetFoliage()
-	{
-
-	}
 
 	// Public terrain type variables
-	TerrainType terrainType;
+	public TerrainType terrainType;
 	// Set terrain
 	public void SetTerrain()
 	{
@@ -188,29 +198,22 @@ public class OverallHappiness : MonoBehaviour {
 		// Detect keys have been pressed
 		switch(input)
 		{
-		case "p" :
+		case "1" :
 			terrainType = TerrainType.GRASS;
 			break;
-		case "o" :
+		case "2" :
 			terrainType = TerrainType.SAND;
 			break;
-		case "i" :
+		case "3" :
 			terrainType = TerrainType.STONE;
 			break;
-		case "j" :
+		case "4" :
 			terrainType = TerrainType.WATER;
 			break;
-		
 		default :
-			terrainType = TerrainType.NONE;
+			print("default T");
 			break;
 		}
-	}
-	// Get terrain
-	public void GetTerrain()
-	{
-		TerrainType terrain;
-		terrain = terrainType;
 	}
 
 
