@@ -86,29 +86,29 @@ public class CameraMovement : MonoBehaviour
 
     void TranslateLeft()
     {
-        if (cameraPointing == "N" | cameraPointing == "W")
+        if (cameraPointing == "N" || cameraPointing == "E")
         {
             transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
-            transform.Translate((Vector3.up * 0.4f * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.up * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
         }
         else
         {
-            transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
-            transform.Translate((Vector3.down * 0.4f * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.up * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
         }
     }
 
     void TranslateRight()
     {
-        if (cameraPointing == "N" | cameraPointing == "W")
+        if (cameraPointing == "N" || cameraPointing == "E")
         {
             transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
-            transform.Translate((Vector3.down * 0.4f * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.down * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
         }
         else
         {
-            transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
-            transform.Translate((Vector3.up * 0.4f * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.down * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
         }
     }
 
@@ -125,7 +125,7 @@ public class CameraMovement : MonoBehaviour
     void KeyboardControl()
     {
         // Left (screen-wise)
-       /* if ((Input.GetKey(KeyCode.A)))
+        if ((Input.GetKey(KeyCode.A)))
         {
             TranslateLeft();
         }
@@ -143,7 +143,7 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
         {
             TranslateDown();
-        }*/
+        }
         // rotate left one step when key pressed
         if (Input.GetKeyDown(KeyCode.Q))
         {

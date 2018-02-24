@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 namespace LevelEditor
@@ -12,7 +13,7 @@ namespace LevelEditor
         GridBase gridBase;
         InterfaceManager ui;
         Happiness happy;
-        
+   
         
         public float totalMoney;
 
@@ -113,9 +114,16 @@ namespace LevelEditor
 
         float noFences = 0;
 
-        public GameObject wallBuildArea;
-        public GameObject wallAngledBuildArea;
+        public FenceNode wallBuildArea;
+
         int matId;
+
+
+        public GameObject fencePrefab;
+        public GameObject[] fenceMarkers;
+        public GameObject[] fenceMarkersAngled;
+        public Toggle fillAll;
+
         //Enums
         // ToyEnum.ToyTypes toys;
         // CareEnum.CareTypes care;
@@ -123,12 +131,14 @@ namespace LevelEditor
         // TerrainEnum.TerrainTypes terrain;
         // FoliageEnum.FoliageTypes foliage;
         int noWater;
+        GameObject inGameToggle;
 
         void Start()
         {
             gridBase = GridBase.GetInstance();
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
+            inGameToggle = GameObject.Find("Toggle");
            // happy = Happiness.GetInstance();
   
            // PaintAll();
@@ -717,38 +727,79 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-
-                //Vector3 wallBuildArea = GameObject.FindGameObjectWithTag("preplacedFence").transform.position;
-
-                //worldPosition = wallBuildArea.vis.transform.position;
-
                 
-                    
-                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
+
+                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
                     {
-                   // if (wallBuildArea.fenceObj == null)
-                    {
-                        
-                            Vector3 fencePos = hit.collider.gameObject.transform.position;
-                        if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
+                   
+                     if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
+                      {
+                        if (fillAll.isOn)
                         {
-                            GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
-                            if (hit.collider.tag == "preplacedFenceAngled")
+                            fenceMarkers = GameObject.FindGameObjectsWithTag("preplacedFence");
+                            fenceMarkersAngled = GameObject.FindGameObjectsWithTag("preplacedFenceAngled");
+                            
+                                foreach (GameObject fence in fenceMarkers)
                             {
-                                fenceActualPlaced.transform.localScale += new Vector3(0.4142f, 0, 0);
+                                FenceNode wallBuildArea = fence.GetComponent<FenceNode>();
+                                if (wallBuildArea.fenceObj == false)
+                                { 
+                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace,fence.transform.position, fence.transform.rotation) as GameObject;
+                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                   // fencePlacedProperties.gridPosX = Mathf.RoundToInt(fence.transform.position.x);
+                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fence.transform.position.z);
+                                    wallBuildArea.fenceObj = true;
+                                    manager.inSceneFences.Add(fenceActualPlaced);
+                                    totalMoney -= fencePlacedProperties.price;
+                                    noFences++;
+                                }
                             }
-
-                            fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
-                            Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                            fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
-                            fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
-                            //wallBuildArea.fenceObj = fencePlacedProperties;
-                            manager.inSceneFences.Add(fenceActualPlaced);
-                            totalMoney -= fencePlacedProperties.price;
-                            noFences++;
-
+                           
+                            foreach (GameObject fenceAngle in fenceMarkersAngled)
+                            {
+                               FenceNode wallBuildArea = fenceAngle.GetComponent<FenceNode>();
+                               if (wallBuildArea.fenceObj == false)
+                                {
+                                    
+                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fenceAngle.transform.position, fenceAngle.transform.rotation) as GameObject;
+                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                     fenceActualPlaced.transform.localScale = new Vector3(1.4142f, 1, 1);
+                                    //fencePlacedProperties.gridPosX = Mathf.RoundToInt(fenceAngle.transform.position.x);
+                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fenceAngle.transform.position.z);
+                                    wallBuildArea.fenceObj = true;
+                                    manager.inSceneFences.Add(fenceActualPlaced);
+                                    totalMoney -= fencePlacedProperties.price;
+                                    noFences++;
+                 
+                                }
+                                
+                            }
                         }
-                    }
+                        else if (!fillAll.isOn)
+                        {
+                            FenceNode wallBuildArea = hit.collider.gameObject.GetComponent<FenceNode>();
+                            if (wallBuildArea.fenceObj == false)
+                            {
+                               
+
+                                Vector3 fencePos = hit.collider.gameObject.transform.position;
+                                GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
+                                if (hit.collider.tag == "preplacedFenceAngled")
+                                {
+                                    fenceActualPlaced.transform.localScale += new Vector3(0.4142f, 0, 0);
+                                }
+                                fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
+                                Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
+                                fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
+                                wallBuildArea.fenceObj = true;
+                                manager.inSceneFences.Add(fenceActualPlaced);
+                                totalMoney -= fencePlacedProperties.price;
+                                noFences++;
+                            }
+                            }
+                        }
+                    
                 }
                 
             }
@@ -760,6 +811,8 @@ namespace LevelEditor
                 }
             }
         }
+       
+       
 
         public void PassFenceToPlace(string fenceId)
         {

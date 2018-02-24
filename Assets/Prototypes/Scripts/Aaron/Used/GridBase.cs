@@ -6,9 +6,6 @@ using UnityEngine;
 //Creates The Grid Base for the Level(all the cubes)
 public class GridBase : MonoBehaviour {
 
-    
-
-
     public GameObject nodePrefab;
     public GameObject grassPrefab;
     public int sizeX;
