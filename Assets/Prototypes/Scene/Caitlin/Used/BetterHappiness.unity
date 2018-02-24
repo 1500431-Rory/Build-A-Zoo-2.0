@@ -149,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainStarAchived: 0
-  terrainHappiness: {fileID: 1016451887}
+  terrainHappiness: 0
+  overallVariables: {fileID: 1016451887}
 --- !u!1 &306627953
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +301,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a68255d1c64b0794f8cc8a2b76a6600d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  terrainStar: {fileID: 122717680}
+  animalType: 0
+  terrainType: 0
 --- !u!1 &1244057858
 GameObject:
   m_ObjectHideFlags: 0
