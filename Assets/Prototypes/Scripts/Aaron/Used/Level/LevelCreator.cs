@@ -117,8 +117,6 @@ namespace LevelEditor
         public FenceNode wallBuildArea;
 
         int matId;
-
-
         public GameObject fencePrefab;
         public GameObject[] fenceMarkers;
         public GameObject[] fenceMarkersAngled;
@@ -574,6 +572,15 @@ namespace LevelEditor
                 UpdateMousePosition();
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+                Node nodeE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (1 * gridBase.offset)));
+
+                Node nodeEE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (2 * gridBase.offset), 0, mousePosition.z));
+                Node nodeWW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (2 * gridBase.offset), 0, mousePosition.z));
+                Node nodeNN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (2 * gridBase.offset)));
+                Node nodeSS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (2 * gridBase.offset)));
 
                 worldPosition = curNode.vis.transform.position;
 
@@ -589,10 +596,9 @@ namespace LevelEditor
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
-                            if (curNode.placedObj != null)
+                            /*if (curNode.placedObj != null)
                             {
                                 CareClass careEnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>(); //get the Enum before Deleting
-
                                 manager.inSceneCare.Remove(curNode.placedObj.gameObject);
                                 Destroy(curNode.placedObj.gameObject);
                                 curNode.placedObj = null;
@@ -610,25 +616,48 @@ namespace LevelEditor
                                         Happiness.noShelter--;
                                         break;
                                 }
-                            }
+                            }*/
 
-                            GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
-                            Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
-                            CareClass careEnumComponent = careActualPlaced.GetComponent<CareClass>(); //get the Enum
-
-                            carePlacedProperties.gridPosX = curNode.nodePosX;
-                            carePlacedProperties.gridPosZ = curNode.nodePosZ;
-                            curNode.placedObj = carePlacedProperties;
-                            manager.inSceneCare.Add(careActualPlaced);
-                            totalMoney -= carePlacedProperties.price;
+                            
+                            CareClass careEnumComponent = careToPlace.GetComponent<CareClass>(); //get the Enum
 
                             switch (careEnumComponent.careType)
                             {
                                 case CareClass.CareTypes.AID:
-                                    Happiness.noAid++;
+                                   
+                                    if (Happiness.noAid < 1)
+                                    {
+                                        GameObject careActualPlacedAid = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                                        Level_Object carePlacedPropertiesAid = careActualPlacedAid.GetComponent<Level_Object>();
+                                        carePlacedPropertiesAid.gridPosX = curNode.nodePosX;
+                                        carePlacedPropertiesAid.gridPosZ = curNode.nodePosZ;
+
+                                        curNode.placedObj = carePlacedPropertiesAid;
+                                        nodeE.placedObj = carePlacedPropertiesAid;
+                                        nodeW.placedObj = carePlacedPropertiesAid;
+                                        nodeN.placedObj = carePlacedPropertiesAid;
+                                        nodeS.placedObj = carePlacedPropertiesAid;
+                                        nodeEE.placedObj = carePlacedPropertiesAid;
+                                        nodeWW.placedObj = carePlacedPropertiesAid;
+                                        nodeNN.placedObj = carePlacedPropertiesAid;
+                                        nodeSS.placedObj = carePlacedPropertiesAid;
+
+                                        manager.inSceneCare.Add(careActualPlacedAid);
+                                        totalMoney -= carePlacedPropertiesAid.price;
+                                        Happiness.noAid++;
+                                    }
+                                  
                                     break;
                                 case CareClass.CareTypes.FOOD:
-                                    switch(careEnumComponent.foodType)
+                                    GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                                    Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
+                                    carePlacedProperties.gridPosX = curNode.nodePosX;
+                                    carePlacedProperties.gridPosZ = curNode.nodePosZ;
+                                    curNode.placedObj = carePlacedProperties;
+                                    manager.inSceneCare.Add(careActualPlaced);
+                                    totalMoney -= carePlacedProperties.price;
+
+                                    switch (careEnumComponent.foodType)
                                     {
                                         case CareClass.FoodType.CARNIVOUROUS:
                                             happy.carnivourous = true;
@@ -637,10 +666,36 @@ namespace LevelEditor
                                             happy.herbivourous = true;
                                             break;
                                     }
+
                                     break;
                                 case CareClass.CareTypes.SHELTER:
-                                    Happiness.noShelter++;
-                                    Happiness.animalsSheltered += careEnumComponent.noAnimalsPerShelter;
+                                   
+               
+                                    if (Happiness.noShelter < 1)
+                                    {
+                                     GameObject careActualPlacedShelter = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                                    Level_Object carePlacedPropertiesShelter = careActualPlacedShelter.GetComponent<Level_Object>();
+
+                                        carePlacedPropertiesShelter.gridPosX = curNode.nodePosX;
+                                        carePlacedPropertiesShelter.gridPosZ = curNode.nodePosZ;
+                                        curNode.placedObj = carePlacedPropertiesShelter;
+                                        
+
+                                        nodeE.placedObj = carePlacedPropertiesShelter;
+                                        nodeW.placedObj = carePlacedPropertiesShelter;
+                                        nodeN.placedObj = carePlacedPropertiesShelter;
+                                        nodeS.placedObj = carePlacedPropertiesShelter;
+                                        nodeEE.placedObj = carePlacedPropertiesShelter;
+                                        nodeWW.placedObj = carePlacedPropertiesShelter;
+                                        nodeNN.placedObj = carePlacedPropertiesShelter;
+                                        nodeSS.placedObj = carePlacedPropertiesShelter;
+
+                                        manager.inSceneCare.Add(careActualPlacedShelter);
+                                        totalMoney -= carePlacedPropertiesShelter.price;
+                                        Happiness.noShelter++;
+                                        Happiness.animalsSheltered += careEnumComponent.noAnimalsPerShelter;
+                                    }
+                                   
                                     break;
                             }
 
@@ -682,7 +737,7 @@ namespace LevelEditor
                 UpdateMousePosition();
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
+               
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                 {
                     if (curNode.placedObj != null)
@@ -695,7 +750,7 @@ namespace LevelEditor
                             Destroy(curNode.placedObj.gameObject);
                         }
                         curNode.placedObj = null;
-
+                      
                         //Subtract from No. trackers based on enum
                         switch (careEnumComponents.careType)
                         {
@@ -960,7 +1015,8 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
- int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+                int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+
                 if (previousNode == null)
                 {
                     previousNode = curNode;
