@@ -74,6 +74,7 @@ public class OverallHappiness : MonoBehaviour {
 
 	// For other class varaibles
 	public TerrainStar terrainStar;
+	public FoliageStar foliageStar;
 
 	// Use this for initialization
 	void Start () 
@@ -87,7 +88,9 @@ public class OverallHappiness : MonoBehaviour {
 
 		// Set all enums to NONE
 		animalType = AnimalType.NONE;
+		dietType = DietType.NONE;
 		fenceType = FenceType.NONE;
+		foodType = FoodType.NONE;
 		foliageType = FoliageType.NONE;
 		terrainType = TerrainType.NONE;
 		toyType = ToyType.NONE;
@@ -110,10 +113,20 @@ public class OverallHappiness : MonoBehaviour {
 		// Check if terrain star is complete
 		if(terrainStar.terrainStarAchived == true)
 		{
-			// Add type happiness to the current happiness
+			// Add terraintype happiness to the current happiness
 			currentHappiness += terrainStar.terrainHappiness;
 			// Reset the terrainHappiness to 0
 			terrainStar.terrainHappiness = 0;
+		}
+
+		// Check if foliage star is complete
+		// Check if terrain star is complete
+		if(foliageStar.foliageStarAchieved == true)
+		{
+			// Add foliagetype happiness to the current happiness
+			currentHappiness += foliageStar.foliageHappiness;
+			// Reset the foliageHappiness to 0
+			foliageStar.foliageHappiness = 0;
 		}
 		
 	}
@@ -159,9 +172,9 @@ public class OverallHappiness : MonoBehaviour {
 	}
 
 	// Public care type variables
-	DietType dietType;
-	FoodType foodType;
-	ToyType toyType;
+	public DietType dietType;
+	public FoodType foodType;
+	public ToyType toyType;
 	// Set care
 	public void SetCare()
 	{
@@ -174,7 +187,7 @@ public class OverallHappiness : MonoBehaviour {
 	}
 
 	// Public fence type variables
-	FenceType fenceType;
+	public FenceType fenceType;
 	// Set Fence
 	public void SetFence()
 	{
@@ -182,11 +195,25 @@ public class OverallHappiness : MonoBehaviour {
 	}
 
 	// Public foliage type variables
-	FoliageType foliageType;
+	public FoliageType foliageType;
 	// Set Foliage
 	public void SetFoliage()
 	{
-		
+		string input;
+		input = Input.inputString;
+		// Detect keys have been pressed
+		switch (input) 
+		{
+		case "b":
+			foliageType = FoliageType.BUSH;
+			break;
+		case "r":
+			foliageType = FoliageType.ROCK;
+			break;
+		default:
+			print ("Default Fol");
+			break;
+		}
 	}
 
 	// Public terrain type variables
