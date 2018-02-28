@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 namespace LevelEditor
@@ -12,7 +13,7 @@ namespace LevelEditor
         GridBase gridBase;
         InterfaceManager ui;
         Happiness happy;
-        
+   
         
         public float totalMoney;
 
@@ -113,9 +114,14 @@ namespace LevelEditor
 
         float noFences = 0;
 
-        public GameObject wallBuildArea;
-        public GameObject wallAngledBuildArea;
+        public FenceNode wallBuildArea;
+
         int matId;
+        public GameObject fencePrefab;
+        public GameObject[] fenceMarkers;
+        public GameObject[] fenceMarkersAngled;
+        public Toggle fillAll;
+
         //Enums
         // ToyEnum.ToyTypes toys;
         // CareEnum.CareTypes care;
@@ -123,12 +129,14 @@ namespace LevelEditor
         // TerrainEnum.TerrainTypes terrain;
         // FoliageEnum.FoliageTypes foliage;
         int noWater;
+        GameObject inGameToggle;
 
         void Start()
         {
             gridBase = GridBase.GetInstance();
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
+            inGameToggle = GameObject.Find("Toggle");
            // happy = Happiness.GetInstance();
   
            // PaintAll();
@@ -564,6 +572,15 @@ namespace LevelEditor
                 UpdateMousePosition();
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+                Node nodeE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (1 * gridBase.offset)));
+
+                Node nodeEE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (2 * gridBase.offset), 0, mousePosition.z));
+                Node nodeWW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (2 * gridBase.offset), 0, mousePosition.z));
+                Node nodeNN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (2 * gridBase.offset)));
+                Node nodeSS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (2 * gridBase.offset)));
 
                 worldPosition = curNode.vis.transform.position;
 
@@ -579,10 +596,9 @@ namespace LevelEditor
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
-                            if (curNode.placedObj != null)
+                            /*if (curNode.placedObj != null)
                             {
                                 CareClass careEnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>(); //get the Enum before Deleting
-
                                 manager.inSceneCare.Remove(curNode.placedObj.gameObject);
                                 Destroy(curNode.placedObj.gameObject);
                                 curNode.placedObj = null;
@@ -600,25 +616,48 @@ namespace LevelEditor
                                         Happiness.noShelter--;
                                         break;
                                 }
-                            }
+                            }*/
 
-                            GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
-                            Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
-                            CareClass careEnumComponent = careActualPlaced.GetComponent<CareClass>(); //get the Enum
-
-                            carePlacedProperties.gridPosX = curNode.nodePosX;
-                            carePlacedProperties.gridPosZ = curNode.nodePosZ;
-                            curNode.placedObj = carePlacedProperties;
-                            manager.inSceneCare.Add(careActualPlaced);
-                            totalMoney -= carePlacedProperties.price;
+                            
+                            CareClass careEnumComponent = careToPlace.GetComponent<CareClass>(); //get the Enum
 
                             switch (careEnumComponent.careType)
                             {
                                 case CareClass.CareTypes.AID:
-                                    Happiness.noAid++;
+                                   
+                                    if (Happiness.noAid < 1)
+                                    {
+                                        GameObject careActualPlacedAid = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                                        Level_Object carePlacedPropertiesAid = careActualPlacedAid.GetComponent<Level_Object>();
+                                        carePlacedPropertiesAid.gridPosX = curNode.nodePosX;
+                                        carePlacedPropertiesAid.gridPosZ = curNode.nodePosZ;
+
+                                        curNode.placedObj = carePlacedPropertiesAid;
+                                        nodeE.placedObj = carePlacedPropertiesAid;
+                                        nodeW.placedObj = carePlacedPropertiesAid;
+                                        nodeN.placedObj = carePlacedPropertiesAid;
+                                        nodeS.placedObj = carePlacedPropertiesAid;
+                                        nodeEE.placedObj = carePlacedPropertiesAid;
+                                        nodeWW.placedObj = carePlacedPropertiesAid;
+                                        nodeNN.placedObj = carePlacedPropertiesAid;
+                                        nodeSS.placedObj = carePlacedPropertiesAid;
+
+                                        manager.inSceneCare.Add(careActualPlacedAid);
+                                        totalMoney -= carePlacedPropertiesAid.price;
+                                        Happiness.noAid++;
+                                    }
+                                  
                                     break;
                                 case CareClass.CareTypes.FOOD:
-                                    switch(careEnumComponent.foodType)
+                                    GameObject careActualPlaced = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                                    Level_Object carePlacedProperties = careActualPlaced.GetComponent<Level_Object>();
+                                    carePlacedProperties.gridPosX = curNode.nodePosX;
+                                    carePlacedProperties.gridPosZ = curNode.nodePosZ;
+                                    curNode.placedObj = carePlacedProperties;
+                                    manager.inSceneCare.Add(careActualPlaced);
+                                    totalMoney -= carePlacedProperties.price;
+
+                                    switch (careEnumComponent.foodType)
                                     {
                                         case CareClass.FoodType.CARNIVOUROUS:
                                             happy.carnivourous = true;
@@ -627,10 +666,36 @@ namespace LevelEditor
                                             happy.herbivourous = true;
                                             break;
                                     }
+
                                     break;
                                 case CareClass.CareTypes.SHELTER:
-                                    Happiness.noShelter++;
-                                    Happiness.animalsSheltered += careEnumComponent.noAnimalsPerShelter;
+                                   
+               
+                                    if (Happiness.noShelter < 1)
+                                    {
+                                     GameObject careActualPlacedShelter = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
+                                    Level_Object carePlacedPropertiesShelter = careActualPlacedShelter.GetComponent<Level_Object>();
+
+                                        carePlacedPropertiesShelter.gridPosX = curNode.nodePosX;
+                                        carePlacedPropertiesShelter.gridPosZ = curNode.nodePosZ;
+                                        curNode.placedObj = carePlacedPropertiesShelter;
+                                        
+
+                                        nodeE.placedObj = carePlacedPropertiesShelter;
+                                        nodeW.placedObj = carePlacedPropertiesShelter;
+                                        nodeN.placedObj = carePlacedPropertiesShelter;
+                                        nodeS.placedObj = carePlacedPropertiesShelter;
+                                        nodeEE.placedObj = carePlacedPropertiesShelter;
+                                        nodeWW.placedObj = carePlacedPropertiesShelter;
+                                        nodeNN.placedObj = carePlacedPropertiesShelter;
+                                        nodeSS.placedObj = carePlacedPropertiesShelter;
+
+                                        manager.inSceneCare.Add(careActualPlacedShelter);
+                                        totalMoney -= carePlacedPropertiesShelter.price;
+                                        Happiness.noShelter++;
+                                        Happiness.animalsSheltered += careEnumComponent.noAnimalsPerShelter;
+                                    }
+                                   
                                     break;
                             }
 
@@ -672,7 +737,7 @@ namespace LevelEditor
                 UpdateMousePosition();
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
+               
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                 {
                     if (curNode.placedObj != null)
@@ -685,7 +750,7 @@ namespace LevelEditor
                             Destroy(curNode.placedObj.gameObject);
                         }
                         curNode.placedObj = null;
-
+                      
                         //Subtract from No. trackers based on enum
                         switch (careEnumComponents.careType)
                         {
@@ -717,38 +782,79 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-
-                //Vector3 wallBuildArea = GameObject.FindGameObjectWithTag("preplacedFence").transform.position;
-
-                //worldPosition = wallBuildArea.vis.transform.position;
-
                 
-                    
-                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
+
+                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement)
                     {
-                   // if (wallBuildArea.fenceObj == null)
-                    {
-                        
-                            Vector3 fencePos = hit.collider.gameObject.transform.position;
-                        if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
+                   
+                     if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
+                      {
+                        if (fillAll.isOn)
                         {
-                            GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
-                            if (hit.collider.tag == "preplacedFenceAngled")
+                            fenceMarkers = GameObject.FindGameObjectsWithTag("preplacedFence");
+                            fenceMarkersAngled = GameObject.FindGameObjectsWithTag("preplacedFenceAngled");
+                            
+                                foreach (GameObject fence in fenceMarkers)
                             {
-                                fenceActualPlaced.transform.localScale += new Vector3(0.4142f, 0, 0);
+                                FenceNode wallBuildArea = fence.GetComponent<FenceNode>();
+                                if (wallBuildArea.fenceObj == false)
+                                { 
+                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace,fence.transform.position, fence.transform.rotation) as GameObject;
+                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                   // fencePlacedProperties.gridPosX = Mathf.RoundToInt(fence.transform.position.x);
+                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fence.transform.position.z);
+                                    wallBuildArea.fenceObj = true;
+                                    manager.inSceneFences.Add(fenceActualPlaced);
+                                    totalMoney -= fencePlacedProperties.price;
+                                    noFences++;
+                                }
                             }
-
-                            fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
-                            Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                            fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
-                            fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
-                            //wallBuildArea.fenceObj = fencePlacedProperties;
-                            manager.inSceneFences.Add(fenceActualPlaced);
-                            totalMoney -= fencePlacedProperties.price;
-                            noFences++;
-
+                           
+                            foreach (GameObject fenceAngle in fenceMarkersAngled)
+                            {
+                               FenceNode wallBuildArea = fenceAngle.GetComponent<FenceNode>();
+                               if (wallBuildArea.fenceObj == false)
+                                {
+                                    
+                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fenceAngle.transform.position, fenceAngle.transform.rotation) as GameObject;
+                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                     fenceActualPlaced.transform.localScale = new Vector3(1.4142f, 1, 1);
+                                    //fencePlacedProperties.gridPosX = Mathf.RoundToInt(fenceAngle.transform.position.x);
+                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fenceAngle.transform.position.z);
+                                    wallBuildArea.fenceObj = true;
+                                    manager.inSceneFences.Add(fenceActualPlaced);
+                                    totalMoney -= fencePlacedProperties.price;
+                                    noFences++;
+                 
+                                }
+                                
+                            }
                         }
-                    }
+                        else if (!fillAll.isOn)
+                        {
+                            FenceNode wallBuildArea = hit.collider.gameObject.GetComponent<FenceNode>();
+                            if (wallBuildArea.fenceObj == false)
+                            {
+                               
+
+                                Vector3 fencePos = hit.collider.gameObject.transform.position;
+                                GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
+                                if (hit.collider.tag == "preplacedFenceAngled")
+                                {
+                                    fenceActualPlaced.transform.localScale += new Vector3(0.4142f, 0, 0);
+                                }
+                                fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
+                                Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
+                                fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
+                                wallBuildArea.fenceObj = true;
+                                manager.inSceneFences.Add(fenceActualPlaced);
+                                totalMoney -= fencePlacedProperties.price;
+                                noFences++;
+                            }
+                            }
+                        }
+                    
                 }
                 
             }
@@ -760,6 +866,8 @@ namespace LevelEditor
                 }
             }
         }
+       
+       
 
         public void PassFenceToPlace(string fenceId)
         {
@@ -907,7 +1015,8 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
- int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+                int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+
                 if (previousNode == null)
                 {
                     previousNode = curNode;
