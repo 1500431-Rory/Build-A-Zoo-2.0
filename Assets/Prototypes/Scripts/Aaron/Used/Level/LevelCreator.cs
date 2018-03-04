@@ -411,20 +411,20 @@ namespace LevelEditor
                             }
                             else
                             { 
-                                    //Water current texture id = 2, be sure to change when rearranging textures
-                                    if (curNode.vis.GetComponent<NodeObject>().textureid == 2 && enrichmentToyClass.isWaterObject == true)
+                                    //Water current texture id = 3, be sure to change when rearranging textures
+                                    if (curNode.vis.GetComponent<NodeObject>().textureid == 3 && enrichmentToyClass.isWaterObject == true)
                                     {
                                         placingEnrichment();
                                     }
-                                    else if (curNode.vis.GetComponent<NodeObject>().textureid == 2 && enrichmentToyClass.isWaterObject == false)
+                                    else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 && enrichmentToyClass.isWaterObject == false)
                                     {
                                         Debug.Log("Cant place in Water");
                                     }
-                                    else if (curNode.vis.GetComponent<NodeObject>().textureid != 2 && enrichmentToyClass.isWaterObject == false)
+                                    else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && enrichmentToyClass.isWaterObject == false)
                                     {
                                         placingEnrichment();
                                     }
-                                    else if (curNode.vis.GetComponent<NodeObject>().textureid != 2 && enrichmentToyClass.isWaterObject == true)
+                                    else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && enrichmentToyClass.isWaterObject == true)
                                     {
                                         Debug.Log("Can only be placed in Water");
                                     }           
@@ -1031,10 +1031,6 @@ namespace LevelEditor
                         {
                             matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
                             curNode.vis.GetComponent<NodeObject>().textureid = matId;
-
-
-                            paintTile = false;
-                           
 
                         }
                         else
