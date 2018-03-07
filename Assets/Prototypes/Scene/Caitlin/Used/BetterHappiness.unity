@@ -305,8 +305,8 @@ MonoBehaviour:
   currentHappiness: 0
   terrainStar: {fileID: 122717680}
   foliageStar: {fileID: 1244057860}
+  careStar: {fileID: 1457546651}
   animalType: 0
-  dietType: 0
   foodType: 0
   toyType: 0
   fenceType: 0
@@ -436,9 +436,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2fdba62997fb9f489de8f66cedda99c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  careStarAchieved: 0
+  foodHappiness: 0
+  toyHappiness: 0
   careHappiness: 0
-  foodNum: 0
-  toyNum: 0
+  dietType: 0
+  overallVariables: {fileID: 1016451887}
 --- !u!1 &2078148033
 GameObject:
   m_ObjectHideFlags: 0
