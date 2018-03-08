@@ -8067,7 +8067,6 @@ GameObject:
   - component: {fileID: 639885579}
   - component: {fileID: 639885574}
   - component: {fileID: 639885573}
-  - component: {fileID: 639885578}
   - component: {fileID: 639885577}
   - component: {fileID: 639885576}
   - component: {fileID: 639885582}
@@ -8166,23 +8165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32379eb4140ad6443a0dfa8b3b368058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &639885578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 639885572}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8d4c209a134f1498b3942dbed3a925, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dimLight: {fileID: 2113849131}
-  cycle: 40
-  fadeSpeed: 4
-  nightTimeIntensity: 1
-  dayTimeIntensity: 1
-  dayTime: 6
 --- !u!114 &639885579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25728,7 +25710,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 20
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -25771,13 +25753,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1861220819}
-  m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: -20, y: 30, z: -21.9}
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: -20, y: 20, z: -21.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 639596746}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!1 &1867295399
 GameObject:
   m_ObjectHideFlags: 0
