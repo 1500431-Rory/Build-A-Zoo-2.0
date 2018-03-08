@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FoliageStar : MonoBehaviour {
 
-	[HideInInspector]
 	public bool foliageStarAchieved;
 	public int currentFoliageHappiness;
 	public int rockFoliageHappiness;
@@ -21,7 +20,7 @@ public class FoliageStar : MonoBehaviour {
 		rockFoliageHappiness = 0;
 		foliageHappiness = 20;
 
-
+		// Get compent/Find game object with script All Stars
 		overallVariables = GameObject.Find("All Stars").GetComponent<OverallHappiness>();
 	}
 	

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TerrainStar : MonoBehaviour {
 
-	[HideInInspector]
 	public bool terrainStarAchived;
 	public int groundTerrainHappiness;
 	public int waterTerrainHappiness;

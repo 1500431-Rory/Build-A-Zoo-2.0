@@ -63,10 +63,12 @@ public class OverallHappiness : MonoBehaviour {
 	private bool isLonley;
 
 	// For other class varaibles
-	public TerrainStar terrainStar;
-	public FoliageStar foliageStar;
 	public CareStar careStar;
+	public CostStar costStar;
 	public FenceStar fenceStar;
+	public FoliageStar foliageStar;
+	public TerrainStar terrainStar;
+
 
 	// Use this for initialization
 	void Start () 
@@ -100,42 +102,54 @@ public class OverallHappiness : MonoBehaviour {
 		SetFoliage();
 		SetTerrain();
 
-		// Check if terrain star is complete
-		if(terrainStar.terrainStarAchived == true)
+		// Check if current happiness is less than max happiness
+		if(currentHappiness < maxAnimalHappiness)
 		{
-			// Add terraintype happiness to the current happiness
-			currentHappiness += terrainStar.terrainHappiness;
-			// Reset the terrainHappiness to 0
-			terrainStar.terrainHappiness = 0;
+			// Check if care star is complete
+			if(careStar.careStarAchieved == true)
+			{
+				// Add total care happiness to the current happiness
+				currentHappiness += careStar.careHappiness;
+				// Reset the careHappiness to 0
+				careStar.careHappiness = 0;
+			}
 
-			print("overall" + terrainStar.terrainStarAchived);
-		}
+			// Check if cost star has been achieved 
+			if(costStar.costStarAchieved == true)
+			{
+				// Add cost happiness to current happiness
+				currentHappiness += costStar.costHappiness;
+				// Reset costeHappiness to 0
+				costStar.costHappiness = 0;
+			}
 
-		// Check if foliage star is complete
-		if(foliageStar.foliageStarAchieved == true)
-		{
-			// Add foliagetype happiness to the current happiness
-			currentHappiness += foliageStar.foliageHappiness;
-			// Reset the foliageHappiness to 0
-			foliageStar.foliageHappiness = 0;
-		}
+			// Check if fence star is complete
+			if(fenceStar.fenceStarAchieved == true)
+			{
+				// Add total fence happiness to current happiness
+				currentHappiness += fenceStar.fenceHappiness;
+				// Reset fenceHappiness to 0
+				fenceStar.fenceHappiness = 0;
+			}
 
-		// Check if care star is complete
-		if(careStar.careStarAchieved == true)
-		{
-			// Add total care happiness to the current happiness
-			currentHappiness += careStar.careHappiness;
-			// Reset the careHappiness to 0
-			careStar.careHappiness = 0;
-		}
+			// Check if foliage star is complete
+			if(foliageStar.foliageStarAchieved == true)
+			{
+				// Add foliagetype happiness to the current happiness
+				currentHappiness += foliageStar.foliageHappiness;
+				// Reset the foliageHappiness to 0
+				foliageStar.foliageHappiness = 0;
+			}
 
-		// Check if fence star is complete
-		if(fenceStar.fenceStarAchieved == true)
-		{
-			// Add total fence happiness to current happiness
-			currentHappiness += fenceStar.fenceHappiness;
-			// Reset fenceHappiness to 0
-			fenceStar.fenceHappiness = 0;
+			// Check if terrain star is complete
+			if(terrainStar.terrainStarAchived == true)
+			{
+				// Add terraintype happiness to the current happiness
+				currentHappiness += terrainStar.terrainHappiness;
+				// Reset the terrainHappiness to 0
+				terrainStar.terrainHappiness = 0;
+			}
+
 		}
 		
 	}
@@ -217,7 +231,7 @@ public class OverallHappiness : MonoBehaviour {
 
 	public void SetCost()
 	{
-		
+		// Add cost of fences, terrain animals care items and folaige items
 	}
 
 	// Public fence type variables

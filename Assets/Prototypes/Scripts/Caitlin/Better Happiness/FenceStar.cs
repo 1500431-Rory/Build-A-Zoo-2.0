@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FenceStar : MonoBehaviour {
 
-	[HideInInspector]
 	public bool fenceStarAchieved;
 	public int animalHappiness;
 	public int guestHappiness;

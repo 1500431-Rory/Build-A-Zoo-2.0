@@ -149,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainStarAchived: 0
-  currentTerrainHappiness: 0
+  groundTerrainHappiness: 0
+  waterTerrainHappiness: 0
   terrainHappiness: 0
   overallVariables: {fileID: 1016451887}
 --- !u!1 &306627953
@@ -257,6 +258,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 471667ab7f1ff054c825d2111dbb58a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fenceStarAchieved: 0
+  animalHappiness: 0
+  guestHappiness: 0
+  fenceHappiness: 0
+  overallVariables: {fileID: 1016451887}
 --- !u!1 &1016451885
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,6 +312,7 @@ MonoBehaviour:
   terrainStar: {fileID: 122717680}
   foliageStar: {fileID: 1244057860}
   careStar: {fileID: 1457546651}
+  fenceStar: {fileID: 365830339}
   animalType: 0
   foodType: 0
   toyType: 0
@@ -354,6 +361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foliageStarAchieved: 0
   currentFoliageHappiness: 0
+  rockFoliageHappiness: 0
   foliageHappiness: 0
   overallVariables: {fileID: 1016451887}
 --- !u!1 &1275078505

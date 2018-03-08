@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CareStar : MonoBehaviour {
 
-	[HideInInspector]
 	public bool careStarAchieved;
 	public int foodHappiness;
 	public int toyHappiness;
