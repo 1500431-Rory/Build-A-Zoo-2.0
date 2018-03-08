@@ -63,6 +63,7 @@ public class OverallHappiness : MonoBehaviour {
 	// Bool for if animal is lonley
 	private bool isLonley;
 
+	[HideInInspector]
 	// For other class varaibles
 	public TerrainStar terrainStar;
 	public FoliageStar foliageStar;
@@ -107,6 +108,8 @@ public class OverallHappiness : MonoBehaviour {
 			currentHappiness += terrainStar.terrainHappiness;
 			// Reset the terrainHappiness to 0
 			terrainStar.terrainHappiness = 0;
+
+			print("overall" + terrainStar.terrainStarAchived);
 		}
 
 		// Check if foliage star is complete

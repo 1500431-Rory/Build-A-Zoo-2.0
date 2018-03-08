@@ -9,7 +9,6 @@ public class CareStar : MonoBehaviour {
 	public int foodHappiness;
 	public int toyHappiness;
 	public int careHappiness;
-
 	public DietType dietType;
 
 	// For diet types
@@ -44,7 +43,7 @@ public class CareStar : MonoBehaviour {
 	{
 		AnimalCare();
 
-		if(foodHappiness + toyHappiness == 20)
+		if(foodHappiness + toyHappiness == careHappiness)
 		{
 			careStarAchieved = true;
 		} else
