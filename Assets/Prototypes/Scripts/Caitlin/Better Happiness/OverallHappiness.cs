@@ -40,7 +40,6 @@ public class OverallHappiness : MonoBehaviour {
 		WATER,
 		STONE,
 		GRASS,
-		SAND,
 		NONE
 	}
 	//  For toy types
@@ -63,11 +62,11 @@ public class OverallHappiness : MonoBehaviour {
 	// Bool for if animal is lonley
 	private bool isLonley;
 
-	[HideInInspector]
 	// For other class varaibles
 	public TerrainStar terrainStar;
 	public FoliageStar foliageStar;
 	public CareStar careStar;
+	public FenceStar fenceStar;
 
 	// Use this for initialization
 	void Start () 
@@ -128,6 +127,15 @@ public class OverallHappiness : MonoBehaviour {
 			currentHappiness += careStar.careHappiness;
 			// Reset the careHappiness to 0
 			careStar.careHappiness = 0;
+		}
+
+		// Check if fence star is complete
+		if(fenceStar.fenceStarAchieved == true)
+		{
+			// Add total fence happiness to current happiness
+			currentHappiness += fenceStar.fenceHappiness;
+			// Reset fenceHappiness to 0
+			fenceStar.fenceHappiness = 0;
 		}
 		
 	}
@@ -217,7 +225,24 @@ public class OverallHappiness : MonoBehaviour {
 	// Set Fence
 	public void SetFence()
 	{
-		
+		string input;
+		input = Input.inputString;
+
+		switch(input)
+		{
+		case "0":
+			fenceType = FenceType.GLASS;
+			break;
+		case "9":
+			fenceType = FenceType.MESH;
+			break;
+		case "8":
+			fenceType = FenceType.STONE;
+			break;
+		default:
+			print("No fence type");
+			break;
+		}
 	}
 
 	// Public foliage type variables
@@ -257,12 +282,9 @@ public class OverallHappiness : MonoBehaviour {
 			terrainType = TerrainType.GRASS;
 			break;
 		case "2" :
-			terrainType = TerrainType.SAND;
-			break;
-		case "3" :
 			terrainType = TerrainType.STONE;
 			break;
-		case "4" :
+		case "3" :
 			terrainType = TerrainType.WATER;
 			break;
 		default :

@@ -43,11 +43,14 @@ public class CareStar : MonoBehaviour {
 	{
 		AnimalCare();
 
+		// Check both happiness variables are equal to careHappiness
 		if(foodHappiness + toyHappiness == careHappiness)
 		{
+			// Set careStarAchieved to true
 			careStarAchieved = true;
 		} else
 		{
+			// Set careStarAchieved to false
 			careStarAchieved = false;
 		}
 	}
@@ -68,22 +71,13 @@ public class CareStar : MonoBehaviour {
 				toyHappiness = 10;
 			}
 
-			// Check if toyType is not suitable for a penguin
-			if(overallVariables.toyType == OverallHappiness.ToyType.ROPES)
+			// Check foodType is appropreate for penguins diet
+			if(overallVariables.foodType == OverallHappiness.FoodType.FISH)
 			{
-				// Subtract 10 from toy happiness
-				toyHappiness  = -10;
+				// Set food happiness to 10
+				foodHappiness = 10;
 			}
-				
 		}
-
-		// Check foodType is appropreate for penguins diet
-		if(overallVariables.foodType == OverallHappiness.FoodType.FISH)
-		{
-			// Set food happiness to 10
-			foodHappiness = 10;
-		}
-			
 	}
 		
 }

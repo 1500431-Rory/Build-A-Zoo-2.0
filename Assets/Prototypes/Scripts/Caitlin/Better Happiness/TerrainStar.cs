@@ -70,14 +70,6 @@ public class TerrainStar : MonoBehaviour {
 				// Add 10 to current happiness
 				groundTerrainHappiness = 0;
 			}
-
-			// Check terrain type is stone
-			if(overallVariables.terrainType == OverallHappiness.TerrainType.SAND)
-			{
-				// Add 10 to current happiness
-				waterTerrainHappiness = 0;
-			}
 		}
-
 	}
 }
