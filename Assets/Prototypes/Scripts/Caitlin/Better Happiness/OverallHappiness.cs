@@ -151,6 +151,8 @@ public class OverallHappiness : MonoBehaviour {
 			}
 
 		}
+
+		// Reset stars  and happiness variables if a new level is created
 		
 	}
 
@@ -161,12 +163,6 @@ public class OverallHappiness : MonoBehaviour {
 		{
 			// Set is lonely to true
 			isLonley = true;
-			// Check if current happiness is > 0
-			/*if(currentHappiness > 0)
-			{
-				// Subtract 1 from current happiness
-				currentHappiness --;
-			}*/
 		}
 	}
 
@@ -189,7 +185,7 @@ public class OverallHappiness : MonoBehaviour {
 				animalType = AnimalType.OTHER;
 				break;
 			default :
-				print("default A");
+				print("No animal type found");
 				break;
 		}
 	}
@@ -218,13 +214,15 @@ public class OverallHappiness : MonoBehaviour {
 			toyType = ToyType.ROPES;
 			break;
 		case "d" :
+			// Set food type to fish
 			foodType = FoodType.FISH;
 			break;
 		case "f" :
+			// Set food type other
 			foodType = FoodType.OTHER;
 			break;
 		default :
-			print("default D");
+			print("No care type found");
 			break;
 		}
 	}
@@ -245,16 +243,20 @@ public class OverallHappiness : MonoBehaviour {
 		switch(input)
 		{
 		case "0":
+			// Set fence type to glass 
 			fenceType = FenceType.GLASS;
 			break;
 		case "9":
+			// Set fence type to mesh
 			fenceType = FenceType.MESH;
 			break;
 		case "8":
+			// Set fence type to stone
 			fenceType = FenceType.STONE;
 			break;
 		default:
-			print("No fence type");
+			// Print error message
+			print("No fence type found");
 			break;
 		}
 	}
@@ -270,13 +272,16 @@ public class OverallHappiness : MonoBehaviour {
 		switch (input) 
 		{
 		case "b":
+			// Set fence type bush
 			foliageType = FoliageType.BUSH;
 			break;
 		case "r":
+			// Set foliage type to rock
 			foliageType = FoliageType.ROCK;
 			break;
 		default:
-			print ("Default Fol");
+			// Print error message 
+			print ("No foliage type found");
 			break;
 		}
 	}
@@ -286,23 +291,26 @@ public class OverallHappiness : MonoBehaviour {
 	// Set terrain
 	public void SetTerrain()
 	{
-		
 		string input;
 		input = Input.inputString;
 		// Detect keys have been pressed
 		switch(input)
 		{
 		case "1" :
+			// Set terrain type to grass
 			terrainType = TerrainType.GRASS;
 			break;
 		case "2" :
+			// Set terrain type tp stone
 			terrainType = TerrainType.STONE;
 			break;
 		case "3" :
+			// Set terrain type water
 			terrainType = TerrainType.WATER;
 			break;
 		default :
-			print("default T");
+			// Print error message
+			print("No terrain type found");
 			break;
 		}
 	}
