@@ -5,8 +5,7 @@ using UnityEngine;
 public class FoliageStar : MonoBehaviour {
 
 	public bool foliageStarAchieved;
-	public int currentFoliageHappiness;
-	public int rockFoliageHappiness;
+	public int rockHappiness;
 	public int foliageHappiness;
 
 	public OverallHappiness overallVariables;
@@ -16,8 +15,7 @@ public class FoliageStar : MonoBehaviour {
 	{
 		// Initulize variables
 		foliageStarAchieved = false;
-		currentFoliageHappiness = 0;
-		rockFoliageHappiness = 0;
+		rockHappiness = 0;
 		foliageHappiness = 20;
 
 		// Get compent/Find game object with script All Stars
@@ -31,7 +29,7 @@ public class FoliageStar : MonoBehaviour {
 		FolliageHappiness();
 
 		// Check if currentFolliageHappiness is equal to 20
-		if(currentFoliageHappiness + rockFoliageHappiness == foliageHappiness)
+		if(rockHappiness == foliageHappiness)
 		{
 			// Set folliageStarAcheived to true
 			foliageStarAchieved = true;
@@ -44,18 +42,11 @@ public class FoliageStar : MonoBehaviour {
 		// Check animal type is penguin
 		if(overallVariables.animalType == OverallHappiness.AnimalType.PENGUIN)
 		{
-			// Check folliage type
-			switch(overallVariables.foliageType)
+			// Check if foliageType is rock
+			if(overallVariables.foliageType == OverallHappiness.FoliageType.ROCK)
 			{
-			case OverallHappiness.FoliageType.BUSH:
-				currentFoliageHappiness = 10;
-				break;
-			case OverallHappiness.FoliageType.ROCK:
-				rockFoliageHappiness = 10;
-				break;
-			default:
-				print("No FoliageType");
-				break;
+				// Set rockHapiness to 20
+				rockHappiness = 20;
 			}
 		}
 	}

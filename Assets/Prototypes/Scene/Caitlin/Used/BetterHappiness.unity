@@ -309,10 +309,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHappiness: 0
-  terrainStar: {fileID: 122717680}
-  foliageStar: {fileID: 1244057860}
   careStar: {fileID: 1457546651}
+  costStar: {fileID: 1275078507}
   fenceStar: {fileID: 365830339}
+  foliageStar: {fileID: 1244057860}
+  terrainStar: {fileID: 122717680}
   animalType: 0
   foodType: 0
   toyType: 0
@@ -360,8 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foliageStarAchieved: 0
-  currentFoliageHappiness: 0
-  rockFoliageHappiness: 0
+  rockHappiness: 0
   foliageHappiness: 0
   overallVariables: {fileID: 1016451887}
 --- !u!1 &1275078505
@@ -404,6 +404,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20a3f6cd020d4e746bd3c25224d35fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  costStarAchieved: 0
+  costLevel: 0
+  totalCostLevel: 0
+  budget: 0
+  costHappiness: 0
+  overallVariables: {fileID: 1016451887}
+  care: {fileID: 1457546651}
+  fence: {fileID: 365830339}
+  foliage: {fileID: 1244057860}
+  terrainStar: {fileID: 122717680}
 --- !u!1 &1457546649
 GameObject:
   m_ObjectHideFlags: 0

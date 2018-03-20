@@ -23,7 +23,6 @@ public class CareStar : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-
 		// Initulize variables
 		foodHappiness = 0;
 		toyHappiness = 0;
