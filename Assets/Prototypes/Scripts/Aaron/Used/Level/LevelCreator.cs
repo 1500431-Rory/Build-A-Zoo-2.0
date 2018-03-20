@@ -244,7 +244,7 @@ namespace LevelEditor
                 else
                 {
                     foliageClone.transform.position = worldPosition;
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
@@ -356,7 +356,7 @@ namespace LevelEditor
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (curNode.placedObj != null)
                     {
@@ -393,7 +393,7 @@ namespace LevelEditor
                 else
                 {
                     enrichmentClone.transform.position = worldPosition;
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                     {
 
                         if (hit.collider.tag == "EnclosureMarker")
@@ -529,7 +529,7 @@ namespace LevelEditor
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (curNode.placedObj != null)
                     {
@@ -596,7 +596,7 @@ namespace LevelEditor
                 else
                 {
                     careClone.transform.position = worldPosition;
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
@@ -743,7 +743,7 @@ namespace LevelEditor
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
 
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
 
                 {
                     if (curNode.placedObj != null)
@@ -788,7 +788,7 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
                     {
@@ -892,7 +892,7 @@ namespace LevelEditor
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (curNode.placedObj != null)
                     {
@@ -933,7 +933,7 @@ namespace LevelEditor
                 else
                 {
                     animalClone.transform.position = worldPosition;
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                     {
 
                         if (hit.collider.tag == "EnclosureMarker")
@@ -990,7 +990,7 @@ namespace LevelEditor
 
                 // Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (hit.collider.tag == "penguin")
                     {
@@ -1065,7 +1065,7 @@ namespace LevelEditor
                 curNode.tileRenderer.material = matToPlace;
                 curNode.vis.transform.localRotation = targetRot;
 
-                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !ui.mouseOverUIElement)
+                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (hit.collider.tag == "EnclosureMarker")
                     {
