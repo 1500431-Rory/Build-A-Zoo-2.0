@@ -140,10 +140,6 @@ MonoBehaviour:
   modelVisualization: {fileID: 1085221728640380}
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
-  isCareObject: 0
-  isEnrichmentObject: 0
-  isFoliageObject: 1
-  isFenceObject: 0
-  isAnimalObject: 0
   rotateDegrees: 0
-  price: 0
+  price: 100
+  maintenance: 0

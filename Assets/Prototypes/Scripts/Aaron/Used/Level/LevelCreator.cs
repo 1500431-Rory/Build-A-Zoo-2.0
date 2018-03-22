@@ -12,9 +12,8 @@ namespace LevelEditor
         LevelManager manager;
         GridBase gridBase;
         InterfaceManager ui;
-        Happiness happy;
-
-
+        NumberTrackers numberTracker;
+        
         public float totalMoney;
 
         Vector3 mousePosition;
@@ -65,6 +64,8 @@ namespace LevelEditor
         //Terrain variable
         bool hasMaterial;
         bool paintTile;
+        GameObject terrainToPlace;
+        Terrain_Object terrainProperties;
         public Material matToPlace;
         Node previousNode;
         Material prevMaterial;
@@ -128,8 +129,16 @@ namespace LevelEditor
         // FenceEnum.FenceTypes fence;
         // TerrainEnum.TerrainTypes terrain;
         // FoliageEnum.FoliageTypes foliage;
+
+       OverallHappiness.AnimalType animalType;
+
         int noWater;
         GameObject inGameToggle;
+        public GameObject terrainObject;
+        public GameObject terrainObject1;
+        public GameObject terrainObject2;
+        public GameObject terrainObject3;
+
 
         void Start()
         {
@@ -137,8 +146,7 @@ namespace LevelEditor
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
             inGameToggle = GameObject.Find("Toggle");
-            // happy = Happiness.GetInstance();
-
+            
             // PaintAll();
 
 
@@ -254,7 +262,7 @@ namespace LevelEditor
                             }
                             else
                             {
-                                if (curNode.vis.GetComponent<NodeObject>().textureid == 2)
+                                if (curNode.vis.GetComponent<NodeObject>().textureid == 3)
                                 {
                                     Debug.Log("Cannot Place Object in water");
                                 }
@@ -291,6 +299,11 @@ namespace LevelEditor
             Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
             FoliageClass foliageEnumComponents = curNode.placedObj.gameObject.GetComponent<FoliageClass>(); //get the Enum before Deleting
+            Level_Object foliagePlacedProperties = curNode.placedObj.gameObject.GetComponent<Level_Object>();
+
+            NumberTrackers.totalMoney += foliagePlacedProperties.price;
+            NumberTrackers.maintenance -= foliagePlacedProperties.maintenance;
+
             manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
             Destroy(curNode.placedObj.gameObject);
             curNode.placedObj = null;
@@ -299,12 +312,13 @@ namespace LevelEditor
             switch (foliageEnumComponents.foliageType)
             {
                 case FoliageClass.FoliageTypes.BUSH:
-
+                    NumberTrackers.noBush--;
                     break;
                 case FoliageClass.FoliageTypes.ROCK:
-
+                    NumberTrackers.noRock--;
                     break;
                 case FoliageClass.FoliageTypes.OTHER:
+                    NumberTrackers.noOther--;
                     break;
             }
         }
@@ -321,16 +335,20 @@ namespace LevelEditor
             foliagePlacedProperties.gridPosZ = curNode.nodePosZ;
             curNode.placedObj = foliagePlacedProperties;
             manager.inSceneEnrichment.Add(foliageActualPlaced);
-            //totalMoney -= enrichmentPlacedProperties.price;
+
+            NumberTrackers.totalMoney -= foliagePlacedProperties.price;
+            NumberTrackers.maintenance += foliagePlacedProperties.maintenance;
+
             switch (foliageEnumComponent.foliageType)
             {
                 case FoliageClass.FoliageTypes.BUSH:
-
+                    NumberTrackers.noBush++;
                     break;
                 case FoliageClass.FoliageTypes.ROCK:
-
+                    NumberTrackers.noRock++;
                     break;
                 case FoliageClass.FoliageTypes.OTHER:
+                    NumberTrackers.noOther++;
                     break;
             }
         }
@@ -461,6 +479,11 @@ namespace LevelEditor
             Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
             ToyClass toyEnumComponents = curNode.placedObj.gameObject.GetComponent<ToyClass>(); //get the Enum before Deleting
+            Level_Object enrichmentPlacedProperties = curNode.placedObj.gameObject.GetComponent<Level_Object>();
+
+            NumberTrackers.totalMoney -= enrichmentPlacedProperties.price;
+            NumberTrackers.maintenance += enrichmentPlacedProperties.maintenance;
+
             manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
             Destroy(curNode.placedObj.gameObject);
             curNode.placedObj = null;
@@ -468,14 +491,11 @@ namespace LevelEditor
             //Subtract from No. trackers based on enum
             switch (toyEnumComponents.toyType)
             {
-                case ToyClass.ToyTypes.SHINYBOTTLE:
-                    Happiness.noShinyBottle--;
+                case ToyClass.ToyTypes.TOY:
+                    NumberTrackers.noToys--;
                     break;
-                case ToyClass.ToyTypes.SHINYCD:
-                    Happiness.noShinyCd--;
-                    break;
-                case ToyClass.ToyTypes.WATERFLOAT:
-                    Happiness.noWaterFloat--;
+                case ToyClass.ToyTypes.WATERTOY:
+                    NumberTrackers.noWaterToys--;
                     break;
             }
             Happiness.maxAnimalsHappy -= toyEnumComponents.animalsKeptHappy;
@@ -493,20 +513,21 @@ namespace LevelEditor
             enrichmentPlacedProperties.gridPosZ = curNode.nodePosZ;
             curNode.placedObj = enrichmentPlacedProperties;
             manager.inSceneEnrichment.Add(enrichmentActualPlaced);
-            //totalMoney -= enrichmentPlacedProperties.price;
+
+            NumberTrackers.totalMoney -= enrichmentPlacedProperties.price;
+            NumberTrackers.maintenance += enrichmentPlacedProperties.maintenance;
+
             switch (toyEnumComponent.toyType)
             {
-                case ToyClass.ToyTypes.SHINYBOTTLE:
-                    Happiness.noShinyBottle++;
+                case ToyClass.ToyTypes.TOY:
+                    NumberTrackers.noToys++;
                     break;
-                case ToyClass.ToyTypes.SHINYCD:
-                    Happiness.noShinyCd++;
+                case ToyClass.ToyTypes.WATERTOY:
+                    NumberTrackers.noWaterToys++;
                     break;
-                case ToyClass.ToyTypes.WATERFLOAT:
-                    Happiness.noWaterFloat++;
-                    break;
+            
             }
-            Happiness.maxAnimalsHappy += toyEnumComponent.animalsKeptHappy;
+            //Happiness.maxAnimalsHappy += toyEnumComponent.animalsKeptHappy;
         }
 
         public void PassEnrichmentToPlace(string enrichmentId)
@@ -534,29 +555,6 @@ namespace LevelEditor
                     if (curNode.placedObj != null)
                     {
                         deletingEnrichment();
-                        /*ToyClass toyEnumComponent = curNode.placedObj.gameObject.GetComponent<ToyClass>(); //get the script#1
-
-                        if (manager.inSceneEnrichment.Contains(curNode.placedObj.gameObject))
-                        {
-                            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
-                        }
-                        curNode.placedObj = null;
-                       
-
-                        switch (toyEnumComponent.toyType)
-                        {
-                            case ToyClass.ToyTypes.SHINYBOTTLE:
-                                Happiness.noShinyBottle--;
-                                break;
-                            case ToyClass.ToyTypes.SHINYCD:
-                                Happiness.noShinyCd--;
-                                break;
-                            case ToyClass.ToyTypes.WATERFLOAT:
-                                Happiness.noWaterFloat--;
-                                break;
-                        }
-                        Happiness.maxAnimalsHappy -= toyEnumComponent.animalsKeptHappy;*/
                     }
                 }
             }
@@ -600,36 +598,13 @@ namespace LevelEditor
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
-                            /*if (curNode.placedObj != null)
-                            {
-                                CareClass careEnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>(); //get the Enum before Deleting
-                                manager.inSceneCare.Remove(curNode.placedObj.gameObject);
-                                Destroy(curNode.placedObj.gameObject);
-                                curNode.placedObj = null;
-
-                                //Subtract from No. trackers based on enum
-                                switch (careEnumComponents.careType)
-                                {
-                                    case CareClass.CareTypes.AID:
-                                        Happiness.noAid--;
-                                        break;
-                                    case CareClass.CareTypes.FOOD:
-                                        Happiness.noFood--;
-                                        break;
-                                    case CareClass.CareTypes.SHELTER:
-                                        Happiness.noShelter--;
-                                        break;
-                                }
-                            }*/
-
-
                             CareClass careEnumComponent = careToPlace.GetComponent<CareClass>(); //get the Enum
 
                             switch (careEnumComponent.careType)
                             {
                                 case CareClass.CareTypes.AID:
 
-                                    if (Happiness.noAid < 1)
+                                    if (NumberTrackers.noAid < 1)
                                     {
                                         GameObject careActualPlacedAid = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
                                         Level_Object carePlacedPropertiesAid = careActualPlacedAid.GetComponent<Level_Object>();
@@ -647,8 +622,10 @@ namespace LevelEditor
                                         nodeSS.placedObj = carePlacedPropertiesAid;
 
                                         manager.inSceneCare.Add(careActualPlacedAid);
-                                        totalMoney -= carePlacedPropertiesAid.price;
-                                        Happiness.noAid++;
+                                        NumberTrackers.totalMoney -= carePlacedPropertiesAid.price;
+                                        NumberTrackers.maintenance += carePlacedPropertiesAid.maintenance;
+
+                                        NumberTrackers.noAid++;
                                     }
 
                                     break;
@@ -659,15 +636,16 @@ namespace LevelEditor
                                     carePlacedProperties.gridPosZ = curNode.nodePosZ;
                                     curNode.placedObj = carePlacedProperties;
                                     manager.inSceneCare.Add(careActualPlaced);
-                                    totalMoney -= carePlacedProperties.price;
+                                    NumberTrackers.totalMoney -= carePlacedProperties.price;
+                                    NumberTrackers.maintenance += carePlacedProperties.maintenance;
 
                                     switch (careEnumComponent.foodType)
                                     {
                                         case CareClass.FoodType.CARNIVOUROUS:
-                                            happy.carnivourous = true;
+                                            NumberTrackers.noCarnivorous++;
                                             break;
                                         case CareClass.FoodType.HERBIVOROUS:
-                                            happy.herbivourous = true;
+                                            NumberTrackers.noHerbivorous++;
                                             break;
                                     }
 
@@ -675,7 +653,7 @@ namespace LevelEditor
                                 case CareClass.CareTypes.SHELTER:
 
 
-                                    if (Happiness.noShelter < 1)
+                                    if (NumberTrackers.noShelter < 1)
                                     {
                                         GameObject careActualPlacedShelter = Instantiate(careToPlace, worldPosition, careClone.transform.rotation) as GameObject;
                                         Level_Object carePlacedPropertiesShelter = careActualPlacedShelter.GetComponent<Level_Object>();
@@ -695,11 +673,11 @@ namespace LevelEditor
                                         nodeSS.placedObj = carePlacedPropertiesShelter;
 
                                         manager.inSceneCare.Add(careActualPlacedShelter);
-                                        totalMoney -= carePlacedPropertiesShelter.price;
-                                        Happiness.noShelter++;
-                                        Happiness.animalsSheltered += careEnumComponent.noAnimalsPerShelter;
+                                        NumberTrackers.totalMoney -= carePlacedPropertiesShelter.price;
+                                        NumberTrackers.maintenance += carePlacedPropertiesShelter.maintenance;
+                                        NumberTrackers.noShelter++;
+                                        NumberTrackers.noAnimalsSheltered += careEnumComponent.noAnimalsPerShelter;
                                     }
-
                                     break;
                             }
 
@@ -749,6 +727,7 @@ namespace LevelEditor
                     if (curNode.placedObj != null)
                     {
                         CareClass careEnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>(); //get the Enum before Deleting
+                        Level_Object carePlacedProperties = curNode.placedObj.gameObject.GetComponent<Level_Object>();
 
                         if (manager.inSceneCare.Contains(curNode.placedObj.gameObject))
                         {
@@ -761,13 +740,27 @@ namespace LevelEditor
                         switch (careEnumComponents.careType)
                         {
                             case CareClass.CareTypes.AID:
-                                Happiness.noAid--;
+                                NumberTrackers.noAid--;
+                                NumberTrackers.totalMoney += carePlacedProperties.price;
+                                NumberTrackers.maintenance -= carePlacedProperties.maintenance;
                                 break;
                             case CareClass.CareTypes.FOOD:
-                                Happiness.noFood--;
+                                switch (careEnumComponents.foodType)
+                                {
+                                    case CareClass.FoodType.CARNIVOUROUS:
+                                        NumberTrackers.noCarnivorous--;
+                                        break;
+                                    case CareClass.FoodType.HERBIVOROUS:
+                                        NumberTrackers.noHerbivorous--;
+                                        break;
+                                }
+                                NumberTrackers.totalMoney += carePlacedProperties.price;
+                                NumberTrackers.maintenance -= carePlacedProperties.maintenance;
                                 break;
                             case CareClass.CareTypes.SHELTER:
-                                Happiness.noShelter--;
+                                NumberTrackers.noShelter--;
+                                NumberTrackers.totalMoney += carePlacedProperties.price;
+                                NumberTrackers.maintenance -= carePlacedProperties.maintenance;
                                 break;
                         }
                     }
@@ -802,14 +795,37 @@ namespace LevelEditor
                                 FenceNode wallBuildArea = fence.GetComponent<FenceNode>();
                                 if (wallBuildArea.fenceObj == false)
                                 {
+                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
                                     GameObject fenceActualPlaced = Instantiate(fenceToPlace, fence.transform.position, fence.transform.rotation) as GameObject;
                                     Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
                                     // fencePlacedProperties.gridPosX = Mathf.RoundToInt(fence.transform.position.x);
                                     //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fence.transform.position.z);
                                     wallBuildArea.fenceObj = true;
                                     manager.inSceneFences.Add(fenceActualPlaced);
-                                    totalMoney -= fencePlacedProperties.price;
-                                    noFences++;
+                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
+                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
+
+                                    switch (fenceEnumComponent.fenceType)
+                                    {
+                                        case FenceClass.FenceTypes.CONCRETE:
+                                            NumberTrackers.noConcrete++;
+                                            break;
+                                        case FenceClass.FenceTypes.CONCRETEW:
+                                            NumberTrackers.noConcreteW++;
+                                            break;
+                                        case FenceClass.FenceTypes.GLASS:
+                                            NumberTrackers.noGlass++;
+                                            break;
+                                        case FenceClass.FenceTypes.WIRE:
+                                            NumberTrackers.noWire++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODEN:
+                                            NumberTrackers.noWooden++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODENW:
+                                            NumberTrackers.noWoodenW++;
+                                            break;
+                                    }
                                 }
                             }
 
@@ -818,7 +834,7 @@ namespace LevelEditor
                                 FenceNode wallBuildArea = fenceAngle.GetComponent<FenceNode>();
                                 if (wallBuildArea.fenceObj == false)
                                 {
-
+                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
                                     GameObject fenceActualPlaced = Instantiate(fenceToPlace, fenceAngle.transform.position, fenceAngle.transform.rotation) as GameObject;
                                     Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
                                     fenceActualPlaced.transform.localScale = new Vector3(1.4142f, 1, 1);
@@ -826,9 +842,31 @@ namespace LevelEditor
                                     //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fenceAngle.transform.position.z);
                                     wallBuildArea.fenceObj = true;
                                     manager.inSceneFences.Add(fenceActualPlaced);
-                                    totalMoney -= fencePlacedProperties.price;
-                                    noFences++;
+                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
+                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
 
+
+                                    switch (fenceEnumComponent.fenceType)
+                                    {
+                                        case FenceClass.FenceTypes.CONCRETE:
+                                            NumberTrackers.noConcrete++;
+                                            break;
+                                        case FenceClass.FenceTypes.CONCRETEW:
+                                            NumberTrackers.noConcreteW++;
+                                            break;
+                                        case FenceClass.FenceTypes.GLASS:
+                                            NumberTrackers.noGlass++;
+                                            break;
+                                        case FenceClass.FenceTypes.WIRE:
+                                            NumberTrackers.noWire++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODEN:
+                                            NumberTrackers.noWooden++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODENW:
+                                            NumberTrackers.noWoodenW++;
+                                            break;
+                                    }
                                 }
 
                             }
@@ -839,7 +877,7 @@ namespace LevelEditor
                             if (wallBuildArea.fenceObj == false)
                             {
 
-
+                                FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
                                 Vector3 fencePos = hit.collider.gameObject.transform.position;
                                 GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
                                 if (hit.collider.tag == "preplacedFenceAngled")
@@ -852,8 +890,29 @@ namespace LevelEditor
                                 fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
                                 wallBuildArea.fenceObj = true;
                                 manager.inSceneFences.Add(fenceActualPlaced);
-                                totalMoney -= fencePlacedProperties.price;
-                                noFences++;
+                                NumberTrackers.totalMoney -= fencePlacedProperties.price;
+                                NumberTrackers.maintenance += fencePlacedProperties.maintenance;
+                                switch (fenceEnumComponent.fenceType)
+                                {
+                                    case FenceClass.FenceTypes.CONCRETE:
+                                        NumberTrackers.noConcrete++;
+                                        break;
+                                    case FenceClass.FenceTypes.CONCRETEW:
+                                        NumberTrackers.noConcreteW++;
+                                        break;
+                                    case FenceClass.FenceTypes.GLASS:
+                                        NumberTrackers.noGlass++;
+                                        break;
+                                    case FenceClass.FenceTypes.WIRE:
+                                        NumberTrackers.noWire++;
+                                        break;
+                                    case FenceClass.FenceTypes.WOODEN:
+                                        NumberTrackers.noWooden++;
+                                        break;
+                                    case FenceClass.FenceTypes.WOODENW:
+                                        NumberTrackers.noWoodenW++;
+                                        break;
+                                }
                             }
                         }
                     }
@@ -890,21 +949,48 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
-                    if (curNode.placedObj != null)
+                    if (hit.collider.tag == "fence")
                     {
-                        if (manager.inSceneFences.Contains(curNode.placedObj.gameObject))
-                        {
-                            manager.inSceneFences.Remove(curNode.placedObj.gameObject);
-                            Destroy(curNode.placedObj.gameObject);
+                            FenceNode wallBuildArea = hit.collider.GetComponent<FenceNode>();
+                        
+                            GameObject fenceActualPlaced = hit.collider.GetComponent<GameObject>();
+                            FenceClass fenceEnumComponent = hit.collider.GetComponent<FenceClass>(); //get the Enum
+                            Level_Object fencePlacedProperties = hit.collider.GetComponent<Level_Object>();
+
+                            NumberTrackers.totalMoney += fencePlacedProperties.price;
+                            NumberTrackers.maintenance -= fencePlacedProperties.maintenance;
+
+                            switch (fenceEnumComponent.fenceType)
+                            {
+                                case FenceClass.FenceTypes.CONCRETE:
+                                    NumberTrackers.noConcrete--;
+                                    break;
+                                case FenceClass.FenceTypes.CONCRETEW:
+                                    NumberTrackers.noConcreteW--;
+                                    break;
+                                case FenceClass.FenceTypes.GLASS:
+                                    NumberTrackers.noGlass--;
+                                    break;
+                                case FenceClass.FenceTypes.WIRE:
+                                    NumberTrackers.noWire--;
+                                    break;
+                                case FenceClass.FenceTypes.WOODEN:
+                                    NumberTrackers.noWooden--;
+                                    break;
+                                case FenceClass.FenceTypes.WOODENW:
+                                    NumberTrackers.noWoodenW--;
+                                    break;
+                            }
+
+                            manager.inSceneFences.Remove(hit.collider.gameObject);
+                            Destroy(hit.collider.gameObject);
                         }
-                        curNode.placedObj = null;
+                        //wallBuildArea.fenceObj = false;
                     }
                 }
-            }
+            
         }
         public void DeleteFences()
         {
@@ -943,9 +1029,22 @@ namespace LevelEditor
                             AnimalClass animalClass = animalActualPlaced.GetComponent<AnimalClass>();
 
                             manager.inSceneAnimals.Add(animalActualPlaced);
-                            //totalMoney -= animalPlacedProperties.price;
 
-                            Happiness.noAnimals++;
+                            NumberTrackers.totalMoney -= animalPlacedProperties.price;
+
+                            NumberTrackers.noAnimals++;
+                            if(animalClass.Carnivore == true)
+                            {
+                                NumberTrackers.noAnimalsC++;
+                            }
+                            else if (animalClass.Herbivore == true)
+                            {
+                                NumberTrackers.noAnimalsH++;
+                            }
+                            else if (animalClass.Omnivore == true)
+                            {
+                                NumberTrackers.noAnimalsO++;
+                            }
 
                         }
                         else
@@ -988,17 +1087,30 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-                // Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
                 if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                 {
                     if (hit.collider.tag == "penguin")
                     {
+                        AnimalClass animalClass = hit.collider.gameObject.GetComponent<AnimalClass>();
+                        Level_Object animalPlacedProperties = hit.collider.gameObject.GetComponent<Level_Object>();
                         manager.inSceneAnimals.Remove(GameObject.Find(hit.collider.gameObject.name));
                         Destroy(GameObject.Find(hit.collider.gameObject.name));
 
-                        Happiness.noAnimals--;
-                        //need to do something fancy with this code later
+                        NumberTrackers.totalMoney += animalPlacedProperties.price;
+
+                        NumberTrackers.noAnimals--;
+                        if (animalClass.Carnivore == true)
+                        {
+                            NumberTrackers.noAnimalsC--;
+                        }
+                        else if (animalClass.Herbivore == true)
+                        {
+                            NumberTrackers.noAnimalsH--;
+                        }
+                        else if (animalClass.Omnivore == true)
+                        {
+                            NumberTrackers.noAnimalsO--;
+                        }
                     }
                 }
             }
@@ -1017,68 +1129,132 @@ namespace LevelEditor
             if (hasMaterial)
             {
                 UpdateMousePosition();
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-                int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+                if (hit.collider.tag == "EnclosureMarker")
+                {
+                    Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                if (previousNode == null)
-                {
-                    previousNode = curNode;
-                    prevMaterial = previousNode.tileRenderer.material;
-                    prevRotation = previousNode.vis.transform.rotation;
-                }
-                else
-                {
-                    if (previousNode != curNode)
+                    int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+
+                    if (previousNode == null)
                     {
-                        if (paintTile)
-                        {
-                            matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
-                            curNode.vis.GetComponent<NodeObject>().textureid = matId;
-
-                        }
-                        else
-                        {
-                            previousNode.tileRenderer.material = prevMaterial;
-                            previousNode.vis.transform.rotation = prevRotation;
-                        }
-
-
                         previousNode = curNode;
-                        prevMaterial = curNode.tileRenderer.material;
-                        prevRotation = curNode.vis.transform.rotation;
+                        prevMaterial = previousNode.tileRenderer.material;
+                        prevRotation = previousNode.vis.transform.rotation;
                     }
-                }
-
-                if (curNode.vis.GetComponent<NodeObject>().textureid == matId)
-                {
-                    if (paintTile)
+                    else
                     {
-                        if (matId == 2)
+                        if (previousNode != curNode)
                         {
-                            noWater++;
+                            if (paintTile)
+                            {
+                                matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+
+                                if (curNode.vis.GetComponent<NodeObject>().textureid != matId)
+                                {
+                                    deleteTerrainChooser();
+                                }
+
+                                if (curNode.terrainObj == null)
+                                {
+                                    curNode.vis.GetComponent<NodeObject>().textureid = matId;
+                                    placeTerrainChooser();
+                                }
+
+                                paintTile = false;
+                            }
+                            else
+                            {
+                                previousNode.tileRenderer.material = prevMaterial;
+                                previousNode.vis.transform.rotation = prevRotation;
+                            }
+
+
+                            previousNode = curNode;
+                            prevMaterial = curNode.tileRenderer.material;
+                            prevRotation = curNode.vis.transform.rotation;
                         }
-                        paintTile = false;
                     }
-                }
-                Debug.Log(curNode.vis.GetComponent<NodeObject>().textureid);
+                    curNode.tileRenderer.material = matToPlace;
+                    curNode.vis.transform.localRotation = targetRot;
 
-                curNode.tileRenderer.material = matToPlace;
-                curNode.vis.transform.localRotation = targetRot;
 
-                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
-                {
-                    if (hit.collider.tag == "EnclosureMarker")
+
+                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
                     {
-                        paintTile = true;
+                        if (hit.collider.tag == "EnclosureMarker")
+                        {
+                            paintTile = true;
+                        }
+                    }
+
+                    if (Input.GetMouseButtonUp(1))
+                    {
+                        Vector3 eulerAngles = curNode.vis.transform.eulerAngles;
+                        eulerAngles += new Vector3(0, 90, 0);
+                        targetRot = Quaternion.Euler(eulerAngles);
                     }
                 }
+            }
+        }
 
-                if (Input.GetMouseButtonUp(1))
-                {
-                    Vector3 eulerAngles = curNode.vis.transform.eulerAngles;
-                    eulerAngles += new Vector3(0, 90, 0);
-                    targetRot = Quaternion.Euler(eulerAngles);
-                }
+        void deleteTerrainChooser()
+        {
+            
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+           
+            if (curNode.terrainObj != null)
+            {
+                Terrain_Object terrainPlacedProperties = curNode.terrainObj.GetComponent<Terrain_Object>();
+                manager.inSceneEnrichment.Remove(curNode.terrainObj.gameObject);
+                Destroy(curNode.terrainObj.gameObject);
+                curNode.terrainObj = null;
+                switch (terrainPlacedProperties.matId)
+            {
+                case 0:
+                    NumberTrackers.noGrass--;
+                    break;
+                case 1:
+                    NumberTrackers.noStone--;
+                    break;
+                case 2:
+                    NumberTrackers.noSand--;
+                    break;
+                case 3:
+                    NumberTrackers.noWater--;
+                    break;
+            }
+            }
+
+
+          
+
+        }
+        void placeTerrainChooser()
+        {
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+            GameObject terrainActualPlaced = Instantiate(terrainToPlace, worldPosition, Quaternion.identity) as GameObject;
+            Terrain_Object terrainPlacedProperties = terrainActualPlaced.GetComponent<Terrain_Object>();
+
+            terrainPlacedProperties.gridPosX = curNode.nodePosX;
+            terrainPlacedProperties.gridPosZ = curNode.nodePosZ;
+            curNode.terrainObj = terrainPlacedProperties;
+            manager.inSceneEnrichment.Add(terrainActualPlaced);
+            totalMoney -= terrainPlacedProperties.price;
+
+            switch(terrainPlacedProperties.matId)
+            {
+                case 0:
+                    NumberTrackers.noGrass++;
+                    break;
+                case 1:
+                    NumberTrackers.noStone++;
+                    break;
+                case 2:
+                    NumberTrackers.noSand++;
+                    break;
+                case 3:
+                    NumberTrackers.noWater++;
+                    break;
             }
         }
 
@@ -1086,6 +1262,23 @@ namespace LevelEditor
         {
             CloseAll();
             matToPlace = ResourcesManager.GetInstance().GetMaterial(matId);
+            switch (matId)
+                {
+                case 0:
+                    terrainToPlace = terrainObject;
+                    break;
+                case 1:
+                    terrainToPlace = terrainObject1;
+                    break;
+                case 2:
+                    terrainToPlace = terrainObject2;
+                    break;
+                case 3:
+                    terrainToPlace = terrainObject3;
+                    break;
+
+            }
+
             hasMaterial = true;
         }
 
@@ -1105,11 +1298,7 @@ namespace LevelEditor
 
         #endregion
 
-        void OnGUI()
-        {
-            GUI.Label(new Rect(100, 210, 150, 20), "Fences" + noFences.ToString());
-            GUI.Label(new Rect(100, 230, 150, 20), "Water" + noWater.ToString());
-        }
+       
 
         /*
         #region Wall Object Placers

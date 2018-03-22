@@ -15,15 +15,11 @@ namespace LevelEditor
         public GameObject modelVisualization;
         public Vector3 worldPositionOffset;
         public Vector3 worldRotation;
-        public bool isCareObject;
-        public bool isEnrichmentObject;
-        public bool isFoliageObject;
-        public bool isFenceObject;
-        public bool isAnimalObject;
-
-        public float rotateDegrees = 0;
+     
+       public float rotateDegrees = 0;
 
         public float price = 0;
+        public float maintenance = 0;
 
         public void UpdateNode(Node[,] grid)
         {

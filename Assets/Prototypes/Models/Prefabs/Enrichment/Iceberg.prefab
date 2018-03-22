@@ -355,7 +355,8 @@ Animation:
   m_Enabled: 1
   serializedVersion: 3
   m_Animation: {fileID: 7400000, guid: ff292eeff5ff2814a9c354603a7be784, type: 2}
-  m_Animations: []
+  m_Animations:
+  - {fileID: 7400000, guid: ff292eeff5ff2814a9c354603a7be784, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -426,10 +427,6 @@ MonoBehaviour:
   modelVisualization: {fileID: 1067237895879888}
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
-  isCareObject: 0
-  isEnrichmentObject: 0
-  isFoliageObject: 0
-  isFenceObject: 0
-  isAnimalObject: 0
   rotateDegrees: 0
-  price: 0
+  price: 200
+  maintenance: 10

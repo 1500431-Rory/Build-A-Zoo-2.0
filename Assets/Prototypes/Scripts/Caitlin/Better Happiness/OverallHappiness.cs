@@ -67,11 +67,18 @@ public class OverallHappiness : MonoBehaviour {
 	public CostStar costStar;
 	public FenceStar fenceStar;
 	public FoliageStar foliageStar;
-	public TerrainStar terrainStar;
+    public TerrainStar terrainStar;
 
 
-	// Use this for initialization
-	void Start () 
+    private static OverallHappiness instance = null;
+    public static OverallHappiness GetInstance()
+    {
+        return instance;
+    }
+
+
+    // Use this for initialization
+    void Start () 
 	{
 		// Initualise variables
 		animalNum = 0;
