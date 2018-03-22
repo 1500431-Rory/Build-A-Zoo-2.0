@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OverallHappiness : MonoBehaviour {
 
@@ -69,6 +70,11 @@ public class OverallHappiness : MonoBehaviour {
 	public FoliageStar foliageStar;
 	public TerrainStar terrainStar;
 
+	// Text for testing
+	public Text welfareText;
+	public Text starsText;
+	public Text stateText;
+	public Text keypressText;
 
 	// Use this for initialization
 	void Start () 
@@ -101,6 +107,17 @@ public class OverallHappiness : MonoBehaviour {
 		SetFence();
 		SetFoliage();
 		SetTerrain();
+
+		// Display Welfare text on screen
+		welfareText.text = "Animal Happiness: " + currentHappiness; 
+		starsText.text = " Care Star: " + careStar.careStarAchieved + "\n" + " Cost Star: " + costStar.costStarAchieved + "\n"  + " Fence Star: " + fenceStar.fenceStarAchieved + "\n"  + " Foliage Star: " + foliageStar.foliageStarAchieved + "\n" + " Terrain Star: " + terrainStar.terrainStarAchived;
+		stateText.text = "Animal Type: " + animalType + "\n" + "Diet Type: " + careStar.dietType +  "\n" + "Food Type: " + foodType + "\n" + "Toy Type: " + toyType + "\n" + "Fence Type: " + fenceType + "\n" + "Terrain Type: " + terrainType;
+		// Check if any key is pressed
+		if(Input.anyKeyDown)
+		{
+			// Display key pressed
+			keypressText.text = "Key Press: " + Input.inputString;
+		}
 
 		// Check if current happiness is less than max happiness
 		if(currentHappiness < maxAnimalHappiness)

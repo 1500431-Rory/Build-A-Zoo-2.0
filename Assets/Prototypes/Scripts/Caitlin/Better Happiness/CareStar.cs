@@ -49,7 +49,7 @@ public class CareStar : MonoBehaviour {
 		} else
 		{
 			// Set careStarAchieved to false
-			careStarAchieved = false;
+			//careStarAchieved = false;
 		}
 	}
 
