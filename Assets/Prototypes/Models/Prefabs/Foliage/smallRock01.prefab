@@ -51,8 +51,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4613549284995180}
-  - component: {fileID: 114440208705918608}
   - component: {fileID: 114039582334177536}
+  - component: {fileID: 114440208705918608}
   m_Layer: 0
   m_Name: smallRock01
   m_TagString: Untagged
@@ -157,13 +157,9 @@ MonoBehaviour:
   modelVisualization: {fileID: 1418914102243280}
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
-  isCareObject: 0
-  isEnrichmentObject: 0
-  isFoliageObject: 1
-  isFenceObject: 0
-  isAnimalObject: 0
   rotateDegrees: 0
-  price: 0
+  price: 100
+  maintenance: 0
 --- !u!114 &114440208705918608
 MonoBehaviour:
   m_ObjectHideFlags: 1

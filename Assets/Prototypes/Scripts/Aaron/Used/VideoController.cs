@@ -8,8 +8,8 @@ public class VideoController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        MovieTexture movie = GetComponent<Renderer>().material.GetTexture("water") as MovieTexture;
-        movie.Play();
+        //MovieTexture movie = GetComponent<Renderer>().material.GetTexture("water") as MovieTexture;
+        //movie.Play();
 	}
 	
 	// Update is called once per frame

@@ -7,9 +7,8 @@ public class ToyClass : MonoBehaviour
 {
   public enum ToyTypes
     {
-        SHINYBOTTLE,
-        SHINYCD,
-        WATERFLOAT
+        TOY,
+        WATERTOY
     }
 
     public ToyTypes toyType;
