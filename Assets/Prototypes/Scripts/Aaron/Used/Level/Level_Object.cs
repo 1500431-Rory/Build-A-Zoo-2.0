@@ -21,6 +21,21 @@ namespace LevelEditor
         public float price = 0;
         public float maintenance = 0;
 
+        public bool isWaterObject;
+
+        public enum ObjectType
+        {
+            FOLIAGEOBJECT,
+            ENRICHMENTOBJECT,
+            SHELTEROBJECT,
+            AIDOBJECT,
+            FOODOBJECT,
+            FENCEOBJECT,
+            ANIMALOBJECT
+        }
+
+        public ObjectType objectType;
+
         public void UpdateNode(Node[,] grid)
         {
             Node node = grid[gridPosX, gridPosZ];

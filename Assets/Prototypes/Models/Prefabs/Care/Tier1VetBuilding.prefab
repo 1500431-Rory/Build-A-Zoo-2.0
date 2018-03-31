@@ -176,3 +176,4 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 5000
   maintenance: 500
+  objectType: 3

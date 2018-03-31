@@ -5,6 +5,7 @@ using UnityEngine;
 namespace LevelEditor {
     public class ResourcesManager : MonoBehaviour {
 
+        public List<LevelObjectBase> LevelObjects = new List<LevelObjectBase>();
         public List<LevelFoliageBase> LevelFoliageObjects = new List<LevelFoliageBase>();
         public List<LevelCareBase> LevelCareObjects = new List<LevelCareBase>();
         public List<LevelEnrichmentBase> LevelEnrichmentObjects = new List<LevelEnrichmentBase>();
@@ -25,6 +26,22 @@ namespace LevelEditor {
         public static ResourcesManager GetInstance()
         {
             return instance;
+        }
+
+        public LevelObjectBase GetObjectBase(string objectId)
+        {
+            LevelObjectBase retVal = null;
+
+            for (int i = 0; i < LevelObjects.Count; i++)
+            {
+                if (objectId.Equals(LevelObjects[i].object_id))
+                {
+                    retVal = LevelObjects[i];
+                    break;
+                }
+            }
+
+            return retVal;
         }
 
         public LevelFoliageBase GetFoliageBase(string foliageId)
@@ -136,8 +153,13 @@ namespace LevelEditor {
             return id;
         }
     }
+    [System.Serializable]
+    public class LevelObjectBase
+    {
+        public string object_id;
+        public GameObject objectPrefab;
+    }
 
-    
     [System.Serializable]
     public class LevelFoliageBase
     {

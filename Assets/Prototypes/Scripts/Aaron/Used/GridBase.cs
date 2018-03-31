@@ -7,7 +7,8 @@ using UnityEngine;
 public class GridBase : MonoBehaviour {
 
     public GameObject nodePrefab;
-    public GameObject grassPrefab;
+    public GameObject nodeTPrefab;
+
     public int sizeX;
     public int sizeZ;
 
@@ -35,9 +36,9 @@ public class GridBase : MonoBehaviour {
     {
         grid = new Node[sizeX, sizeZ];
 
-        for (int x = 0; x < sizeX; x++)
+        for (int x = 13; x < 25; x++)
         {
-            for (int z = 0; z < sizeZ; z++)
+            for (int z = 10; z < 12; z++)
             {
 
                 float posX = x * offset;
@@ -60,24 +61,151 @@ public class GridBase : MonoBehaviour {
             }
         }
 
-        //spawning grass blades
-        /*for (int s = 0; s < 2; s++)
+        for (int x = 13; x < 24; x++)
         {
-            for (int x = 0; x < sizeX - 10; x++)
+            int z = 12;
+
+                float posX = x * offset;
+                float posZ = z * offset;
+
+                GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+                go.transform.parent = transform.GetChild(1).transform;
+
+                NodeObject nodeObj = go.GetComponent<NodeObject>();
+                nodeObj.posX = x;
+                nodeObj.posZ = z;
+
+                Node node = new Node();
+                node.vis = go;
+                node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+                node.isWalkable = true;
+                node.nodePosX = x;
+                node.nodePosZ = z;
+                grid[x, z] = node;
+            
+        }
+        for (int x = 13; x < 23; x++)
+        {
+            int z = 13;
+
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+
+        }
+
+        for (int x = 13; x < 22; x++)
+        {
+            for (int z = 14; z < 23; z++)
             {
-                for (int z = 0; z < sizeZ - 10; z++)
-                {
+                float posX = x * offset;
+                float posZ = z * offset;
 
-                    float posXx = x * offset;
-                    float posZz = z * offset;
+                GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+                go.transform.parent = transform.GetChild(1).transform;
 
-                    int[] randomRot = new int[]{ 0, 0,90,90 };
-                    GameObject grassBlades = Instantiate(grassPrefab, new Vector3(Random.Range(0, sizeX * offset), 0, Random.Range(0, sizeZ * offset)), Quaternion.Euler(0, randomRot[Random.Range(0, randomRot.Length)], 0)) as GameObject;
-                }
+                NodeObject nodeObj = go.GetComponent<NodeObject>();
+                nodeObj.posX = x;
+                nodeObj.posZ = z;
+
+                Node node = new Node();
+                node.vis = go;
+                node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+                node.isWalkable = true;
+                node.nodePosX = x;
+                node.nodePosZ = z;
+                grid[x, z] = node;
             }
-        }*/
+        }
+
+        for (int x = 16; x < 23; x++)
+        {
+            int z = 23;
+
+                float posX = x * offset;
+                float posZ = z * offset;
+
+                GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+                go.transform.parent = transform.GetChild(1).transform;
+
+                NodeObject nodeObj = go.GetComponent<NodeObject>();
+                nodeObj.posX = x;
+                nodeObj.posZ = z;
+
+                Node node = new Node();
+                node.vis = go;
+                node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+                node.isWalkable = true;
+                node.nodePosX = x;
+                node.nodePosZ = z;
+                grid[x, z] = node;
+            
+        }
+
+        for (int x = 17; x < 23; x++)
+        {
+            int z = 24;
+
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+
+        }
+        for (int x = 18; x < 23; x++)
+        {
+            int z = 25;
+
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+
+        }
+       
     }
 
+   
     //Creates a box collider on top of the Cubes as generating a collider on each cube would cause more "stress"
     void CreateMouseCollision()
     {

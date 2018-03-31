@@ -18,6 +18,8 @@ public class CareStarAw : MonoBehaviour {
     bool allAnimalsSheltered;
     bool haveAid;
 
+    public Animator anim;
+
     //public OverallHappiness overallVariables;
 
     public 
@@ -34,7 +36,7 @@ public class CareStarAw : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        AnimalCare();
+        AnimalCare(anim);
 
         // Check both happiness variables are equal to careHappiness
         if (UIStar.fillAmount == 1f)
@@ -50,7 +52,7 @@ public class CareStarAw : MonoBehaviour {
     }
 
     // For food and diet
-    void AnimalCare()
+    void AnimalCare(Animator anim)
     {
 
         if(NumberTrackers.noAnimalsC > 0)
@@ -91,6 +93,15 @@ public class CareStarAw : MonoBehaviour {
 
         IncreaseFillAmount();
         UIStar.fillAmount = fillAmountFood + fillAmountShelter + fillAmountAid;
+
+        if (UIStar.fillAmount == 1f)
+        {
+            anim.SetBool("StarAchieved", true);
+        }
+        else
+        {
+            anim.SetBool("StarAchieved", false);
+        }
 
     }
 

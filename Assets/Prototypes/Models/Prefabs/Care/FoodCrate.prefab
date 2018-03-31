@@ -37,7 +37,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4801077706993266}
   - component: {fileID: 33903424962614858}
-  - component: {fileID: 65939226649226796}
   - component: {fileID: 23197069892930674}
   m_Layer: 0
   m_Name: Cube
@@ -112,18 +111,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1572874966981090}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65939226649226796
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1572874966981090}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114473610395900686
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -144,6 +131,8 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 100
   maintenance: 100
+  isWaterObject: 0
+  objectType: 4
 --- !u!114 &114559354639736308
 MonoBehaviour:
   m_ObjectHideFlags: 1

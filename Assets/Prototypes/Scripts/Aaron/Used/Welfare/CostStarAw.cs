@@ -18,6 +18,8 @@ public class CostStarAw : MonoBehaviour {
     public Image UIStar;
     private float fillAmount= 0f;
 
+    public Animator anim;
+
     float prevMoney;
     // Use this for initialization
     void Start()
@@ -32,7 +34,7 @@ public class CostStarAw : MonoBehaviour {
         // Call to CostCheck()
         if (care.UIStar.fillAmount == 1.0f && fence.UIStar.fillAmount == 1.0f && foliage.UIStar.fillAmount == 1.0f && terrain.UIStar.fillAmount == 1.0f)
         {
-            CostCheck();
+            CostCheck(anim);
         }
         
         if (UIStar.fillAmount == 1.0f)
@@ -40,7 +42,7 @@ public class CostStarAw : MonoBehaviour {
 
     }
 
-    void CostCheck()
+    void CostCheck(Animator anim)
     {
 
        prevMoney = NumberTrackers.totalMoney;
@@ -72,6 +74,14 @@ public class CostStarAw : MonoBehaviour {
         {
             UIStar.fillAmount = 0.0f;
         }
-       
+
+        if (UIStar.fillAmount == 1)
+        {
+            anim.SetBool("StarAchieved", true);
+        }
+        else
+        {
+            anim.SetBool("StarAchieved", false);
+        }
     }
 }

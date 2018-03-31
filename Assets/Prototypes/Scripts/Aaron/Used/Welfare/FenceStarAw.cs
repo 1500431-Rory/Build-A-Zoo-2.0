@@ -9,6 +9,7 @@ public class FenceStarAw : MonoBehaviour {
 
     public Image UIStar;
     private float fillAmount;
+    public Animator anim;
 
     // Use this for initialization
     void Start()
@@ -20,11 +21,12 @@ public class FenceStarAw : MonoBehaviour {
     void Update()
     {
         // Fences call
-        Fences();
+        Fences(anim);
+        
     }
 
     // Checking fence
-    void Fences()
+    void Fences(Animator anim)
     {
         if(NumberTrackers.noConcrete+NumberTrackers.noConcreteW+NumberTrackers.noGlass+NumberTrackers.noWire+NumberTrackers.noWooden+NumberTrackers.noWoodenW == NumberTrackers.totalFences)
         {
@@ -36,6 +38,15 @@ public class FenceStarAw : MonoBehaviour {
             {
                 UIStar.fillAmount = 1;
             }
+        }
+
+        if (UIStar.fillAmount == 1)
+        {
+            anim.SetBool("StarAchieved",true);
+        }
+        else
+        {
+            anim.SetBool("StarAchieved", false);
         }
     }
 }

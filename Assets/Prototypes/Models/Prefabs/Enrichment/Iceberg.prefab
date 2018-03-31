@@ -430,3 +430,5 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 200
   maintenance: 10
+  isWaterObject: 1
+  objectType: 1

@@ -16,6 +16,8 @@ public class TerrainStarAw : MonoBehaviour {
 
     float fillAmount1, fillAmount2, fillAmount3;
 
+    public Animator anim;
+
     // Use this for initialization
     void Start()
     {
@@ -31,7 +33,7 @@ public class TerrainStarAw : MonoBehaviour {
     void Update()
     {
         // Call to TerrainHappiness()
-        TerrainHappiness();
+        TerrainHappiness(anim);
 
       
             // Set terrainStarAcheived to true
@@ -40,11 +42,11 @@ public class TerrainStarAw : MonoBehaviour {
         
     }
 
-    void TerrainHappiness()
+    void TerrainHappiness(Animator anim)
     {
 
             // Check terrain type is stone
-            if (NumberTrackers.noStone+NumberTrackers.noSand == NumberTrackers.totalTerrainSquares/4)
+            if (NumberTrackers.noStone+NumberTrackers.noSand >= NumberTrackers.totalTerrainSquares/4)
             {
                 correctLand = true;
             }
@@ -54,7 +56,7 @@ public class TerrainStarAw : MonoBehaviour {
             }
 
             // Check terrain type is stone
-            if (NumberTrackers.noWater == NumberTrackers.totalTerrainSquares / 4)
+            if (NumberTrackers.noWater >= NumberTrackers.totalTerrainSquares / 4)
             {
                 containsWater = true;
             }
@@ -75,6 +77,15 @@ public class TerrainStarAw : MonoBehaviour {
 
         IncreaseFillAmount();
         UIStar.fillAmount = fillAmount1 + fillAmount2 + fillAmount3;
+
+        if (UIStar.fillAmount == 1)
+        {
+            anim.SetBool("StarAchieved", true);
+        }
+        else
+        {
+            anim.SetBool("StarAchieved", false);
+        }
     }
 
     void IncreaseFillAmount()

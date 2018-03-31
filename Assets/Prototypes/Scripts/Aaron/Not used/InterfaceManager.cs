@@ -11,20 +11,7 @@ namespace LevelEditor
     {
 
         public bool mouseOverUIElement;
-
-        public Transform loadLevelGrid;
-        public Transform saveLevelDialog;
         public GameObject[] otherUI;
-        public GameObject loadlevelUIbuttonPrefab;
-
-        public GameObject btnWall;
-        public GameObject btnObjects;
-        public GameObject btnTerrain;
-
-        Level_SaveLoad sl;
-
-
-
 
         /*void Start()
         {
@@ -111,6 +98,17 @@ namespace LevelEditor
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         }
 
+        /*public Transform loadLevelGrid;
+        public Transform saveLevelDialog;
+     
+        public GameObject loadlevelUIbuttonPrefab;
+
+        public GameObject btnWall;
+        public GameObject btnObjects;
+        public GameObject btnTerrain;
+
+        Level_SaveLoad sl;
+        */
         /*public void ReloadFiles()
         {
             Button[] prevB = loadLevelGrid.GetComponentsInChildren<Button>();

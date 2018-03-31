@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 65448584207350354}
   m_Layer: 0
   m_Name: WireFence1
-  m_TagString: Untagged
+  m_TagString: fence
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -262,6 +262,8 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 500
   maintenance: 50
+  isWaterObject: 0
+  objectType: 5
 --- !u!114 &114326564063615078
 MonoBehaviour:
   m_ObjectHideFlags: 1

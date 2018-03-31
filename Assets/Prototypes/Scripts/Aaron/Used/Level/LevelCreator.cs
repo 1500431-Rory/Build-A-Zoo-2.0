@@ -20,6 +20,13 @@ namespace LevelEditor
         Vector3 fencePosition;
         Vector3 worldPosition;
 
+        //place object variables
+        bool objectHas;
+        GameObject objectToPlace;
+        GameObject objectClone;
+        Level_Object objectProperties;
+        bool objectDelete;
+
         //place foliage variables
         bool foliageHas;
         GameObject foliageToPlace;
@@ -139,6 +146,20 @@ namespace LevelEditor
         public GameObject terrainObject2;
         public GameObject terrainObject3;
 
+        bool cantPlace = false;
+
+        private void OnGUI()
+        {
+            Vector2 MouseCoords = Input.mousePosition;
+
+            float x = MouseCoords.x / Screen.width;
+            float y = MouseCoords.y / Screen.height;
+            //Vector2 ScreenCoords = new Vector2(x, y);
+            if (cantPlace == true)
+            {
+                GUI.Label(new Rect(x, y, 150, 30), "Cannot Place Object in the way");
+            }
+        }
 
         void Start()
         {
@@ -158,14 +179,17 @@ namespace LevelEditor
 
         void Update()
         {
-            PlaceFoliage();
-            DeleteFoliage();
+            PlaceObject();
+            DeleteObject();
 
-            PlaceCare();
-            DeleteCare();
+            //PlaceFoliage();
+            //DeleteFoliage();
 
-            PlaceEnrichment();
-            DeleteEnrichment();
+            //PlaceCare();
+            //DeleteCare();
+
+            //PlaceEnrichment();
+            //DeleteEnrichment();
 
             PlaceFence();
             DeleteFence();
@@ -182,8 +206,11 @@ namespace LevelEditor
 
         }
 
-        void CloseAll()
+        public void CloseAll()
         {
+            objectHas = false;
+            objectDelete = false;
+
             foliageHas = false;
             foliageDelete = false;
 
@@ -221,7 +248,6 @@ namespace LevelEditor
                 }
             }
 
-
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
                 mousePosition = hit.point;
@@ -232,10 +258,626 @@ namespace LevelEditor
         // Object Placement for all areas
         //Currently all work the exact same 
         //changes to be made to way fence and animals are placed
-        #region Place Foliage
-        void PlaceFoliage()
+
+        #region Place Objects
+        void PlaceObject()
         {
-            if (foliageHas)
+            if (objectHas)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                
+                worldPosition = curNode.vis.transform.position;
+               
+                if (objectClone == null)
+                {
+                    objectClone = Instantiate(objectToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    objectProperties = objectClone.GetComponent<Level_Object>();
+                    Renderer r = objectClone.GetComponentInChildren<Renderer>();
+                    r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+                    r.material.color = Color.green;
+                }
+                else
+                {
+                    objectClone.transform.position = worldPosition;
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                    {
+                        if (hit.collider.tag == "EnclosureMarker")
+                        {
+                            if (curNode.placedObj != null)
+                            {
+                                StartCoroutine("cantPlaceFeedBack");                          
+                            }
+                            else
+                            {
+                                
+                                //Water current texture id = 3, be sure to change when rearranging textures
+                                if (curNode.vis.GetComponent<NodeObject>().textureid == 3 && objectProperties.isWaterObject == true)
+                                {
+                                    placingObjects();
+                                }
+                                else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 && objectProperties.isWaterObject == false)
+                                {
+                                    Debug.Log("Cant place in Water");
+                                }
+                                else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && objectProperties.isWaterObject == false)
+                                {
+                                    placingObjects();
+                                }
+                                else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && objectProperties.isWaterObject == true)
+                                {
+                                    Debug.Log("Can only be placed in Water");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Must be placed in Enclosure");
+                        }
+                    }
+
+                    //Rotation
+                    /*
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        objectProperties.ChangeRotation();
+                    }
+                    */
+                }
+            }
+            else
+            {
+                if (objectClone != null)
+                {
+                    Destroy(objectClone);
+                }
+            }
+        }
+
+        IEnumerator cantPlaceFeedBack()
+        {
+            Renderer r = objectClone.GetComponentInChildren<Renderer>();
+            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            r.material.color = Color.red;
+            cantPlace = true;
+            yield return new WaitForSeconds(0.3f);
+            r.material.color = Color.green;
+            cantPlace = false;
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        public void PassObjectToPlace(string objectId)
+        {
+            if (objectClone != null)
+            {
+                Destroy(objectClone);
+            }
+
+            CloseAll();
+            objectHas = true;
+            objectClone = null;
+            objectToPlace = ResourcesManager.GetInstance().GetObjectBase(objectId).objectPrefab;
+        }
+        void DeleteObject()
+        {
+            if (objectDelete)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                {
+                    if (curNode.placedObj != null)
+                    {
+                        deletingObjects();
+                    }
+                }
+            }
+        }
+        public void DeleteObjects()
+        {
+            CloseAll();
+            objectDelete = true;
+        }
+
+        void deletingObjects()
+        {
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+            Level_Object objectPlacedProperties = curNode.placedObj.gameObject.GetComponent<Level_Object>();
+            switch(objectPlacedProperties.objectType)
+            {
+                case Level_Object.ObjectType.AIDOBJECT:
+                    NumberTrackers.noAid--;
+                    break;
+
+                case Level_Object.ObjectType.ANIMALOBJECT:
+                    AnimalClass animalEnumComponents = curNode.placedObj.gameObject.GetComponent<AnimalClass>();
+                    switch (animalEnumComponents.animalFoodType)
+                    {
+                        case AnimalClass.AnimalFoodTypes.Carnivore:
+                            NumberTrackers.noAnimalsC--;
+                            break;
+
+                        case AnimalClass.AnimalFoodTypes.Herbivore:
+                            NumberTrackers.noAnimalsH--;
+                            break;
+
+                        case AnimalClass.AnimalFoodTypes.Omnivore:
+                            NumberTrackers.noAnimalsO--;
+                            break;
+                    }
+
+                    //Switch currently not need but implemented for furture addition of other animals
+                    switch (animalEnumComponents.animalType)
+                    {
+                        case AnimalClass.AnimalTypes.PENGUIN:
+                            NumberTrackers.noAnimals--;
+                            break;
+                            
+                        case AnimalClass.AnimalTypes.OTHER:
+                            NumberTrackers.noAnimals--;
+                            break;
+                    }
+
+
+                    break;
+
+                case Level_Object.ObjectType.ENRICHMENTOBJECT:
+                   ToyClass toyEnumComponents = curNode.placedObj.gameObject.GetComponent<ToyClass>();
+                    //Subtract from No. trackers based on enum
+                    switch (toyEnumComponents.toyType)
+                    {
+                        case ToyClass.ToyTypes.TOY:
+                            NumberTrackers.noToys--;
+                            break;
+                        case ToyClass.ToyTypes.WATERTOY:
+                            NumberTrackers.noWaterToys--;
+                            break;
+                    }
+                    break;
+
+                case Level_Object.ObjectType.FENCEOBJECT:
+                    //get the Enum before Deleting
+                    FenceClass fenceEnumComponents = curNode.placedObj.gameObject.GetComponent<FenceClass>();
+                    //Subtract from No. trackers based on enum
+                    switch (fenceEnumComponents.fenceType)
+                    {
+                        case FenceClass.FenceTypes.CONCRETE:
+                            NumberTrackers.noConcrete--;
+                            break;
+                        case FenceClass.FenceTypes.CONCRETEW:
+                            NumberTrackers.noConcreteW--;
+                            break;
+                        case FenceClass.FenceTypes.GLASS:
+                            NumberTrackers.noGlass--;
+                            break;
+                        case FenceClass.FenceTypes.WIRE:
+                            NumberTrackers.noWire--;
+                            break;
+                        case FenceClass.FenceTypes.WOODEN:
+                            NumberTrackers.noWooden--;
+                            break;
+                        case FenceClass.FenceTypes.WOODENW:
+                            NumberTrackers.noWoodenW--;
+                            break;
+                    }
+
+                    break;
+
+                case Level_Object.ObjectType.FOLIAGEOBJECT:
+                    //get the Enum before Deleting
+                    FoliageClass foliageEnumComponents = curNode.placedObj.gameObject.GetComponent<FoliageClass>();
+                    //Subtract from No. trackers based on enum
+                    switch (foliageEnumComponents.foliageType)
+                           {
+                                case FoliageClass.FoliageTypes.BUSH:
+                                    NumberTrackers.noBush--;
+                                    break;
+                                case FoliageClass.FoliageTypes.ROCK:
+                                    NumberTrackers.noRock--;
+                                    break;
+                                case FoliageClass.FoliageTypes.OTHER:
+                                    NumberTrackers.noOther--;
+                                    break;
+                            }
+                    break;
+
+                case Level_Object.ObjectType.FOODOBJECT:
+                    CareClass careEnumComponent = curNode.placedObj.gameObject.GetComponent<CareClass>();
+                    switch (careEnumComponent.foodType)
+                    {
+                        case CareClass.FoodType.CARNIVOUROUS:
+                            NumberTrackers.noCarnivorous--;
+                            break;
+                        case CareClass.FoodType.HERBIVOROUS:
+                            NumberTrackers.noHerbivorous--;
+                            break;
+                    }
+                    break;
+
+                case Level_Object.ObjectType.SHELTEROBJECT:
+                    CareClass care3EnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>();
+                    NumberTrackers.noShelter--;
+                    break;
+            }
+
+            NumberTrackers.totalMoney += objectPlacedProperties.price;
+            NumberTrackers.maintenance -= objectPlacedProperties.maintenance;
+
+            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
+            Destroy(curNode.placedObj.gameObject);
+            curNode.placedObj = null;
+
+            
+        }
+        void placingObjects()
+        {
+
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+            GameObject objectActualPlaced = Instantiate(objectToPlace, worldPosition, objectClone.transform.rotation) as GameObject;
+            Level_Object objectPlacedProperties = objectActualPlaced.GetComponent<Level_Object>();
+           
+
+            objectPlacedProperties.gridPosX = curNode.nodePosX;
+            objectPlacedProperties.gridPosZ = curNode.nodePosZ;
+            curNode.placedObj = objectPlacedProperties;
+            manager.inSceneEnrichment.Add(objectActualPlaced);
+
+            NumberTrackers.totalMoney -= objectPlacedProperties.price;
+            NumberTrackers.maintenance += objectPlacedProperties.maintenance;
+
+            switch (objectPlacedProperties.objectType)
+            {
+                case Level_Object.ObjectType.AIDOBJECT:
+                    NumberTrackers.noAid++;
+                    break;
+
+                case Level_Object.ObjectType.ANIMALOBJECT:
+                    AnimalClass animalEnumComponents = curNode.placedObj.gameObject.GetComponent<AnimalClass>();
+                    switch (animalEnumComponents.animalFoodType)
+                    {
+                        case AnimalClass.AnimalFoodTypes.Carnivore:
+                            NumberTrackers.noAnimalsC++;
+                            break;
+
+                        case AnimalClass.AnimalFoodTypes.Herbivore:
+                            NumberTrackers.noAnimalsH++;
+                            break;
+
+                        case AnimalClass.AnimalFoodTypes.Omnivore:
+                            NumberTrackers.noAnimalsO++;
+                            break;
+                    }
+
+                    //Switch currently not need but implemented for furture addition of other animals
+                    switch (animalEnumComponents.animalType)
+                    {
+                        case AnimalClass.AnimalTypes.PENGUIN:
+                            NumberTrackers.noAnimals++;
+                            break;
+
+                        case AnimalClass.AnimalTypes.OTHER:
+                            NumberTrackers.noAnimals++;
+                            break;
+                    }
+
+
+                    break;
+
+                case Level_Object.ObjectType.ENRICHMENTOBJECT:
+                    ToyClass toyEnumComponents = curNode.placedObj.gameObject.GetComponent<ToyClass>();
+                    //Subtract from No. trackers based on enum
+                    switch (toyEnumComponents.toyType)
+                    {
+                        case ToyClass.ToyTypes.TOY:
+                            NumberTrackers.noToys++;
+                            break;
+                        case ToyClass.ToyTypes.WATERTOY:
+                            NumberTrackers.noWaterToys++;
+                            break;
+                    }
+                    break;
+
+                case Level_Object.ObjectType.FENCEOBJECT:
+                    //get the Enum before Deleting
+                    FenceClass fenceEnumComponents = curNode.placedObj.gameObject.GetComponent<FenceClass>();
+                    //Subtract from No. trackers based on enum
+                    switch (fenceEnumComponents.fenceType)
+                    {
+                        case FenceClass.FenceTypes.CONCRETE:
+                            NumberTrackers.noConcrete++;
+                            break;
+                        case FenceClass.FenceTypes.CONCRETEW:
+                            NumberTrackers.noConcreteW++;
+                            break;
+                        case FenceClass.FenceTypes.GLASS:
+                            NumberTrackers.noGlass++;
+                            break;
+                        case FenceClass.FenceTypes.WIRE:
+                            NumberTrackers.noWire++;
+                            break;
+                        case FenceClass.FenceTypes.WOODEN:
+                            NumberTrackers.noWooden++;
+                            break;
+                        case FenceClass.FenceTypes.WOODENW:
+                            NumberTrackers.noWoodenW++;
+                            break;
+                    }
+
+                    break;
+
+                case Level_Object.ObjectType.FOLIAGEOBJECT:
+                    //get the Enum before Deleting
+                    FoliageClass foliageEnumComponents = curNode.placedObj.gameObject.GetComponent<FoliageClass>();
+                    //Subtract from No. trackers based on enum
+                    switch (foliageEnumComponents.foliageType)
+                    {
+                        case FoliageClass.FoliageTypes.BUSH:
+                            NumberTrackers.noBush++;
+                            break;
+                        case FoliageClass.FoliageTypes.ROCK:
+                            NumberTrackers.noRock++;
+                            break;
+                        case FoliageClass.FoliageTypes.OTHER:
+                            NumberTrackers.noOther++;
+                            break;
+                    }
+                    break;
+
+                case Level_Object.ObjectType.FOODOBJECT:
+                    CareClass careEnumComponent = curNode.placedObj.gameObject.GetComponent<CareClass>();
+                    switch (careEnumComponent.foodType)
+                    {
+                        case CareClass.FoodType.CARNIVOUROUS:
+                            NumberTrackers.noCarnivorous++;
+                            break;
+                        case CareClass.FoodType.HERBIVOROUS:
+                            NumberTrackers.noHerbivorous++;
+                            break;
+                    }
+                    break;
+
+                case Level_Object.ObjectType.SHELTEROBJECT:
+                    CareClass care3EnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>();
+                    NumberTrackers.noShelter++;
+                    break;
+            }
+        }
+
+
+        #endregion
+
+
+        #region Place Fence
+        void PlaceFence()
+        {
+            if (fenceHas)
+            {
+                UpdateMousePosition();
+
+                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                {
+                    if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
+                    {
+                        if (fillAll.isOn)
+                        {
+                            fenceMarkers = GameObject.FindGameObjectsWithTag("preplacedFence");
+                            fenceMarkersAngled = GameObject.FindGameObjectsWithTag("preplacedFenceAngled");
+
+                            foreach (GameObject fence in fenceMarkers)
+                            {
+                                FenceNode wallBuildArea = fence.GetComponent<FenceNode>();
+                                if (wallBuildArea.fenceObj == false)
+                                {
+                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
+                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fence.transform.position, fence.transform.rotation) as GameObject;
+                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                    // fencePlacedProperties.gridPosX = Mathf.RoundToInt(fence.transform.position.x);
+                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fence.transform.position.z);
+                                    wallBuildArea.fenceObj = true;
+                                    fenceActualPlaced.transform.parent = wallBuildArea.transform;
+                                    manager.inSceneFences.Add(fenceActualPlaced);
+                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
+                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
+
+                                    switch (fenceEnumComponent.fenceType)
+                                    {
+                                        case FenceClass.FenceTypes.CONCRETE:
+                                            NumberTrackers.noConcrete++;
+                                            break;
+                                        case FenceClass.FenceTypes.CONCRETEW:
+                                            NumberTrackers.noConcreteW++;
+                                            break;
+                                        case FenceClass.FenceTypes.GLASS:
+                                            NumberTrackers.noGlass++;
+                                            break;
+                                        case FenceClass.FenceTypes.WIRE:
+                                            NumberTrackers.noWire++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODEN:
+                                            NumberTrackers.noWooden++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODENW:
+                                            NumberTrackers.noWoodenW++;
+                                            break;
+                                    }
+                                }
+                            }
+                            /*
+                            foreach (GameObject fenceAngle in fenceMarkersAngled)
+                            {
+                                FenceNode wallBuildArea = fenceAngle.GetComponent<FenceNode>();
+                                if (wallBuildArea.fenceObj == false)
+                                {
+                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
+                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fenceAngle.transform.position, fenceAngle.transform.rotation) as GameObject;
+                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                    fenceActualPlaced.transform.localScale = new Vector3(1.4142f, 1, 1);
+                                    //fencePlacedProperties.gridPosX = Mathf.RoundToInt(fenceAngle.transform.position.x);
+                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fenceAngle.transform.position.z);
+                                    wallBuildArea.fenceObj = true;
+                                    manager.inSceneFences.Add(fenceActualPlaced);
+                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
+                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
+
+
+                                    switch (fenceEnumComponent.fenceType)
+                                    {
+                                        case FenceClass.FenceTypes.CONCRETE:
+                                            NumberTrackers.noConcrete++;
+                                            break;
+                                        case FenceClass.FenceTypes.CONCRETEW:
+                                            NumberTrackers.noConcreteW++;
+                                            break;
+                                        case FenceClass.FenceTypes.GLASS:
+                                            NumberTrackers.noGlass++;
+                                            break;
+                                        case FenceClass.FenceTypes.WIRE:
+                                            NumberTrackers.noWire++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODEN:
+                                            NumberTrackers.noWooden++;
+                                            break;
+                                        case FenceClass.FenceTypes.WOODENW:
+                                            NumberTrackers.noWoodenW++;
+                                            break;
+                                    }
+                                }
+
+                            }*/
+                        }
+                        else if (!fillAll.isOn)
+                        {
+                            FenceNode wallBuildArea = hit.collider.gameObject.GetComponent<FenceNode>();
+                            if (wallBuildArea.fenceObj == false)
+                            {
+
+                                FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
+                                Vector3 fencePos = hit.collider.gameObject.transform.position;
+                                GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
+                                fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
+                                Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
+                                fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
+                                fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
+                                wallBuildArea.fenceObj = true;
+                                fenceActualPlaced.transform.parent = wallBuildArea.transform;
+                                manager.inSceneFences.Add(fenceActualPlaced);
+                                NumberTrackers.totalMoney -= fencePlacedProperties.price;
+                                NumberTrackers.maintenance += fencePlacedProperties.maintenance;
+                                switch (fenceEnumComponent.fenceType)
+                                {
+                                    case FenceClass.FenceTypes.CONCRETE:
+                                        NumberTrackers.noConcrete++;
+                                        break;
+                                    case FenceClass.FenceTypes.CONCRETEW:
+                                        NumberTrackers.noConcreteW++;
+                                        break;
+                                    case FenceClass.FenceTypes.GLASS:
+                                        NumberTrackers.noGlass++;
+                                        break;
+                                    case FenceClass.FenceTypes.WIRE:
+                                        NumberTrackers.noWire++;
+                                        break;
+                                    case FenceClass.FenceTypes.WOODEN:
+                                        NumberTrackers.noWooden++;
+                                        break;
+                                    case FenceClass.FenceTypes.WOODENW:
+                                        NumberTrackers.noWoodenW++;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            else
+            {
+                if (fenceClone != null)
+                {
+                    Destroy(fenceClone);
+                }
+            }
+        }
+
+        public void PassFenceToPlace(string fenceId)
+        {
+            if (fenceClone != null)
+            {
+                Destroy(fenceClone);
+            }
+            CloseAll();
+            fenceHas = true;
+            fenceClone = null;
+            fenceToPlace = ResourcesManager.GetInstance().GetFenceBase(fenceId).fencePrefab;
+        }
+
+        void DeleteFence()
+        {
+            if (fenceDelete)
+            {
+                UpdateMousePosition();
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                {
+                    if (hit.collider.tag == "fence")
+                    {
+                            FenceNode wallBuildArea = hit.collider.GetComponentInParent<FenceNode>();
+                        
+                            GameObject fenceActualPlaced = hit.collider.GetComponent<GameObject>();
+                            FenceClass fenceEnumComponent = hit.collider.GetComponent<FenceClass>(); //get the Enum
+                            Level_Object fencePlacedProperties = hit.collider.GetComponent<Level_Object>();
+
+                            NumberTrackers.totalMoney += fencePlacedProperties.price;
+                            NumberTrackers.maintenance -= fencePlacedProperties.maintenance;
+
+                            switch (fenceEnumComponent.fenceType)
+                            {
+                                case FenceClass.FenceTypes.CONCRETE:
+                                    NumberTrackers.noConcrete--;
+                                    break;
+                                case FenceClass.FenceTypes.CONCRETEW:
+                                    NumberTrackers.noConcreteW--;
+                                    break;
+                                case FenceClass.FenceTypes.GLASS:
+                                    NumberTrackers.noGlass--;
+                                    break;
+                                case FenceClass.FenceTypes.WIRE:
+                                    NumberTrackers.noWire--;
+                                    break;
+                                case FenceClass.FenceTypes.WOODEN:
+                                    NumberTrackers.noWooden--;
+                                    break;
+                                case FenceClass.FenceTypes.WOODENW:
+                                    NumberTrackers.noWoodenW--;
+                                    break;
+                            }
+                            wallBuildArea.fenceObj = false;
+                            manager.inSceneFences.Remove(hit.collider.gameObject);
+                            Destroy(hit.collider.gameObject);
+                        }
+                        //wallBuildArea.fenceObj = false;
+                    }
+                }
+            
+        }
+        public void DeleteFences()
+        {
+            CloseAll();
+            fenceDelete = true;
+        }
+        #endregion
+
+        //Going to change Animal Placement so it just adds in a penguin without you placing it, this will make it easier for deleting.
+        #region Place animal
+        public void PlaceAnimal()
+        {
+            if (animalHas)
             {
                 UpdateMousePosition();
 
@@ -243,6 +885,302 @@ namespace LevelEditor
 
                 worldPosition = curNode.vis.transform.position;
 
+                if (animalClone == null)
+                {
+                    animalClone = Instantiate(animalToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    animalProperties = animalClone.GetComponent<Level_Object>();
+                }
+                else
+                {
+                    animalClone.transform.position = worldPosition;
+                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                    {
+
+                        if (hit.collider.tag == "EnclosureMarker")
+                        {
+                            GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
+                            Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
+                            AnimalClass animalClass = animalActualPlaced.GetComponent<AnimalClass>();
+
+                            manager.inSceneAnimals.Add(animalActualPlaced);
+
+                            NumberTrackers.totalMoney -= animalPlacedProperties.price;
+
+                            NumberTrackers.noAnimals++;
+                            /*if(animalClass.Carnivore == true)
+                            {
+                                NumberTrackers.noAnimalsC++;
+                            }
+                            else if (animalClass.Herbivore == true)
+                            {
+                                NumberTrackers.noAnimalsH++;
+                            }
+                            else if (animalClass.Omnivore == true)
+                            {
+                                NumberTrackers.noAnimalsO++;
+                            }*/
+
+                        }
+                        else
+                        {
+                            Debug.Log("Not ANIMAL Valid");
+                        }
+                    }
+
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        animalProperties.ChangeRotation();
+                    }
+                }
+            }
+            else
+            {
+                if (animalClone != null)
+                {
+                    Destroy(animalClone);
+                }
+            }
+        }
+
+        public void PassAnimalToPlace(string animalId)
+        {
+            if (animalClone != null)
+            {
+                Destroy(animalClone);
+            }
+
+            CloseAll();
+            animalHas = true;
+            animalClone = null;
+            animalToPlace = ResourcesManager.GetInstance().GetAnimalBase(animalId).animalPrefab;
+        }
+        void DeleteAnimal()
+        {
+            if (animalDelete)
+            {
+                UpdateMousePosition();
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                {
+                    if (hit.collider.tag == "penguin")
+                    {
+                        AnimalClass animalClass = hit.collider.gameObject.GetComponent<AnimalClass>();
+                        Level_Object animalPlacedProperties = hit.collider.gameObject.GetComponent<Level_Object>();
+                        manager.inSceneAnimals.Remove(GameObject.Find(hit.collider.gameObject.name));
+                        Destroy(GameObject.Find(hit.collider.gameObject.name));
+
+                        NumberTrackers.totalMoney += animalPlacedProperties.price;
+
+                        NumberTrackers.noAnimals--;
+                       /* if (animalClass.Carnivore == true)
+                        {
+                            NumberTrackers.noAnimalsC--;
+                        }
+                        else if (animalClass.Herbivore == true)
+                        {
+                            NumberTrackers.noAnimalsH--;
+                        }
+                        else if (animalClass.Omnivore == true)
+                        {
+                            NumberTrackers.noAnimalsO--;
+                        }*/
+                    }
+                }
+            }
+        }
+        public void DeleteAnimals()
+        {
+            CloseAll();
+            animalDelete = true;
+        }
+        #endregion
+
+        #region Tile Painting
+
+        void PaintTile()
+        {
+            if (hasMaterial)
+            {
+                UpdateMousePosition();
+                if (hit.collider.tag == "EnclosureMarker")
+                {
+                    Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+                    int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+
+                    if (previousNode == null)
+                    {
+                        previousNode = curNode;
+                        prevMaterial = previousNode.tileRenderer.material;
+                        prevRotation = previousNode.vis.transform.rotation;
+                    }
+                    else
+                    {
+                        if (previousNode != curNode)
+                        {
+                            if (paintTile)
+                            {
+                                matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+
+                                if (curNode.vis.GetComponent<NodeObject>().textureid != matId)
+                                {
+                                    deleteTerrainChooser();
+                                }
+
+                                if (curNode.terrainObj == null)
+                                {
+                                    curNode.vis.GetComponent<NodeObject>().textureid = matId;
+                                    placeTerrainChooser();
+                                }
+
+                                paintTile = false;
+                            }
+                            else
+                            {
+                                previousNode.tileRenderer.material = prevMaterial;
+                                previousNode.vis.transform.rotation = prevRotation;
+                            }
+
+
+                            previousNode = curNode;
+                            prevMaterial = curNode.tileRenderer.material;
+                            prevRotation = curNode.vis.transform.rotation;
+                        }
+                    }
+                    curNode.tileRenderer.material = matToPlace;
+                    curNode.vis.transform.localRotation = targetRot;
+
+
+
+                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                    {
+                        if (hit.collider.tag == "EnclosureMarker")
+                        {
+                            paintTile = true;
+                        }
+                    }
+
+                    if (Input.GetMouseButtonUp(1))
+                    {
+                        Vector3 eulerAngles = curNode.vis.transform.eulerAngles;
+                        eulerAngles += new Vector3(0, 90, 0);
+                        targetRot = Quaternion.Euler(eulerAngles);
+                    }
+                }
+            }
+        }
+
+        void deleteTerrainChooser()
+        {
+            
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+           
+            if (curNode.terrainObj != null)
+            {
+                Terrain_Object terrainPlacedProperties = curNode.terrainObj.GetComponent<Terrain_Object>();
+                manager.inSceneEnrichment.Remove(curNode.terrainObj.gameObject);
+                Destroy(curNode.terrainObj.gameObject);
+                curNode.terrainObj = null;
+                switch (terrainPlacedProperties.matId)
+                {
+                    case 0:
+                        NumberTrackers.noGrass--;
+                        break;
+                    case 1:
+                        NumberTrackers.noStone--;
+                        break;
+                    case 2:
+                        NumberTrackers.noSand--;
+                        break;
+                    case 3:
+                        NumberTrackers.noWater--;
+                        break;
+                }
+            }
+        }
+        void placeTerrainChooser()
+        {
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+            GameObject terrainActualPlaced = Instantiate(terrainToPlace, worldPosition, Quaternion.identity) as GameObject;
+            Terrain_Object terrainPlacedProperties = terrainActualPlaced.GetComponent<Terrain_Object>();
+
+            terrainPlacedProperties.gridPosX = curNode.nodePosX;
+            terrainPlacedProperties.gridPosZ = curNode.nodePosZ;
+            curNode.terrainObj = terrainPlacedProperties;
+            manager.inSceneEnrichment.Add(terrainActualPlaced);
+            totalMoney -= terrainPlacedProperties.price;
+
+            switch(terrainPlacedProperties.matId)
+            {
+                case 0:
+                    NumberTrackers.noGrass++;
+                    break;
+                case 1:
+                    NumberTrackers.noStone++;
+                    break;
+                case 2:
+                    NumberTrackers.noSand++;
+                    break;
+                case 3:
+                    NumberTrackers.noWater++;
+                    break;
+            }
+        }
+
+        public void PassMaterialToPaint(int matId)
+        {
+            CloseAll();
+            matToPlace = ResourcesManager.GetInstance().GetMaterial(matId);
+            switch (matId)
+                {
+                case 0:
+                    terrainToPlace = terrainObject;
+                    break;
+                case 1:
+                    terrainToPlace = terrainObject1;
+                    break;
+                case 2:
+                    terrainToPlace = terrainObject2;
+                    break;
+                case 3:
+                    terrainToPlace = terrainObject3;
+                    break;
+
+            }
+
+            hasMaterial = true;
+        }
+
+        /*public void PaintAll()
+        {
+            for (int x = 0; x < gridBase.sizeX; x++)
+            {
+                for (int z = 0; z < gridBase.sizeZ; z++)
+                {
+                    gridBase.grid[x, z].tileRenderer.material = matToPlace;
+                    int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
+                    gridBase.grid[x, z].vis.GetComponent<NodeObject>().textureid = matId;
+                }
+            }
+            previousNode = null;
+        }*/
+
+        #endregion
+
+
+       /* #region Place Foliage
+        void PlaceFoliage()
+        {
+            if (foliageHas)
+            {
+                UpdateMousePosition();
+
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+                if (hit.collider.tag == "EnclosureMarker")
+                {
+                    worldPosition = curNode.vis.transform.position;
+                }
                 if (foliageClone == null)
                 {
                     foliageClone = Instantiate(foliageToPlace, worldPosition, Quaternion.identity) as GameObject;
@@ -428,7 +1366,7 @@ namespace LevelEditor
                                 else
                                 {
                                     Debug.Log("Not an enrichment object so cant replace");
-                                }*/
+                                }
 
                             }
                             else
@@ -772,532 +1710,7 @@ namespace LevelEditor
             CloseAll();
             careDelete = true;
         }
-        #endregion
-
-        #region Place Fence
-        void PlaceFence()
-        {
-            if (fenceHas)
-            {
-                UpdateMousePosition();
-
-                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
-                {
-                    if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
-                    {
-                        if (fillAll.isOn)
-                        {
-                            fenceMarkers = GameObject.FindGameObjectsWithTag("preplacedFence");
-                            fenceMarkersAngled = GameObject.FindGameObjectsWithTag("preplacedFenceAngled");
-
-                            foreach (GameObject fence in fenceMarkers)
-                            {
-                                FenceNode wallBuildArea = fence.GetComponent<FenceNode>();
-                                if (wallBuildArea.fenceObj == false)
-                                {
-                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
-                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fence.transform.position, fence.transform.rotation) as GameObject;
-                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                                    // fencePlacedProperties.gridPosX = Mathf.RoundToInt(fence.transform.position.x);
-                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fence.transform.position.z);
-                                    wallBuildArea.fenceObj = true;
-                                    manager.inSceneFences.Add(fenceActualPlaced);
-                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
-                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
-
-                                    switch (fenceEnumComponent.fenceType)
-                                    {
-                                        case FenceClass.FenceTypes.CONCRETE:
-                                            NumberTrackers.noConcrete++;
-                                            break;
-                                        case FenceClass.FenceTypes.CONCRETEW:
-                                            NumberTrackers.noConcreteW++;
-                                            break;
-                                        case FenceClass.FenceTypes.GLASS:
-                                            NumberTrackers.noGlass++;
-                                            break;
-                                        case FenceClass.FenceTypes.WIRE:
-                                            NumberTrackers.noWire++;
-                                            break;
-                                        case FenceClass.FenceTypes.WOODEN:
-                                            NumberTrackers.noWooden++;
-                                            break;
-                                        case FenceClass.FenceTypes.WOODENW:
-                                            NumberTrackers.noWoodenW++;
-                                            break;
-                                    }
-                                }
-                            }
-
-                            foreach (GameObject fenceAngle in fenceMarkersAngled)
-                            {
-                                FenceNode wallBuildArea = fenceAngle.GetComponent<FenceNode>();
-                                if (wallBuildArea.fenceObj == false)
-                                {
-                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
-                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fenceAngle.transform.position, fenceAngle.transform.rotation) as GameObject;
-                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                                    fenceActualPlaced.transform.localScale = new Vector3(1.4142f, 1, 1);
-                                    //fencePlacedProperties.gridPosX = Mathf.RoundToInt(fenceAngle.transform.position.x);
-                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fenceAngle.transform.position.z);
-                                    wallBuildArea.fenceObj = true;
-                                    manager.inSceneFences.Add(fenceActualPlaced);
-                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
-                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
-
-
-                                    switch (fenceEnumComponent.fenceType)
-                                    {
-                                        case FenceClass.FenceTypes.CONCRETE:
-                                            NumberTrackers.noConcrete++;
-                                            break;
-                                        case FenceClass.FenceTypes.CONCRETEW:
-                                            NumberTrackers.noConcreteW++;
-                                            break;
-                                        case FenceClass.FenceTypes.GLASS:
-                                            NumberTrackers.noGlass++;
-                                            break;
-                                        case FenceClass.FenceTypes.WIRE:
-                                            NumberTrackers.noWire++;
-                                            break;
-                                        case FenceClass.FenceTypes.WOODEN:
-                                            NumberTrackers.noWooden++;
-                                            break;
-                                        case FenceClass.FenceTypes.WOODENW:
-                                            NumberTrackers.noWoodenW++;
-                                            break;
-                                    }
-                                }
-
-                            }
-                        }
-                        else if (!fillAll.isOn)
-                        {
-                            FenceNode wallBuildArea = hit.collider.gameObject.GetComponent<FenceNode>();
-                            if (wallBuildArea.fenceObj == false)
-                            {
-
-                                FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
-                                Vector3 fencePos = hit.collider.gameObject.transform.position;
-                                GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
-                                if (hit.collider.tag == "preplacedFenceAngled")
-                                {
-                                    fenceActualPlaced.transform.localScale += new Vector3(0.4142f, 0, 0);
-                                }
-                                fenceActualPlaced.transform.rotation = hit.collider.gameObject.transform.rotation;
-                                Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                                fencePlacedProperties.gridPosX = Mathf.RoundToInt(fencePos.x);
-                                fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fencePos.z);
-                                wallBuildArea.fenceObj = true;
-                                manager.inSceneFences.Add(fenceActualPlaced);
-                                NumberTrackers.totalMoney -= fencePlacedProperties.price;
-                                NumberTrackers.maintenance += fencePlacedProperties.maintenance;
-                                switch (fenceEnumComponent.fenceType)
-                                {
-                                    case FenceClass.FenceTypes.CONCRETE:
-                                        NumberTrackers.noConcrete++;
-                                        break;
-                                    case FenceClass.FenceTypes.CONCRETEW:
-                                        NumberTrackers.noConcreteW++;
-                                        break;
-                                    case FenceClass.FenceTypes.GLASS:
-                                        NumberTrackers.noGlass++;
-                                        break;
-                                    case FenceClass.FenceTypes.WIRE:
-                                        NumberTrackers.noWire++;
-                                        break;
-                                    case FenceClass.FenceTypes.WOODEN:
-                                        NumberTrackers.noWooden++;
-                                        break;
-                                    case FenceClass.FenceTypes.WOODENW:
-                                        NumberTrackers.noWoodenW++;
-                                        break;
-                                }
-                            }
-                        }
-                    }
-
-                }
-
-            }
-            else
-            {
-                if (fenceClone != null)
-                {
-                    Destroy(fenceClone);
-                }
-            }
-        }
-
-
-
-        public void PassFenceToPlace(string fenceId)
-        {
-            if (fenceClone != null)
-            {
-                Destroy(fenceClone);
-            }
-
-            CloseAll();
-            fenceHas = true;
-            fenceClone = null;
-            fenceToPlace = ResourcesManager.GetInstance().GetFenceBase(fenceId).fencePrefab;
-        }
-        void DeleteFence()
-        {
-            if (fenceDelete)
-            {
-                UpdateMousePosition();
-
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
-                {
-                    if (hit.collider.tag == "fence")
-                    {
-                            FenceNode wallBuildArea = hit.collider.GetComponent<FenceNode>();
-                        
-                            GameObject fenceActualPlaced = hit.collider.GetComponent<GameObject>();
-                            FenceClass fenceEnumComponent = hit.collider.GetComponent<FenceClass>(); //get the Enum
-                            Level_Object fencePlacedProperties = hit.collider.GetComponent<Level_Object>();
-
-                            NumberTrackers.totalMoney += fencePlacedProperties.price;
-                            NumberTrackers.maintenance -= fencePlacedProperties.maintenance;
-
-                            switch (fenceEnumComponent.fenceType)
-                            {
-                                case FenceClass.FenceTypes.CONCRETE:
-                                    NumberTrackers.noConcrete--;
-                                    break;
-                                case FenceClass.FenceTypes.CONCRETEW:
-                                    NumberTrackers.noConcreteW--;
-                                    break;
-                                case FenceClass.FenceTypes.GLASS:
-                                    NumberTrackers.noGlass--;
-                                    break;
-                                case FenceClass.FenceTypes.WIRE:
-                                    NumberTrackers.noWire--;
-                                    break;
-                                case FenceClass.FenceTypes.WOODEN:
-                                    NumberTrackers.noWooden--;
-                                    break;
-                                case FenceClass.FenceTypes.WOODENW:
-                                    NumberTrackers.noWoodenW--;
-                                    break;
-                            }
-
-                            manager.inSceneFences.Remove(hit.collider.gameObject);
-                            Destroy(hit.collider.gameObject);
-                        }
-                        //wallBuildArea.fenceObj = false;
-                    }
-                }
-            
-        }
-        public void DeleteFences()
-        {
-            CloseAll();
-            fenceDelete = true;
-        }
-        #endregion
-
-        //Going to change Animal Placement so it just adds in a penguin without you placing it, this will make it easier for deleting.
-        #region Place animal
-        public void PlaceAnimal()
-        {
-            if (animalHas)
-            {
-                UpdateMousePosition();
-
-                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
-                worldPosition = curNode.vis.transform.position;
-
-                if (animalClone == null)
-                {
-                    animalClone = Instantiate(animalToPlace, worldPosition, Quaternion.identity) as GameObject;
-                    animalProperties = animalClone.GetComponent<Level_Object>();
-                }
-                else
-                {
-                    animalClone.transform.position = worldPosition;
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
-                    {
-
-                        if (hit.collider.tag == "EnclosureMarker")
-                        {
-                            GameObject animalActualPlaced = Instantiate(animalToPlace, worldPosition, animalClone.transform.rotation) as GameObject;
-                            Level_Object animalPlacedProperties = animalActualPlaced.GetComponent<Level_Object>();
-                            AnimalClass animalClass = animalActualPlaced.GetComponent<AnimalClass>();
-
-                            manager.inSceneAnimals.Add(animalActualPlaced);
-
-                            NumberTrackers.totalMoney -= animalPlacedProperties.price;
-
-                            NumberTrackers.noAnimals++;
-                            if(animalClass.Carnivore == true)
-                            {
-                                NumberTrackers.noAnimalsC++;
-                            }
-                            else if (animalClass.Herbivore == true)
-                            {
-                                NumberTrackers.noAnimalsH++;
-                            }
-                            else if (animalClass.Omnivore == true)
-                            {
-                                NumberTrackers.noAnimalsO++;
-                            }
-
-                        }
-                        else
-                        {
-                            Debug.Log("Not ANIMAL Valid");
-                        }
-                    }
-
-
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        animalProperties.ChangeRotation();
-                    }
-                }
-            }
-            else
-            {
-                if (animalClone != null)
-                {
-                    Destroy(animalClone);
-                }
-            }
-        }
-
-        public void PassAnimalToPlace(string animalId)
-        {
-            if (animalClone != null)
-            {
-                Destroy(animalClone);
-            }
-
-            CloseAll();
-            animalHas = true;
-            animalClone = null;
-            animalToPlace = ResourcesManager.GetInstance().GetAnimalBase(animalId).animalPrefab;
-        }
-        void DeleteAnimal()
-        {
-            if (animalDelete)
-            {
-                UpdateMousePosition();
-
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
-                {
-                    if (hit.collider.tag == "penguin")
-                    {
-                        AnimalClass animalClass = hit.collider.gameObject.GetComponent<AnimalClass>();
-                        Level_Object animalPlacedProperties = hit.collider.gameObject.GetComponent<Level_Object>();
-                        manager.inSceneAnimals.Remove(GameObject.Find(hit.collider.gameObject.name));
-                        Destroy(GameObject.Find(hit.collider.gameObject.name));
-
-                        NumberTrackers.totalMoney += animalPlacedProperties.price;
-
-                        NumberTrackers.noAnimals--;
-                        if (animalClass.Carnivore == true)
-                        {
-                            NumberTrackers.noAnimalsC--;
-                        }
-                        else if (animalClass.Herbivore == true)
-                        {
-                            NumberTrackers.noAnimalsH--;
-                        }
-                        else if (animalClass.Omnivore == true)
-                        {
-                            NumberTrackers.noAnimalsO--;
-                        }
-                    }
-                }
-            }
-        }
-        public void DeleteAnimals()
-        {
-            CloseAll();
-            animalDelete = true;
-        }
-        #endregion
-
-        #region Tile Painting
-
-        void PaintTile()
-        {
-            if (hasMaterial)
-            {
-                UpdateMousePosition();
-                if (hit.collider.tag == "EnclosureMarker")
-                {
-                    Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-
-                    int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
-
-                    if (previousNode == null)
-                    {
-                        previousNode = curNode;
-                        prevMaterial = previousNode.tileRenderer.material;
-                        prevRotation = previousNode.vis.transform.rotation;
-                    }
-                    else
-                    {
-                        if (previousNode != curNode)
-                        {
-                            if (paintTile)
-                            {
-                                matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
-
-                                if (curNode.vis.GetComponent<NodeObject>().textureid != matId)
-                                {
-                                    deleteTerrainChooser();
-                                }
-
-                                if (curNode.terrainObj == null)
-                                {
-                                    curNode.vis.GetComponent<NodeObject>().textureid = matId;
-                                    placeTerrainChooser();
-                                }
-
-                                paintTile = false;
-                            }
-                            else
-                            {
-                                previousNode.tileRenderer.material = prevMaterial;
-                                previousNode.vis.transform.rotation = prevRotation;
-                            }
-
-
-                            previousNode = curNode;
-                            prevMaterial = curNode.tileRenderer.material;
-                            prevRotation = curNode.vis.transform.rotation;
-                        }
-                    }
-                    curNode.tileRenderer.material = matToPlace;
-                    curNode.vis.transform.localRotation = targetRot;
-
-
-
-                    if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
-                    {
-                        if (hit.collider.tag == "EnclosureMarker")
-                        {
-                            paintTile = true;
-                        }
-                    }
-
-                    if (Input.GetMouseButtonUp(1))
-                    {
-                        Vector3 eulerAngles = curNode.vis.transform.eulerAngles;
-                        eulerAngles += new Vector3(0, 90, 0);
-                        targetRot = Quaternion.Euler(eulerAngles);
-                    }
-                }
-            }
-        }
-
-        void deleteTerrainChooser()
-        {
-            
-            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-           
-            if (curNode.terrainObj != null)
-            {
-                Terrain_Object terrainPlacedProperties = curNode.terrainObj.GetComponent<Terrain_Object>();
-                manager.inSceneEnrichment.Remove(curNode.terrainObj.gameObject);
-                Destroy(curNode.terrainObj.gameObject);
-                curNode.terrainObj = null;
-                switch (terrainPlacedProperties.matId)
-            {
-                case 0:
-                    NumberTrackers.noGrass--;
-                    break;
-                case 1:
-                    NumberTrackers.noStone--;
-                    break;
-                case 2:
-                    NumberTrackers.noSand--;
-                    break;
-                case 3:
-                    NumberTrackers.noWater--;
-                    break;
-            }
-            }
-
-
-          
-
-        }
-        void placeTerrainChooser()
-        {
-            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
-            GameObject terrainActualPlaced = Instantiate(terrainToPlace, worldPosition, Quaternion.identity) as GameObject;
-            Terrain_Object terrainPlacedProperties = terrainActualPlaced.GetComponent<Terrain_Object>();
-
-            terrainPlacedProperties.gridPosX = curNode.nodePosX;
-            terrainPlacedProperties.gridPosZ = curNode.nodePosZ;
-            curNode.terrainObj = terrainPlacedProperties;
-            manager.inSceneEnrichment.Add(terrainActualPlaced);
-            totalMoney -= terrainPlacedProperties.price;
-
-            switch(terrainPlacedProperties.matId)
-            {
-                case 0:
-                    NumberTrackers.noGrass++;
-                    break;
-                case 1:
-                    NumberTrackers.noStone++;
-                    break;
-                case 2:
-                    NumberTrackers.noSand++;
-                    break;
-                case 3:
-                    NumberTrackers.noWater++;
-                    break;
-            }
-        }
-
-        public void PassMaterialToPaint(int matId)
-        {
-            CloseAll();
-            matToPlace = ResourcesManager.GetInstance().GetMaterial(matId);
-            switch (matId)
-                {
-                case 0:
-                    terrainToPlace = terrainObject;
-                    break;
-                case 1:
-                    terrainToPlace = terrainObject1;
-                    break;
-                case 2:
-                    terrainToPlace = terrainObject2;
-                    break;
-                case 3:
-                    terrainToPlace = terrainObject3;
-                    break;
-
-            }
-
-            hasMaterial = true;
-        }
-
-        public void PaintAll()
-        {
-            for (int x = 0; x < gridBase.sizeX; x++)
-            {
-                for (int z = 0; z < gridBase.sizeZ; z++)
-                {
-                    gridBase.grid[x, z].tileRenderer.material = matToPlace;
-                    int matId = ResourcesManager.GetInstance().GetMaterialID(matToPlace);
-                    gridBase.grid[x, z].vis.GetComponent<NodeObject>().textureid = matId;
-                }
-            }
-            previousNode = null;
-        }
-
-        #endregion
-
+        #endregion*/
        
 
         /*
@@ -3048,3 +3461,4 @@ public void DeleteObj()
         }
 
         #endregion*/
+

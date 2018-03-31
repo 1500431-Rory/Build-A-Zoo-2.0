@@ -10,17 +10,7 @@ public class UIPanelActivate : MonoBehaviour
     public GameObject UIBackDrop;
     public GameObject ObjectSelectionMenu;
     public GameObject CloseMenuButton;
-    //void Start()
-    //{
-    //    Button btn = yourButton.GetComponent<Button>();
-    //     btn.onClick.AddListener(TaskOnClick);
-    // }
-
-    // void TaskOnClick()
-    //{
-
-    // }
-
+ 
     public void panelManagement()
     {
         if (UIBackDrop.activeInHierarchy == true)
@@ -37,13 +27,11 @@ public class UIPanelActivate : MonoBehaviour
     {
         UIBackDrop.gameObject.SetActive(true);
         ObjectSelectionMenu.gameObject.SetActive(true);
-        CloseMenuButton.gameObject.SetActive(true);
     }
     void hidePanel()
     {
         UIBackDrop.gameObject.SetActive(false);
         ObjectSelectionMenu.gameObject.SetActive(false);
-        CloseMenuButton.gameObject.SetActive(false);
     }
 
 }

@@ -8,6 +8,8 @@ public class LevelManager : MonoBehaviour {
 
     GridBase gridBase;
 
+    public List<GameObject> inSceneObject = new List<GameObject>();
+
     public List<GameObject> inSceneFoliage = new List<GameObject>();
     public List<GameObject> inSceneEnrichment = new List<GameObject>();
     public List<GameObject> inSceneFences = new List<GameObject>();

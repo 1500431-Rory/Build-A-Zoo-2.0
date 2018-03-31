@@ -11,7 +11,12 @@ public class AnimalClass : MonoBehaviour {
     }
     public AnimalTypes animalType;
 
-    public bool Carnivore;
-    public bool Herbivore;
-    public bool Omnivore;
+    public enum AnimalFoodTypes
+    {
+        Herbivore,
+        Carnivore,
+        Omnivore
+    }
+    public AnimalFoodTypes animalFoodType;
+
 }

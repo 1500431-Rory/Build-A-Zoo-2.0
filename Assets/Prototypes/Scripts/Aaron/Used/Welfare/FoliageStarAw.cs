@@ -10,7 +10,7 @@ public class FoliageStarAw : MonoBehaviour {
 
     public bool foliageStarAchieved;
     public Image UIStar;
-
+    public Animator anim;
 
     // Use this for initialization
     void Start()
@@ -23,7 +23,7 @@ public class FoliageStarAw : MonoBehaviour {
     void Update()
     {
         // Call to folliageHappiness()
-        FolliageHappiness();
+        FolliageHappiness(anim);
 
         
         if (UIStar.fillAmount == 1f)
@@ -33,7 +33,7 @@ public class FoliageStarAw : MonoBehaviour {
         }
     }
 
-    void FolliageHappiness()
+    void FolliageHappiness(Animator anim)
     {
 
         // Check animal type is penguin
@@ -48,6 +48,14 @@ public class FoliageStarAw : MonoBehaviour {
             UIStar.fillAmount = 0.0f;
             }
 
-        
+        if (UIStar.fillAmount == 1)
+        {
+            anim.SetBool("StarAchieved", true);
+        }
+        else
+        {
+            anim.SetBool("StarAchieved", false);
+        }
+
     }
 }

@@ -163,6 +163,7 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 10000
   maintenance: 400
+  objectType: 3
 --- !u!114 &114709011142006690
 MonoBehaviour:
   m_ObjectHideFlags: 1

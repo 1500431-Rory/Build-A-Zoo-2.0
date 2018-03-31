@@ -116,7 +116,7 @@ public class NumberTrackers : MonoBehaviour {
        // GUI.Label(new Rect(100, 270, 150, 20), "WoodenW: " + noWoodenW.ToString());
 
        //GUI.Label(new Rect(100, 290, 150, 20), "Bush: " + noBush.ToString());
-       //GUI.Label(new Rect(100, 310, 150, 20), "Rock: " + noRock.ToString());
+       GUI.Label(new Rect(100, 310, 150, 20), "Rock: " + noRock.ToString());
        //GUI.Label(new Rect(100, 330, 150, 20), "Other: " + noOther.ToString());
 
        // GUI.Label(new Rect(180, 30, 150, 20), "noStone: " + noStone.ToString());
