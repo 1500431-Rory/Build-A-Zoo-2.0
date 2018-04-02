@@ -55,10 +55,10 @@ GameObject:
   - component: {fileID: 114940205664900532}
   - component: {fileID: 114183394583262562}
   - component: {fileID: 143607322505654220}
-  - component: {fileID: 114934696021099980}
   - component: {fileID: 114310754878585408}
   - component: {fileID: 136211784791761434}
   - component: {fileID: 54592925198433772}
+  - component: {fileID: 114346490705138578}
   m_Layer: 0
   m_Name: Penguin
   m_TagString: penguin
@@ -190,9 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animalType: 0
-  Carnivore: 1
-  Herbivore: 0
-  Omnivore: 0
+  animalFoodType: 0
 --- !u!114 &114310754878585408
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788309b431e6ef941b1c5d200f28d441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114934696021099980
+--- !u!114 &114346490705138578
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -215,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda494c885ea507429d575dcdaadc40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  dirChangeInt: 1
+  speed: 1
+  dirChangeInt: 2
   maxDirChange: 30
   timePassed: 0
   diceRoll: 0
@@ -242,6 +240,7 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 1000
   maintenance: 0
+  isWaterObject: 0
   objectType: 6
 --- !u!136 &136211784791761434
 CapsuleCollider:

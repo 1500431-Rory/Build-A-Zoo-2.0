@@ -12,6 +12,16 @@ public class FoliageStarAw : MonoBehaviour {
     public Image UIStar;
     public Animator anim;
 
+    private static FoliageStarAw instance = null;
+    public static FoliageStarAw GetInstance()
+    {
+        return instance;
+    }
+    void Awake()
+    {
+        instance = this;
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -23,23 +33,24 @@ public class FoliageStarAw : MonoBehaviour {
     void Update()
     {
         // Call to folliageHappiness()
-        FolliageHappiness(anim);
+        //FolliageHappiness(anim);
 
         
-        if (UIStar.fillAmount == 1f)
-        {
+       // if (UIStar.fillAmount == 1f)
+       // {
             // Set folliageStarAcheived to true
-            foliageStarAchieved = true;
-        }
+       //     foliageStarAchieved = true;
+       // }
     }
 
-    void FolliageHappiness(Animator anim)
+    public void FolliageHappiness(Animator anim)
     {
 
         // Check animal type is penguin
-       
-            // Check if rocks are there and no other foliage as that upsets penguins(probably wouldnt upset penguins but for sake of game)
-            if (NumberTrackers.noRock >= 5 && NumberTrackers.noBush == 0 && NumberTrackers.noOther == 0)
+        UIStar.fillAmount = 0.0f;
+
+        // Check if rocks are there and no other foliage as that upsets penguins(probably wouldnt upset penguins but for sake of game)
+        if (NumberTrackers.noRock >= 5 && NumberTrackers.noBush == 0 && NumberTrackers.noOther == 0)
             {
             UIStar.fillAmount = 1.0f;
             }
@@ -48,7 +59,7 @@ public class FoliageStarAw : MonoBehaviour {
             UIStar.fillAmount = 0.0f;
             }
 
-        if (UIStar.fillAmount == 1)
+        if (UIStar.fillAmount == 1.0f)
         {
             anim.SetBool("StarAchieved", true);
         }

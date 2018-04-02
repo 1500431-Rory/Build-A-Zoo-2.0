@@ -130,6 +130,9 @@ namespace LevelEditor
         public GameObject[] fenceMarkersAngled;
         public Toggle fillAll;
 
+        public Animator animFoliage;
+        FoliageStarAw foliageStarAw;
+
         //Enums
         // ToyEnum.ToyTypes toys;
         // CareEnum.CareTypes care;
@@ -137,7 +140,7 @@ namespace LevelEditor
         // TerrainEnum.TerrainTypes terrain;
         // FoliageEnum.FoliageTypes foliage;
 
-       OverallHappiness.AnimalType animalType;
+        OverallHappiness.AnimalType animalType;
 
         int noWater;
         GameObject inGameToggle;
@@ -167,7 +170,7 @@ namespace LevelEditor
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
             inGameToggle = GameObject.Find("Toggle");
-            
+            foliageStarAw = FoliageStarAw.GetInstance();
             // PaintAll();
 
 
@@ -626,6 +629,9 @@ namespace LevelEditor
                             NumberTrackers.noOther++;
                             break;
                     }
+
+                    // Call to folliageHappiness()
+                    foliageStarAw.FolliageHappiness(animFoliage);
                     break;
 
                 case Level_Object.ObjectType.FOODOBJECT:
