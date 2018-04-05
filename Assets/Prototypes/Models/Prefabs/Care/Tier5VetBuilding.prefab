@@ -87,7 +87,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 6beb4ce3342161648b9af79d8cc5566c, type: 2}
+  - {fileID: 2100000, guid: 7fcb15677e0473f48bcb2fe2dffcc893, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,6 +162,7 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 20000
   maintenance: 200
+  isWaterObject: 0
   objectType: 3
 --- !u!114 &114749711340784836
 MonoBehaviour:

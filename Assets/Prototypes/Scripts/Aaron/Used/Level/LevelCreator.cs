@@ -271,9 +271,10 @@ namespace LevelEditor
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                
-                worldPosition = curNode.vis.transform.position;
-               
+                if (!ui.mouseOverUIElement && curNode != null)
+                {
+                    worldPosition = curNode.vis.transform.position;
+                }
                 if (objectClone == null)
                 {
                     objectClone = Instantiate(objectToPlace, worldPosition, Quaternion.identity) as GameObject;
@@ -285,7 +286,7 @@ namespace LevelEditor
                 else
                 {
                     objectClone.transform.position = worldPosition;
-                    if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                    if (Input.GetMouseButtonUp(0) && !ui.mouseOverUIElement)
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
@@ -665,7 +666,7 @@ namespace LevelEditor
             {
                 UpdateMousePosition();
 
-                if (Input.GetMouseButton(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonUp(0) && !ui.mouseOverUIElement)
                 {
                     if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
                     {

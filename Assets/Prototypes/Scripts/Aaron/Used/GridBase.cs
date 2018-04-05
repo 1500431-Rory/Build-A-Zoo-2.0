@@ -38,7 +38,7 @@ public class GridBase : MonoBehaviour {
 
         for (int x = 13; x < 25; x++)
         {
-            for (int z = 10; z < 12; z++)
+            for (int z = 10; z < 14; z++)
             {
 
                 float posX = x * offset;
@@ -59,53 +59,6 @@ public class GridBase : MonoBehaviour {
                 node.nodePosZ = z;
                 grid[x, z] = node;
             }
-        }
-
-        for (int x = 13; x < 24; x++)
-        {
-            int z = 12;
-
-                float posX = x * offset;
-                float posZ = z * offset;
-
-                GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
-                go.transform.parent = transform.GetChild(1).transform;
-
-                NodeObject nodeObj = go.GetComponent<NodeObject>();
-                nodeObj.posX = x;
-                nodeObj.posZ = z;
-
-                Node node = new Node();
-                node.vis = go;
-                node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
-                node.isWalkable = true;
-                node.nodePosX = x;
-                node.nodePosZ = z;
-                grid[x, z] = node;
-            
-        }
-        for (int x = 13; x < 23; x++)
-        {
-            int z = 13;
-
-            float posX = x * offset;
-            float posZ = z * offset;
-
-            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
-            go.transform.parent = transform.GetChild(1).transform;
-
-            NodeObject nodeObj = go.GetComponent<NodeObject>();
-            nodeObj.posX = x;
-            nodeObj.posZ = z;
-
-            Node node = new Node();
-            node.vis = go;
-            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
-            node.isWalkable = true;
-            node.nodePosX = x;
-            node.nodePosZ = z;
-            grid[x, z] = node;
-
         }
 
         for (int x = 13; x < 22; x++)
@@ -134,8 +87,8 @@ public class GridBase : MonoBehaviour {
 
         for (int x = 16; x < 23; x++)
         {
-            int z = 23;
-
+            for (int z = 23; z < 26; z++)
+            {
                 float posX = x * offset;
                 float posZ = z * offset;
 
@@ -153,55 +106,9 @@ public class GridBase : MonoBehaviour {
                 node.nodePosX = x;
                 node.nodePosZ = z;
                 grid[x, z] = node;
-            
+            }
         }
 
-        for (int x = 17; x < 23; x++)
-        {
-            int z = 24;
-
-            float posX = x * offset;
-            float posZ = z * offset;
-
-            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
-            go.transform.parent = transform.GetChild(1).transform;
-
-            NodeObject nodeObj = go.GetComponent<NodeObject>();
-            nodeObj.posX = x;
-            nodeObj.posZ = z;
-
-            Node node = new Node();
-            node.vis = go;
-            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
-            node.isWalkable = true;
-            node.nodePosX = x;
-            node.nodePosZ = z;
-            grid[x, z] = node;
-
-        }
-        for (int x = 18; x < 23; x++)
-        {
-            int z = 25;
-
-            float posX = x * offset;
-            float posZ = z * offset;
-
-            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
-            go.transform.parent = transform.GetChild(1).transform;
-
-            NodeObject nodeObj = go.GetComponent<NodeObject>();
-            nodeObj.posX = x;
-            nodeObj.posZ = z;
-
-            Node node = new Node();
-            node.vis = go;
-            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
-            node.isWalkable = true;
-            node.nodePosX = x;
-            node.nodePosZ = z;
-            grid[x, z] = node;
-
-        }
        
     }
 
