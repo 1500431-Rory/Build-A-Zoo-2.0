@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd8420ba287fc94b8350071af75a0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toyType: 1
+  toyType: 0
   animalsKeptHappy: 5
   isWaterObject: 0
 --- !u!114 &114418565641755352
@@ -163,4 +163,5 @@ MonoBehaviour:
   rotateDegrees: 0
   price: 200
   maintenance: 10
+  isWaterObject: 0
   objectType: 1

@@ -27,6 +27,13 @@ namespace LevelEditor
         Level_Object objectProperties;
         bool objectDelete;
 
+        //place object variables
+        bool buildingHas;
+        GameObject buildingToPlace;
+        GameObject buildingClone;
+        Building_Object buildingProperties;
+        bool buildingDelete;
+
         //place foliage variables
         bool foliageHas;
         GameObject foliageToPlace;
@@ -79,7 +86,7 @@ namespace LevelEditor
         Quaternion targetRot;
         Quaternion prevRotation;
 
-
+        Color prevColor;
         /*//Wall creator variables
         bool createWall;
         
@@ -127,20 +134,15 @@ namespace LevelEditor
         int matId;
         public GameObject fencePrefab;
         public GameObject[] fenceMarkers;
-        public GameObject[] fenceMarkersAngled;
         public Toggle fillAll;
 
-        public Animator animFoliage;
-        FoliageStarAw foliageStarAw;
+        public Animator animCare;
+        public Animator animCost;
+        public Animator animEnrichment;
+        public Animator animFences;
+        public Animator animTerrain;
 
-        //Enums
-        // ToyEnum.ToyTypes toys;
-        // CareEnum.CareTypes care;
-        // FenceEnum.FenceTypes fence;
-        // TerrainEnum.TerrainTypes terrain;
-        // FoliageEnum.FoliageTypes foliage;
-
-        OverallHappiness.AnimalType animalType;
+        StarTracking starTracking;
 
         int noWater;
         GameObject inGameToggle;
@@ -149,18 +151,52 @@ namespace LevelEditor
         public GameObject terrainObject2;
         public GameObject terrainObject3;
 
-        bool cantPlace = false;
+        public GameObject containsBuilding;
+        public GameObject containsBuilding2;
 
-        private void OnGUI()
+        public Image ErrorMessageOIW;
+        public Image ErrorMessageWIW;
+        public Image ErrorMessage2mny;
+        public Image ErrorMessageIW;
+
+        bool objectInWay = false;
+        bool waterInWay = false;
+        bool tooManyBuild = false;
+        bool placeInWater = false;
+
+        void ErrorMessage()
         {
-            Vector2 MouseCoords = Input.mousePosition;
-
-            float x = MouseCoords.x / Screen.width;
-            float y = MouseCoords.y / Screen.height;
-            //Vector2 ScreenCoords = new Vector2(x, y);
-            if (cantPlace == true)
+            if (objectInWay == true)
             {
-                GUI.Label(new Rect(x, y, 150, 30), "Cannot Place Object in the way");
+                ErrorMessageOIW.gameObject.SetActive(true);
+            }
+            else
+            {
+                ErrorMessageOIW.gameObject.SetActive(false);
+            }
+            if (waterInWay == true)
+            {
+                ErrorMessageWIW.gameObject.SetActive(true);
+            }
+            else
+            {
+                ErrorMessageWIW.gameObject.SetActive(false);
+            }
+            if (tooManyBuild == true)
+            {
+                ErrorMessage2mny.gameObject.SetActive(true);
+            }
+            else
+            {
+                ErrorMessage2mny.gameObject.SetActive(false);
+            }
+            if (placeInWater == true)
+            {
+                ErrorMessageIW.gameObject.SetActive(true);
+            }
+            else
+            {
+                ErrorMessageIW.gameObject.SetActive(false);
             }
         }
 
@@ -169,15 +205,8 @@ namespace LevelEditor
             gridBase = GridBase.GetInstance();
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
+            starTracking = StarTracking.GetInstance();
             inGameToggle = GameObject.Find("Toggle");
-            foliageStarAw = FoliageStarAw.GetInstance();
-            // PaintAll();
-
-
-            /*for (int i = 0; i < 9; i++)
-            {
-                wallObject = Instantiate(wallPrefab, wallPos[i], Quaternion.identity) as GameObject;
-            }*/
         }
 
         void Update()
@@ -185,34 +214,27 @@ namespace LevelEditor
             PlaceObject();
             DeleteObject();
 
-            //PlaceFoliage();
-            //DeleteFoliage();
-
-            //PlaceCare();
-            //DeleteCare();
-
-            //PlaceEnrichment();
-            //DeleteEnrichment();
+            PlaceBuilding();
+            DeleteBuilding();
 
             PlaceFence();
             DeleteFence();
 
             PlaceAnimal();
             DeleteAnimal();
-
-            //PlaceEnclosure();
-            //DeleteEnclosures();
-
-            // PlaceTiles();
-
+   
             PaintTile();
 
+            ErrorMessage();
         }
 
         public void CloseAll()
         {
             objectHas = false;
             objectDelete = false;
+
+            buildingHas = false;
+            buildingDelete = false;
 
             foliageHas = false;
             foliageDelete = false;
@@ -257,6 +279,91 @@ namespace LevelEditor
             }
         }
 
+        IEnumerator objectInWayFeedBack()
+        {
+            Renderer r = null;
+
+            if (objectClone != null)
+            {
+              r = objectClone.GetComponentInChildren<Renderer>();
+            }
+            if (buildingClone != null)
+            {
+             r = buildingClone.GetComponentInChildren<Renderer>();
+            }
+
+            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            r.material.color = Color.red;
+            objectInWay = true;
+            yield return new WaitForSeconds(0.3f);
+            r.material.color = Color.white;
+            objectInWay = false;
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        IEnumerator waterInWayFeedBack()
+        {
+            Renderer r = null;
+
+            if (objectClone != null)
+            {
+                r = objectClone.GetComponentInChildren<Renderer>();
+            }
+            if (buildingClone != null)
+            {
+                r = buildingClone.GetComponentInChildren<Renderer>();
+            }
+
+            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            r.material.color = Color.red;
+            waterInWay = true;
+            yield return new WaitForSeconds(0.3f);
+            r.material.color = Color.white;
+            waterInWay = false;
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        IEnumerator tooManyBuildsFeedBack()
+        {
+            Renderer r = null;
+
+            if (objectClone != null)
+            {
+                r = objectClone.GetComponentInChildren<Renderer>();
+            }
+            if (buildingClone != null)
+            {
+                r = buildingClone.GetComponentInChildren<Renderer>();
+            }
+
+            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            r.material.color = Color.red;
+            tooManyBuild = true;
+            yield return new WaitForSeconds(0.3f);
+            r.material.color = Color.white;
+            tooManyBuild = false;
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        IEnumerator placeInWaterFeedBack()
+        {
+            Renderer r = null;
+            if (objectClone != null)
+            {
+                r = objectClone.GetComponentInChildren<Renderer>();
+            }
+            if (buildingClone != null)
+            {
+                r = buildingClone.GetComponentInChildren<Renderer>();
+            }
+            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            r.material.color = Color.red;
+            placeInWater = true;
+            yield return new WaitForSeconds(0.3f);
+            r.material.color = Color.white;
+            placeInWater = false;
+            yield return new WaitForSeconds(0.3f);
+        }
 
         // Object Placement for all areas
         //Currently all work the exact same 
@@ -275,13 +382,36 @@ namespace LevelEditor
                 {
                     worldPosition = curNode.vis.transform.position;
                 }
+
+                if (curNode != null && !ui.mouseOverUIElement)
+                {
+                    if (previousNode == null)
+                    {
+                        previousNode = curNode;
+                        prevColor = Color.white;
+                    }
+                    else
+                    {
+                        if (previousNode != curNode)
+                        {
+                            if (curNode.placedObj == null)
+                            {
+                                curNode.tileRenderer.material.color = Color.green;
+                            }
+                            else
+                            {
+                                curNode.tileRenderer.material.color = Color.red;
+                            }
+                            previousNode.tileRenderer.material.color = Color.white;
+                        }
+                        previousNode = curNode;
+                        prevColor = curNode.tileRenderer.material.color;
+                    }
+                }
                 if (objectClone == null)
                 {
                     objectClone = Instantiate(objectToPlace, worldPosition, Quaternion.identity) as GameObject;
                     objectProperties = objectClone.GetComponent<Level_Object>();
-                    Renderer r = objectClone.GetComponentInChildren<Renderer>();
-                    r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
-                    r.material.color = Color.green;
                 }
                 else
                 {
@@ -290,9 +420,9 @@ namespace LevelEditor
                     {
                         if (hit.collider.tag == "EnclosureMarker")
                         {
-                            if (curNode.placedObj != null)
+                            if (curNode.placedObj != null || curNode.placedBuild != null)
                             {
-                                StartCoroutine("cantPlaceFeedBack");                          
+                                StartCoroutine("objectInWayFeedBack");                          
                             }
                             else
                             {
@@ -304,7 +434,7 @@ namespace LevelEditor
                                 }
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 && objectProperties.isWaterObject == false)
                                 {
-                                    Debug.Log("Cant place in Water");
+                                    StartCoroutine("waterInWayFeedBack");
                                 }
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && objectProperties.isWaterObject == false)
                                 {
@@ -312,7 +442,7 @@ namespace LevelEditor
                                 }
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && objectProperties.isWaterObject == true)
                                 {
-                                    Debug.Log("Can only be placed in Water");
+                                    StartCoroutine("placeInWaterFeedBack");
                                 }
                             }
                         }
@@ -340,18 +470,7 @@ namespace LevelEditor
             }
         }
 
-        IEnumerator cantPlaceFeedBack()
-        {
-            Renderer r = objectClone.GetComponentInChildren<Renderer>();
-            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
-            r.material.color = Color.red;
-            cantPlace = true;
-            yield return new WaitForSeconds(0.3f);
-            r.material.color = Color.green;
-            cantPlace = false;
-            yield return new WaitForSeconds(0.3f);
-        }
-
+       
         public void PassObjectToPlace(string objectId)
         {
             if (objectClone != null)
@@ -372,7 +491,7 @@ namespace LevelEditor
 
                 Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
 
-                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended && !ui.mouseOverUIElement)
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
                 {
                     if (curNode.placedObj != null)
                     {
@@ -394,10 +513,6 @@ namespace LevelEditor
             Level_Object objectPlacedProperties = curNode.placedObj.gameObject.GetComponent<Level_Object>();
             switch(objectPlacedProperties.objectType)
             {
-                case Level_Object.ObjectType.AIDOBJECT:
-                    NumberTrackers.noAid--;
-                    break;
-
                 case Level_Object.ObjectType.ANIMALOBJECT:
                     AnimalClass animalEnumComponents = curNode.placedObj.gameObject.GetComponent<AnimalClass>();
                     switch (animalEnumComponents.animalFoodType)
@@ -443,35 +558,6 @@ namespace LevelEditor
                             break;
                     }
                     break;
-
-                case Level_Object.ObjectType.FENCEOBJECT:
-                    //get the Enum before Deleting
-                    FenceClass fenceEnumComponents = curNode.placedObj.gameObject.GetComponent<FenceClass>();
-                    //Subtract from No. trackers based on enum
-                    switch (fenceEnumComponents.fenceType)
-                    {
-                        case FenceClass.FenceTypes.CONCRETE:
-                            NumberTrackers.noConcrete--;
-                            break;
-                        case FenceClass.FenceTypes.CONCRETEW:
-                            NumberTrackers.noConcreteW--;
-                            break;
-                        case FenceClass.FenceTypes.GLASS:
-                            NumberTrackers.noGlass--;
-                            break;
-                        case FenceClass.FenceTypes.WIRE:
-                            NumberTrackers.noWire--;
-                            break;
-                        case FenceClass.FenceTypes.WOODEN:
-                            NumberTrackers.noWooden--;
-                            break;
-                        case FenceClass.FenceTypes.WOODENW:
-                            NumberTrackers.noWoodenW--;
-                            break;
-                    }
-
-                    break;
-
                 case Level_Object.ObjectType.FOLIAGEOBJECT:
                     //get the Enum before Deleting
                     FoliageClass foliageEnumComponents = curNode.placedObj.gameObject.GetComponent<FoliageClass>();
@@ -502,17 +588,16 @@ namespace LevelEditor
                             break;
                     }
                     break;
-
-                case Level_Object.ObjectType.SHELTEROBJECT:
-                    CareClass care3EnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>();
-                    NumberTrackers.noShelter--;
-                    break;
             }
 
             NumberTrackers.totalMoney += objectPlacedProperties.price;
             NumberTrackers.maintenance -= objectPlacedProperties.maintenance;
 
-            manager.inSceneEnrichment.Remove(curNode.placedObj.gameObject);
+            starTracking.CareCheck(animCare);
+            starTracking.CostCheck(animCost);
+            starTracking.EnrichmentCheck(animEnrichment);
+
+            manager.inSceneObject.Remove(curNode.placedObj.gameObject);
             Destroy(curNode.placedObj.gameObject);
             curNode.placedObj = null;
 
@@ -529,17 +614,13 @@ namespace LevelEditor
             objectPlacedProperties.gridPosX = curNode.nodePosX;
             objectPlacedProperties.gridPosZ = curNode.nodePosZ;
             curNode.placedObj = objectPlacedProperties;
-            manager.inSceneEnrichment.Add(objectActualPlaced);
+            manager.inSceneObject.Add(objectActualPlaced);
 
             NumberTrackers.totalMoney -= objectPlacedProperties.price;
             NumberTrackers.maintenance += objectPlacedProperties.maintenance;
 
             switch (objectPlacedProperties.objectType)
             {
-                case Level_Object.ObjectType.AIDOBJECT:
-                    NumberTrackers.noAid++;
-                    break;
-
                 case Level_Object.ObjectType.ANIMALOBJECT:
                     AnimalClass animalEnumComponents = curNode.placedObj.gameObject.GetComponent<AnimalClass>();
                     switch (animalEnumComponents.animalFoodType)
@@ -568,10 +649,7 @@ namespace LevelEditor
                             NumberTrackers.noAnimals++;
                             break;
                     }
-
-
                     break;
-
                 case Level_Object.ObjectType.ENRICHMENTOBJECT:
                     ToyClass toyEnumComponents = curNode.placedObj.gameObject.GetComponent<ToyClass>();
                     //Subtract from No. trackers based on enum
@@ -585,35 +663,6 @@ namespace LevelEditor
                             break;
                     }
                     break;
-
-                case Level_Object.ObjectType.FENCEOBJECT:
-                    //get the Enum before Deleting
-                    FenceClass fenceEnumComponents = curNode.placedObj.gameObject.GetComponent<FenceClass>();
-                    //Subtract from No. trackers based on enum
-                    switch (fenceEnumComponents.fenceType)
-                    {
-                        case FenceClass.FenceTypes.CONCRETE:
-                            NumberTrackers.noConcrete++;
-                            break;
-                        case FenceClass.FenceTypes.CONCRETEW:
-                            NumberTrackers.noConcreteW++;
-                            break;
-                        case FenceClass.FenceTypes.GLASS:
-                            NumberTrackers.noGlass++;
-                            break;
-                        case FenceClass.FenceTypes.WIRE:
-                            NumberTrackers.noWire++;
-                            break;
-                        case FenceClass.FenceTypes.WOODEN:
-                            NumberTrackers.noWooden++;
-                            break;
-                        case FenceClass.FenceTypes.WOODENW:
-                            NumberTrackers.noWoodenW++;
-                            break;
-                    }
-
-                    break;
-
                 case Level_Object.ObjectType.FOLIAGEOBJECT:
                     //get the Enum before Deleting
                     FoliageClass foliageEnumComponents = curNode.placedObj.gameObject.GetComponent<FoliageClass>();
@@ -630,9 +679,6 @@ namespace LevelEditor
                             NumberTrackers.noOther++;
                             break;
                     }
-
-                    // Call to folliageHappiness()
-                    foliageStarAw.FolliageHappiness(animFoliage);
                     break;
 
                 case Level_Object.ObjectType.FOODOBJECT:
@@ -647,12 +693,396 @@ namespace LevelEditor
                             break;
                     }
                     break;
-
-                case Level_Object.ObjectType.SHELTEROBJECT:
-                    CareClass care3EnumComponents = curNode.placedObj.gameObject.GetComponent<CareClass>();
-                    NumberTrackers.noShelter++;
-                    break;
             }
+            starTracking.CareCheck(animCare);
+            starTracking.CostCheck(animCost);
+            starTracking.EnrichmentCheck(animEnrichment);
+        }
+
+
+        #endregion
+
+        #region Place Building
+        void PlaceBuilding()
+        {
+            if (buildingHas)
+            {
+                UpdateMousePosition();
+     
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+               
+                Node nodeE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (1 * gridBase.offset)));
+
+                Node nodeNE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeNW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeSE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z - (1 * gridBase.offset)));
+                Node nodeSW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z - (1 * gridBase.offset)));
+
+                if (!ui.mouseOverUIElement && curNode != null)
+                {
+                    worldPosition = curNode.vis.transform.position;
+                }
+
+               /* if (previousNode == null)
+                {
+                    previousNode = curNode;
+                    prevColor = Color.white;
+                }
+                else
+                {
+                    if (previousNode != curNode)
+                    {
+                        if (curNode.placedObj == null)
+                        {
+                            curNode.tileRenderer.material.color = Color.green;
+                        }
+                        else
+                        {
+                            curNode.tileRenderer.material.color = Color.red;
+                        }
+                        previousNode.tileRenderer.material.color = Color.white;
+                    }
+                    previousNode = curNode;
+                    prevColor = curNode.tileRenderer.material.color;
+                }
+                */
+                if (buildingClone == null)
+                {
+                    buildingClone = Instantiate(buildingToPlace, worldPosition, Quaternion.identity) as GameObject;
+                    buildingProperties = buildingClone.GetComponent<Building_Object>();
+                }
+                else
+                {
+                    buildingClone.transform.position = worldPosition;
+
+                    if (Input.GetMouseButtonUp(0) && !ui.mouseOverUIElement)
+                    {
+                        if (hit.collider.tag == "EnclosureMarker")
+                        {
+                             if(buildingProperties.buildingType == Building_Object.BuildingType.AID && NumberTrackers.noAid > 0)
+                            {
+                                StartCoroutine("tooManyBuildsFeedBack");
+                            }
+                            else if (buildingProperties.buildingType == Building_Object.BuildingType.SHELTER && NumberTrackers.noShelter > 0)
+                            {
+                                StartCoroutine("tooManyBuildsFeedBack");
+                            }
+                            else if (curNode.placedObj != null || nodeE.placedObj != null || nodeS.placedObj != null || nodeW.placedObj != null || nodeN.placedObj != null || nodeNE.placedObj != null || nodeNW.placedObj != null || nodeSE.placedObj != null || nodeSW.placedObj != null||curNode.placedBuild != null || nodeE.placedBuild != null || nodeS.placedBuild != null || nodeW.placedBuild != null || nodeN.placedBuild != null || nodeNE.placedBuild != null || nodeNW.placedBuild != null || nodeSE.placedBuild != null || nodeSW.placedBuild != null)
+                            {
+                                StartCoroutine("objectInWayFeedBack");
+                            }
+                            else
+                            {
+                                //Water current texture id = 3, be sure to change when rearranging textures
+                                if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && nodeN.vis.GetComponent<NodeObject>().textureid != 3 && nodeE.vis.GetComponent<NodeObject>().textureid != 3 && nodeW.vis.GetComponent<NodeObject>().textureid != 3 && nodeS.vis.GetComponent<NodeObject>().textureid != 3 && nodeNE.vis.GetComponent<NodeObject>().textureid != 3 && nodeNW.vis.GetComponent<NodeObject>().textureid != 3 && nodeSE.vis.GetComponent<NodeObject>().textureid != 3 && nodeSW.vis.GetComponent<NodeObject>().textureid != 3)
+                                {
+                                    placingBuildings();
+                                    buildingHas = false;
+                                }
+                                else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 || nodeN.vis.GetComponent<NodeObject>().textureid == 3 || nodeE.vis.GetComponent<NodeObject>().textureid == 3 || nodeW.vis.GetComponent<NodeObject>().textureid == 3 || nodeS.vis.GetComponent<NodeObject>().textureid == 3 || nodeNE.vis.GetComponent<NodeObject>().textureid == 3 || nodeNW.vis.GetComponent<NodeObject>().textureid == 3 || nodeSE.vis.GetComponent<NodeObject>().textureid == 3 || nodeSW.vis.GetComponent<NodeObject>().textureid == 3)
+                                {
+                                    StartCoroutine("waterInWayFeedBack");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Must be placed in Enclosure");
+                        }
+                    }
+
+                    //Rotation
+                    /*
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        objectProperties.ChangeRotation();
+                    }
+                    */
+                }
+            }
+            else
+            {
+                if (buildingClone != null)
+                {
+                    Destroy(buildingClone);
+                }
+            }
+        }
+
+        public void PassBuildingToPlace(string buildingId)
+        {
+            if (buildingClone != null)
+            {
+                Destroy(buildingClone);
+            }
+
+            CloseAll();
+            buildingHas = true;
+            buildingClone = null;
+            buildingToPlace = ResourcesManager.GetInstance().GetBuildingBase(buildingId).buildingPrefab;
+        }
+        
+        void DeleteBuilding()
+        {
+            if (buildingDelete)
+            {
+                UpdateMousePosition();
+                Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+                Node nodeE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z));
+                Node nodeN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (1 * gridBase.offset)));
+
+                Node nodeNE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeNW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z + (1 * gridBase.offset)));
+                Node nodeSE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z - (1 * gridBase.offset)));
+                Node nodeSW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z - (1 * gridBase.offset)));
+                Node centerNode = null;
+
+                        
+
+                if (Input.GetMouseButtonDown(0) && !ui.mouseOverUIElement)
+                {
+                if (curNode.placedBuild != null)
+                {
+                       
+               
+                        if (nodeN.placedBuild != null && nodeN.placedBuild.center == true)
+                        {
+                            centerNode = nodeN;
+                      
+                        }
+                        else if (nodeS.placedBuild != null && nodeS.placedBuild.center == true)
+                        {
+                            centerNode = nodeS;
+                  
+                        }
+                        else if (nodeE.placedBuild != null && nodeE.placedBuild.center == true)
+                        {
+                            centerNode = nodeE;
+                    
+                        }
+                        else if (nodeW.placedBuild != null && nodeW.placedBuild.center == true)
+                        {
+                            centerNode = nodeW;
+            
+                        }
+                        else if (nodeNE.placedBuild != null && nodeNE.placedBuild.center == true)
+                        {
+                            centerNode = nodeNE;
+
+                        }
+                        else if (nodeSE.placedBuild != null && nodeSE.placedBuild.center == true)
+                        {
+                            centerNode = nodeSE;
+
+                        }
+                        else if (nodeNW.placedBuild != null && nodeNW.placedBuild.center == true)
+                        {
+                            centerNode = nodeNW;
+                        }
+                        else if (nodeSW.placedBuild != null && nodeSW.placedBuild.center == true)
+                        {
+                            centerNode = nodeSW;
+
+                        }
+                        else if (curNode.placedBuild != null && curNode.placedBuild.center == true)
+                        {
+                            centerNode = curNode;                    
+                        }
+                        else
+                        {
+                            Debug.Log("rawr");
+                        }
+       
+                }
+                
+                    if (centerNode != null)
+                    {
+                        Building_Object buildingPlacedProperties = centerNode.placedBuild.gameObject.GetComponent<Building_Object>();
+                        Node newNodeN = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x, 0, centerNode.placedBuild.transform.localPosition.z + (1 * gridBase.offset)));
+                        Node newNodeS = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x, 0, centerNode.placedBuild.transform.localPosition.z - (1 * gridBase.offset)));
+                        Node newNodeE = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x + (1 * gridBase.offset), 0, centerNode.placedBuild.transform.localPosition.z));                   
+                        Node newNodeW = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x - (1 * gridBase.offset), 0, centerNode.placedBuild.transform.localPosition.z));
+                        Node newNodeNE = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x + (1 * gridBase.offset), 0, centerNode.placedBuild.transform.localPosition.z + (1 * gridBase.offset)));
+                        Node newNodeSE = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x + (1 * gridBase.offset), 0, centerNode.placedBuild.transform.localPosition.z - (1 * gridBase.offset)));
+                        Node newNodeNW = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x - (1 * gridBase.offset), 0, centerNode.placedBuild.transform.localPosition.z + (1 * gridBase.offset)));
+                        Node newNodeSW = gridBase.NodeFromWorldPosition(new Vector3(centerNode.placedBuild.transform.localPosition.x - (1 * gridBase.offset), 0, centerNode.placedBuild.transform.localPosition.z - (1 * gridBase.offset)));
+                       
+                        
+                        switch(buildingPlacedProperties.buildingType)
+                        {
+                            case Building_Object.BuildingType.AID:
+                                NumberTrackers.noAid--;
+                                break;
+                            case Building_Object.BuildingType.SHELTER:
+                                NumberTrackers.noShelter--;
+                                break;
+                        }
+                        NumberTrackers.totalMoney += buildingPlacedProperties.price;
+                        NumberTrackers.maintenance -= buildingPlacedProperties.maintenance;
+
+                        starTracking.CareCheck(animCare);
+                        starTracking.CostCheck(animCost);
+
+                        manager.inSceneBuilding.Remove(centerNode.placedBuild.gameObject);
+                        Destroy(centerNode.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeE.placedBuild.gameObject);
+                        Destroy(newNodeE.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeW.placedBuild.gameObject);
+                        Destroy(newNodeW.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeS.placedBuild.gameObject);
+                        Destroy(newNodeS.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeN.placedBuild.gameObject);
+                        Destroy(newNodeN.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeNE.placedBuild.gameObject);
+                        Destroy(newNodeNE.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeSE.placedBuild.gameObject);
+                        Destroy(newNodeSE.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeSW.placedBuild.gameObject);
+                        Destroy(newNodeSW.placedBuild.gameObject);
+
+                        manager.inSceneBuilding.Remove(newNodeNW.placedBuild.gameObject);
+                        Destroy(newNodeNW.placedBuild.gameObject);
+
+                        
+
+                        newNodeE.placedBuild = null;
+                        newNodeN.placedBuild = null;
+                        newNodeS.placedBuild = null;
+                        newNodeW.placedBuild = null;
+                        newNodeNE.placedBuild = null;
+                        newNodeSE.placedBuild = null;
+                        newNodeNW.placedBuild = null;
+                        newNodeSW.placedBuild = null;
+                        centerNode.placedBuild = null;
+                    }
+                    
+                }
+            }
+        }
+        public void DeleteBuildings()
+        {
+            CloseAll();
+            buildingDelete = true;
+        }
+
+        void placingBuildings()
+        {
+
+            Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+
+            Node nodeE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z));
+            Node nodeW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z));
+            Node nodeN = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z + (1 * gridBase.offset)));
+            Node nodeS = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x, 0, mousePosition.z - (1 * gridBase.offset)));
+    
+            Node nodeNE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z + (1 * gridBase.offset)));
+            Node nodeNW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z + (1 * gridBase.offset)));
+            Node nodeSE = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x + (1 * gridBase.offset), 0, mousePosition.z - (1 * gridBase.offset)));
+            Node nodeSW = gridBase.NodeFromWorldPosition(new Vector3(mousePosition.x - (1 * gridBase.offset), 0, mousePosition.z - (1 * gridBase.offset)));
+
+            GameObject buildingActualPlaced = Instantiate(buildingToPlace, worldPosition, buildingClone.transform.rotation) as GameObject;
+            GameObject buildingN = Instantiate(containsBuilding, new Vector3 (nodeN.nodePosX * gridBase.offset, 0,nodeN.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingE = Instantiate(containsBuilding, new Vector3(nodeE.nodePosX * gridBase.offset, 0, nodeE.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingW = Instantiate(containsBuilding, new Vector3(nodeW.nodePosX * gridBase.offset, 0, nodeW.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingS = Instantiate(containsBuilding, new Vector3(nodeS.nodePosX * gridBase.offset, 0, nodeS.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingNE = Instantiate(containsBuilding, new Vector3(nodeNE.nodePosX * gridBase.offset, 0, nodeNE.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingNW = Instantiate(containsBuilding, new Vector3(nodeNW.nodePosX * gridBase.offset, 0, nodeNW.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingSE = Instantiate(containsBuilding, new Vector3(nodeSE.nodePosX * gridBase.offset, 0, nodeSE.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            GameObject buildingSW = Instantiate(containsBuilding, new Vector3(nodeSW.nodePosX * gridBase.offset, 0, nodeSW.nodePosZ * gridBase.offset), Quaternion.identity) as GameObject;
+            //Center
+            Building_Object buildingPlacedProperties = buildingActualPlaced.GetComponent<Building_Object>();
+            buildingPlacedProperties.gridPosX = curNode.nodePosX;
+            buildingPlacedProperties.gridPosZ = curNode.nodePosZ;
+            buildingPlacedProperties.center = true;
+            //North
+            Building_Object buildingNorth = buildingN.GetComponent<Building_Object>();
+            buildingNorth.gridPosX = nodeN.nodePosX;
+            buildingNorth.gridPosZ = nodeN.nodePosZ;
+            buildingNorth.center = false;
+            //South
+            Building_Object buildingSouth = buildingS.GetComponent<Building_Object>();
+            buildingSouth.gridPosX = nodeS.nodePosX ;
+            buildingSouth.gridPosZ = nodeS.nodePosZ;
+            buildingSouth.center = false;
+            //East
+            Building_Object buildingEast = buildingE.GetComponent<Building_Object>();
+            buildingEast.gridPosX = nodeE.nodePosX;
+            buildingEast.gridPosZ = nodeE.nodePosZ;
+            buildingEast.center = false;
+            //West
+            Building_Object buildingWest = buildingW.GetComponent<Building_Object>();
+            buildingWest.gridPosX = nodeW.nodePosX ;
+            buildingWest.gridPosZ = nodeW.nodePosZ ;
+            buildingWest.center = false;
+
+            //NorthE
+            Building_Object buildingNorthE = buildingNE.GetComponent<Building_Object>();
+            buildingNorthE.gridPosX = nodeNE.nodePosX ;
+            buildingNorthE.gridPosZ = nodeNE.nodePosZ ;
+            buildingNorthE.center = false;
+            //SouthE
+            Building_Object buildingSouthE = buildingSE.GetComponent<Building_Object>();
+            buildingSouthE.gridPosX = nodeSE.nodePosX ;
+            buildingSouthE.gridPosZ = nodeSE.nodePosZ;
+            buildingSouthE.center = false;
+            //NorthW
+            Building_Object buildingNorthW = buildingNW.GetComponent<Building_Object>();
+            buildingNorthW.gridPosX = nodeNW.nodePosX ;
+            buildingNorthW.gridPosZ = nodeNW.nodePosZ;
+            buildingNorthW.center = false;
+            //SouthW
+            Building_Object buildingSouthW = buildingSW.GetComponent<Building_Object>();
+            buildingSouthW.gridPosX = nodeSW.nodePosX ;
+            buildingSouthW.gridPosZ = nodeSW.nodePosZ ;
+            buildingSouthW.center = false;
+
+            curNode.placedBuild = buildingPlacedProperties;
+            
+            nodeN.placedBuild = buildingNorth;
+            nodeS.placedBuild = buildingSouth;
+            nodeW.placedBuild = buildingWest;
+            nodeE.placedBuild = buildingEast;
+            nodeNE.placedBuild = buildingNorthE;
+            nodeSE.placedBuild = buildingSouthE;
+            nodeNW.placedBuild = buildingNorthW;
+            nodeSW.placedBuild = buildingSouthW;
+
+            manager.inSceneBuilding.Add(buildingActualPlaced);
+            manager.inSceneBuilding.Add(buildingN);
+            manager.inSceneBuilding.Add(buildingS);
+            manager.inSceneBuilding.Add(buildingW);
+            manager.inSceneBuilding.Add(buildingE);
+            manager.inSceneBuilding.Add(buildingNE);
+            manager.inSceneBuilding.Add(buildingSE);
+            manager.inSceneBuilding.Add(buildingNW);
+            manager.inSceneBuilding.Add(buildingSW);
+
+            switch(buildingPlacedProperties.buildingType)
+                        {
+                            case Building_Object.BuildingType.AID:
+                                NumberTrackers.noAid++;
+                                break;
+                            case Building_Object.BuildingType.SHELTER:
+                                NumberTrackers.noShelter++;
+                                break;
+                        }
+
+            NumberTrackers.totalMoney -= buildingPlacedProperties.price;
+            NumberTrackers.maintenance += buildingPlacedProperties.maintenance;
+            starTracking.CareCheck(animCare);
+            starTracking.CostCheck(animCost);
         }
 
 
@@ -665,7 +1095,7 @@ namespace LevelEditor
             if (fenceHas)
             {
                 UpdateMousePosition();
-
+                
                 if (Input.GetMouseButtonUp(0) && !ui.mouseOverUIElement)
                 {
                     if (hit.collider.tag == "preplacedFence" || hit.collider.tag == "preplacedFenceAngled")
@@ -673,18 +1103,16 @@ namespace LevelEditor
                         if (fillAll.isOn)
                         {
                             fenceMarkers = GameObject.FindGameObjectsWithTag("preplacedFence");
-                            fenceMarkersAngled = GameObject.FindGameObjectsWithTag("preplacedFenceAngled");
-
                             foreach (GameObject fence in fenceMarkers)
                             {
+                                Renderer r = fence.GetComponent<Renderer>();
+                                r.material.color = Color.blue;
                                 FenceNode wallBuildArea = fence.GetComponent<FenceNode>();
                                 if (wallBuildArea.fenceObj == false)
                                 {
                                     FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
                                     GameObject fenceActualPlaced = Instantiate(fenceToPlace, fence.transform.position, fence.transform.rotation) as GameObject;
                                     Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                                    // fencePlacedProperties.gridPosX = Mathf.RoundToInt(fence.transform.position.x);
-                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fence.transform.position.z);
                                     wallBuildArea.fenceObj = true;
                                     fenceActualPlaced.transform.parent = wallBuildArea.transform;
                                     manager.inSceneFences.Add(fenceActualPlaced);
@@ -712,57 +1140,17 @@ namespace LevelEditor
                                             NumberTrackers.noWoodenW++;
                                             break;
                                     }
+
+                                    starTracking.CostCheck(animCost);
+                                    starTracking.FencesCheck(animFences);
                                 }
                             }
-                            /*
-                            foreach (GameObject fenceAngle in fenceMarkersAngled)
-                            {
-                                FenceNode wallBuildArea = fenceAngle.GetComponent<FenceNode>();
-                                if (wallBuildArea.fenceObj == false)
-                                {
-                                    FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
-                                    GameObject fenceActualPlaced = Instantiate(fenceToPlace, fenceAngle.transform.position, fenceAngle.transform.rotation) as GameObject;
-                                    Level_Object fencePlacedProperties = fenceActualPlaced.GetComponent<Level_Object>();
-                                    fenceActualPlaced.transform.localScale = new Vector3(1.4142f, 1, 1);
-                                    //fencePlacedProperties.gridPosX = Mathf.RoundToInt(fenceAngle.transform.position.x);
-                                    //fencePlacedProperties.gridPosZ = Mathf.RoundToInt(fenceAngle.transform.position.z);
-                                    wallBuildArea.fenceObj = true;
-                                    manager.inSceneFences.Add(fenceActualPlaced);
-                                    NumberTrackers.totalMoney -= fencePlacedProperties.price;
-                                    NumberTrackers.maintenance += fencePlacedProperties.maintenance;
-
-
-                                    switch (fenceEnumComponent.fenceType)
-                                    {
-                                        case FenceClass.FenceTypes.CONCRETE:
-                                            NumberTrackers.noConcrete++;
-                                            break;
-                                        case FenceClass.FenceTypes.CONCRETEW:
-                                            NumberTrackers.noConcreteW++;
-                                            break;
-                                        case FenceClass.FenceTypes.GLASS:
-                                            NumberTrackers.noGlass++;
-                                            break;
-                                        case FenceClass.FenceTypes.WIRE:
-                                            NumberTrackers.noWire++;
-                                            break;
-                                        case FenceClass.FenceTypes.WOODEN:
-                                            NumberTrackers.noWooden++;
-                                            break;
-                                        case FenceClass.FenceTypes.WOODENW:
-                                            NumberTrackers.noWoodenW++;
-                                            break;
-                                    }
-                                }
-
-                            }*/
                         }
                         else if (!fillAll.isOn)
                         {
                             FenceNode wallBuildArea = hit.collider.gameObject.GetComponent<FenceNode>();
                             if (wallBuildArea.fenceObj == false)
                             {
-
                                 FenceClass fenceEnumComponent = fenceToPlace.GetComponent<FenceClass>(); //get the Enum
                                 Vector3 fencePos = hit.collider.gameObject.transform.position;
                                 GameObject fenceActualPlaced = Instantiate(fenceToPlace, fencePos, Quaternion.identity) as GameObject;
@@ -796,12 +1184,13 @@ namespace LevelEditor
                                         NumberTrackers.noWoodenW++;
                                         break;
                                 }
+
+                                starTracking.FencesCheck(animFences);
+                                starTracking.CostCheck(animCost); 
                             }
                         }
                     }
-
                 }
-
             }
             else
             {
@@ -864,7 +1253,11 @@ namespace LevelEditor
                                     NumberTrackers.noWoodenW--;
                                     break;
                             }
-                            wallBuildArea.fenceObj = false;
+
+                            starTracking.FencesCheck(animFences);
+                            starTracking.CostCheck(animCost);
+
+                        wallBuildArea.fenceObj = false;
                             manager.inSceneFences.Remove(hit.collider.gameObject);
                             Destroy(hit.collider.gameObject);
                         }
@@ -980,18 +1373,23 @@ namespace LevelEditor
                         NumberTrackers.totalMoney += animalPlacedProperties.price;
 
                         NumberTrackers.noAnimals--;
-                       /* if (animalClass.Carnivore == true)
-                        {
-                            NumberTrackers.noAnimalsC--;
-                        }
-                        else if (animalClass.Herbivore == true)
-                        {
-                            NumberTrackers.noAnimalsH--;
-                        }
-                        else if (animalClass.Omnivore == true)
-                        {
-                            NumberTrackers.noAnimalsO--;
-                        }*/
+                        NumberTrackers.noAnimalsC--;
+                        starTracking.CareCheck(animCare);
+                        starTracking.EnrichmentCheck(animEnrichment);
+                        starTracking.TerrainCheck(animTerrain);
+                        starTracking.CostCheck(animCost);
+                        /* if (animalClass.Carnivore == true)
+                         {
+                             NumberTrackers.noAnimalsC--;
+                         }
+                         else if (animalClass.Herbivore == true)
+                         {
+                             NumberTrackers.noAnimalsH--;
+                         }
+                         else if (animalClass.Omnivore == true)
+                         {
+                             NumberTrackers.noAnimalsO--;
+                         }*/
                     }
                 }
             }
@@ -1033,12 +1431,14 @@ namespace LevelEditor
                                 if (curNode.vis.GetComponent<NodeObject>().textureid != matId)
                                 {
                                     deleteTerrainChooser();
+                                    
                                 }
 
                                 if (curNode.terrainObj == null)
                                 {
                                     curNode.vis.GetComponent<NodeObject>().textureid = matId;
                                     placeTerrainChooser();
+                                  
                                 }
 
                                 paintTile = false;
@@ -1068,12 +1468,6 @@ namespace LevelEditor
                         }
                     }
 
-                    if (Input.GetMouseButtonUp(1))
-                    {
-                        Vector3 eulerAngles = curNode.vis.transform.eulerAngles;
-                        eulerAngles += new Vector3(0, 90, 0);
-                        targetRot = Quaternion.Euler(eulerAngles);
-                    }
                 }
             }
         }
@@ -1086,7 +1480,7 @@ namespace LevelEditor
             if (curNode.terrainObj != null)
             {
                 Terrain_Object terrainPlacedProperties = curNode.terrainObj.GetComponent<Terrain_Object>();
-                manager.inSceneEnrichment.Remove(curNode.terrainObj.gameObject);
+                manager.inSceneObject.Remove(curNode.terrainObj.gameObject);
                 Destroy(curNode.terrainObj.gameObject);
                 curNode.terrainObj = null;
                 switch (terrainPlacedProperties.matId)
@@ -1104,19 +1498,22 @@ namespace LevelEditor
                         NumberTrackers.noWater--;
                         break;
                 }
+                starTracking.TerrainCheck(animTerrain);
+                starTracking.CostCheck(animCost);
             }
         }
         void placeTerrainChooser()
         {
             Node curNode = gridBase.NodeFromWorldPosition(mousePosition);
+            worldPosition = curNode.vis.transform.position;
             GameObject terrainActualPlaced = Instantiate(terrainToPlace, worldPosition, Quaternion.identity) as GameObject;
             Terrain_Object terrainPlacedProperties = terrainActualPlaced.GetComponent<Terrain_Object>();
 
             terrainPlacedProperties.gridPosX = curNode.nodePosX;
             terrainPlacedProperties.gridPosZ = curNode.nodePosZ;
             curNode.terrainObj = terrainPlacedProperties;
-            manager.inSceneEnrichment.Add(terrainActualPlaced);
-            totalMoney -= terrainPlacedProperties.price;
+            manager.inSceneObject.Add(terrainActualPlaced);
+            NumberTrackers.totalMoney -= terrainPlacedProperties.price;
 
             switch(terrainPlacedProperties.matId)
             {
@@ -1133,6 +1530,8 @@ namespace LevelEditor
                     NumberTrackers.noWater++;
                     break;
             }
+            starTracking.TerrainCheck(animTerrain);
+            starTracking.CostCheck(animCost);
         }
 
         public void PassMaterialToPaint(int matId)

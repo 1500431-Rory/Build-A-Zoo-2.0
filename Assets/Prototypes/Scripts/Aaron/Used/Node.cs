@@ -11,6 +11,7 @@ public class Node {
     public bool isWalkable;
 
     public LevelEditor.Level_Object placedObj;
+    public LevelEditor.Building_Object placedBuild;
     public LevelEditor.Terrain_Object terrainObj;
     //public LevelEditor.Ground_Object groundObj;
 

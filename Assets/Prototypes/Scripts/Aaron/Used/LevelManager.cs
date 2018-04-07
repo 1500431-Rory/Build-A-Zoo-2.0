@@ -9,18 +9,9 @@ public class LevelManager : MonoBehaviour {
     GridBase gridBase;
 
     public List<GameObject> inSceneObject = new List<GameObject>();
-
-    public List<GameObject> inSceneFoliage = new List<GameObject>();
-    public List<GameObject> inSceneEnrichment = new List<GameObject>();
+    public List<GameObject> inSceneBuilding = new List<GameObject>();
     public List<GameObject> inSceneFences = new List<GameObject>();
     public List<GameObject> inSceneAnimals = new List<GameObject>();
-    public List<GameObject> inSceneCare = new List<GameObject>();
-
-
-    [HideInInspector]
-    public GameObject wallHolder;
-    [HideInInspector]
-    public GameObject objHolder;
 
     private static LevelManager instance = null;
     public static LevelManager GetInstance()
@@ -35,11 +26,6 @@ public class LevelManager : MonoBehaviour {
 
      void Start()
     {
-        wallHolder = new GameObject();
-        wallHolder.name = "Wall Holder";
-        objHolder = new GameObject();
-        objHolder.name = "Obj Holder";
-
         gridBase = GridBase.GetInstance();
 
         InitLevelObjects();
@@ -60,14 +46,11 @@ public class LevelManager : MonoBehaviour {
 
     public void ClearLevel()
     {
-        foreach(GameObject g in inSceneFoliage)
+        foreach (GameObject g in inSceneObject)
         {
             Destroy(g);
         }
-        foreach (GameObject g in inSceneEnrichment)
-        {
-            Destroy(g);
-        }
+      
         foreach (GameObject g in inSceneFences)
         {
             Destroy(g);
@@ -76,17 +59,11 @@ public class LevelManager : MonoBehaviour {
         {
             Destroy(g);
         }
-        foreach (GameObject g in inSceneCare)
-        {
-            Destroy(g);
-        }
+        
 
-        inSceneFoliage.Clear();
-        inSceneEnrichment.Clear();
+        inSceneObject.Clear();
         inSceneFences.Clear();
         inSceneAnimals.Clear();
-        inSceneCare.Clear();
-
     }
 
 

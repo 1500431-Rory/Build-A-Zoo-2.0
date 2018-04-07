@@ -8,49 +8,19 @@ using UnityEngine.UI;
 public class CareStarAw : MonoBehaviour {
 
     bool careStarAchieved;
-
-    public Image UIStar;
-    private float fillAmountFood = 0f;
-    private float fillAmountShelter = 0f;
-    private float fillAmountAid = 0f;
-
     bool correctFood;
     bool allAnimalsSheltered;
     bool haveAid;
 
     public Animator anim;
 
-    //public OverallHappiness overallVariables;
-
-    public 
-
     // Use this for initialization
     void Start()
     {
-        UIStar.fillAmount = 0f;
         correctFood = false;
         allAnimalsSheltered = false;
         haveAid = false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        AnimalCare(anim);
-
-        // Check both happiness variables are equal to careHappiness
-        if (UIStar.fillAmount == 1f)
-        {
-            // Set careStarAchieved to true
-            careStarAchieved = true;
-        }
-        else
-        {
-            // Set careStarAchieved to false
-            careStarAchieved = false;
-        }
-    }
-
     // For food and diet
     void AnimalCare(Animator anim)
     {
@@ -60,7 +30,6 @@ public class CareStarAw : MonoBehaviour {
             // Check foodType is appropreate for penguins diet and have enough food
             if (NumberTrackers.noCarnivorous > 0)
             {
-
                 correctFood = true;
             }
         }
@@ -81,54 +50,23 @@ public class CareStarAw : MonoBehaviour {
             }
         }
 
-        if(NumberTrackers.noAnimals <= NumberTrackers.noAnimalsSheltered && NumberTrackers.noShelter > 0)
+        if(NumberTrackers.noShelter > 0)
         {
             allAnimalsSheltered = true;
         }
 
-        if(NumberTrackers.noAid == 1)
+        if(NumberTrackers.noAid > 0)
         {
             haveAid = true;
         }
 
-        IncreaseFillAmount();
-        UIStar.fillAmount = fillAmountFood + fillAmountShelter + fillAmountAid;
-
-        if (UIStar.fillAmount == 1f)
+        if (correctFood == true && allAnimalsSheltered == true && haveAid == true)
         {
             anim.SetBool("StarAchieved", true);
         }
         else
         {
             anim.SetBool("StarAchieved", false);
-        }
-
-    }
-
-    void IncreaseFillAmount()
-    {
-        if (correctFood == true)
-        {
-           
-                fillAmountFood = 0.33f;
-            
-        }
-        if (allAnimalsSheltered == true)
-        {
-            
-                fillAmountShelter = 0.33f;
-            
-        }
-        if (haveAid == true)
-        {
-           
-                fillAmountAid = 0.34f;
-            
-        }
-
-       if(correctFood==true&&allAnimalsSheltered==true&&haveAid==true)
-        {
-            UIStar.fillAmount = 1.0f;
         }
 
     }

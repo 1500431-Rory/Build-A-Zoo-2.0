@@ -6,6 +6,7 @@ namespace LevelEditor {
     public class ResourcesManager : MonoBehaviour {
 
         public List<LevelObjectBase> LevelObjects = new List<LevelObjectBase>();
+        public List<LevelBuildingBase> LevelBuildings = new List<LevelBuildingBase>();
         public List<LevelFoliageBase> LevelFoliageObjects = new List<LevelFoliageBase>();
         public List<LevelCareBase> LevelCareObjects = new List<LevelCareBase>();
         public List<LevelEnrichmentBase> LevelEnrichmentObjects = new List<LevelEnrichmentBase>();
@@ -37,6 +38,22 @@ namespace LevelEditor {
                 if (objectId.Equals(LevelObjects[i].object_id))
                 {
                     retVal = LevelObjects[i];
+                    break;
+                }
+            }
+
+            return retVal;
+        }
+
+        public LevelBuildingBase GetBuildingBase(string buildingId)
+        {
+            LevelBuildingBase retVal = null;
+
+            for (int i = 0; i < LevelBuildings.Count; i++)
+            {
+                if (buildingId.Equals(LevelBuildings[i].building_id))
+                {
+                    retVal = LevelBuildings[i];
                     break;
                 }
             }
@@ -158,6 +175,13 @@ namespace LevelEditor {
     {
         public string object_id;
         public GameObject objectPrefab;
+    }
+
+    [System.Serializable]
+    public class LevelBuildingBase
+    {
+        public string building_id;
+        public GameObject buildingPrefab;
     }
 
     [System.Serializable]

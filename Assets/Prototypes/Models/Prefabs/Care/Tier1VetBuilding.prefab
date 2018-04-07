@@ -37,12 +37,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4354994106777408}
-  - component: {fileID: 114693621106262612}
-  - component: {fileID: 114030278961190034}
+  - component: {fileID: 114846753983363538}
   - component: {fileID: 65747564730307798}
   m_Layer: 2
   m_Name: Tier1VetBuilding
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,7 +141,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114030278961190034
+--- !u!114 &114846753983363538
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -150,30 +149,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1817887768881146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974c54abcd5d26241bec4c0d5e29ecbc, type: 3}
+  m_Script: {fileID: 11500000, guid: 132bd0f3a1bf5ed408191a91e2644340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  careType: 1
-  foodType: 2
-  noAnimalsPerShelter: 0
---- !u!114 &114693621106262612
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1817887768881146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a97ef4bf8e33bc41b4a0effd8de20c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obj_Id: Tier1VetBuilding
+  build_Id: Tier1VetBuilding
   gridPosX: 0
   gridPosZ: 0
+  center: 0
   modelVisualization: {fileID: 1817887768881146}
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
   rotateDegrees: 0
-  price: 5000
-  maintenance: 500
-  objectType: 3
+  price: 0
+  maintenance: 0
+  buildingType: 1

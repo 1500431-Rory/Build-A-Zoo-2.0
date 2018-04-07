@@ -6,38 +6,36 @@ namespace LevelEditor
 {
 
     //Class to describe and assign values for every object (place on all manipulatable objects)
-    public class Level_Object : MonoBehaviour
+    public class Building_Object : MonoBehaviour
     {
 
-        public string obj_Id;
+        public string build_Id;
+
         public int gridPosX;
         public int gridPosZ;
+
+        public bool center;
+
         public GameObject modelVisualization;
         public Vector3 worldPositionOffset;
         public Vector3 worldRotation;
-     
-       public float rotateDegrees = 0;
+
+        public float rotateDegrees = 0;
 
         public float price = 0;
         public float maintenance = 0;
 
-        public bool isWaterObject;
-
-        public enum ObjectType
+        public enum BuildingType
         {
-            FOLIAGEOBJECT,
-            ENRICHMENTOBJECT,
-            FOODOBJECT,
-            FENCEOBJECT,
-            ANIMALOBJECT
+            SHELTER,
+            AID
         }
 
-        public ObjectType objectType;
+        public BuildingType buildingType;
 
         public void UpdateNode(Node[,] grid)
         {
             Node node = grid[gridPosX, gridPosZ];
-
             Vector3 worldPosition = node.vis.transform.position;
             worldPosition += worldPositionOffset;
             transform.rotation = Quaternion.Euler(worldRotation);
@@ -52,7 +50,7 @@ namespace LevelEditor
         }
 
         //save level remnants
-        public SaveableLevelObject GetSaveableObject()
+        /*public SaveableLevelObject GetSaveableObject()
         {
             SaveableLevelObject savedObj = new SaveableLevelObject();
             savedObj.obj_Id = obj_Id;
@@ -64,15 +62,15 @@ namespace LevelEditor
             savedObj.rotX = worldRotation.x;
             savedObj.rotY = worldRotation.y;
             savedObj.rotZ = worldRotation.z;
-           // savedObj.isWallObject = isWallObject;
-           // savedObj.isStackable = isStackableObj;
+            // savedObj.isWallObject = isWallObject;
+            // savedObj.isStackable = isStackableObj;
 
             return savedObj;
-        }
+        }*/
     }
 
     [System.Serializable]
-    public class SaveableLevelObject
+    public class SaveableLevelBuilding
     {
         public string obj_Id;
         public int posX;
@@ -82,7 +80,7 @@ namespace LevelEditor
         public float rotY;
         public float rotZ;
 
-       // public bool isWallObject = false;
-       // public bool isStackable = false;
+        // public bool isWallObject = false;
+        // public bool isStackable = false;
     }
 }

@@ -132,7 +132,7 @@ MonoBehaviour:
   price: 100
   maintenance: 100
   isWaterObject: 0
-  objectType: 4
+  objectType: 2
 --- !u!114 &114559354639736308
 MonoBehaviour:
   m_ObjectHideFlags: 1

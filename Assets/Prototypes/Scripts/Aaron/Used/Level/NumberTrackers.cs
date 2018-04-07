@@ -42,7 +42,7 @@ public class NumberTrackers : MonoBehaviour {
 
 
     //totals
-    public static float totalFences = 51; //set to match number of marker places, can be adjusted to find number on awake for changing enclosure sizes
+    public static float totalFences = 58; //set to match number of marker places, can be adjusted to find number on awake for changing enclosure sizes
     public static float totalTerrainSquares = 150;
 
     //Money
@@ -53,7 +53,7 @@ public class NumberTrackers : MonoBehaviour {
     void Start ()
     {
         //Money
-        totalMoney = 200000;
+        totalMoney = 100000;
         maintenance = 0;
 
         noAnimals = 0;
@@ -67,7 +67,7 @@ public class NumberTrackers : MonoBehaviour {
    
         //Care Numbers
         noAid = 0;
-        noShelter = 0;
+        noShelter = 1;
         noAnimalsSheltered = 0;
         noCarnivorous =0;
         noHerbivorous = 0;
@@ -91,8 +91,6 @@ public class NumberTrackers : MonoBehaviour {
         noWater = 0;
         noGrass = 0;
 
-        
-
     }
 
     void OnGUI()
@@ -100,32 +98,32 @@ public class NumberTrackers : MonoBehaviour {
         GUI.color = Color.black;
         GUI.Label(new Rect(800, 10, 150, 30), "Animals: " + noAnimals.ToString());
 
-       // GUI.Label(new Rect(100, 50, 150, 20), "Toys: " + noToys.ToString());
-       // GUI.Label(new Rect(100, 70, 150, 20), "Water Toys: " + noWaterToys.ToString());
+        GUI.Label(new Rect(100, 50, 150, 20), "Toys: " + noToys.ToString());
+        GUI.Label(new Rect(100, 70, 150, 20), "Water Toys: " + noWaterToys.ToString());
 
-       // GUI.Label(new Rect(100, 90, 150, 20), "Aid: " + noAid.ToString());
-       // GUI.Label(new Rect(100, 110, 150, 20), "Shelter: " + noShelter.ToString());
-       // GUI.Label(new Rect(100, 130, 150, 20), "Carnivorous: " + noCarnivorous.ToString());
-       // GUI.Label(new Rect(100, 150, 150, 20), "Herbivorous: " + noHerbivorous.ToString());
+        GUI.Label(new Rect(100, 90, 150, 20), "Aid: " + noAid.ToString());
+        GUI.Label(new Rect(100, 110, 150, 20), "Shelter: " + noShelter.ToString());
+        GUI.Label(new Rect(100, 130, 150, 20), "Carnivorous: " + noCarnivorous.ToString());
+        GUI.Label(new Rect(100, 150, 150, 20), "Herbivorous: " + noHerbivorous.ToString());
 
-       // GUI.Label(new Rect(100, 170, 150, 20), "Concrete: " + noConcrete.ToString());
-       // GUI.Label(new Rect(100, 190, 150, 20), "ConcreteW: " + noConcreteW.ToString());
-       // GUI.Label(new Rect(100, 210, 150, 20), "Glass: " + noGlass.ToString());
-       // GUI.Label(new Rect(100, 230, 150, 20), "Wire: " + noWire.ToString());
-       // GUI.Label(new Rect(100, 250, 150, 20), "Wooden: " + noWooden.ToString());
-       // GUI.Label(new Rect(100, 270, 150, 20), "WoodenW: " + noWoodenW.ToString());
+        GUI.Label(new Rect(100, 170, 150, 20), "Concrete: " + noConcrete.ToString());
+        GUI.Label(new Rect(100, 190, 150, 20), "ConcreteW: " + noConcreteW.ToString());
+        GUI.Label(new Rect(100, 210, 150, 20), "Glass: " + noGlass.ToString());
+        GUI.Label(new Rect(100, 230, 150, 20), "Wire: " + noWire.ToString());
+        GUI.Label(new Rect(100, 250, 150, 20), "Wooden: " + noWooden.ToString());
+        GUI.Label(new Rect(100, 270, 150, 20), "WoodenW: " + noWoodenW.ToString());
 
-       //GUI.Label(new Rect(100, 290, 150, 20), "Bush: " + noBush.ToString());
+       GUI.Label(new Rect(100, 290, 150, 20), "Bush: " + noBush.ToString());
        GUI.Label(new Rect(100, 310, 150, 20), "Rock: " + noRock.ToString());
-       //GUI.Label(new Rect(100, 330, 150, 20), "Other: " + noOther.ToString());
+       GUI.Label(new Rect(100, 330, 150, 20), "Other: " + noOther.ToString());
 
-       // GUI.Label(new Rect(180, 30, 150, 20), "noStone: " + noStone.ToString());
-       // GUI.Label(new Rect(180, 50, 150, 20), "noSand: " + noSand.ToString());
-       // GUI.Label(new Rect(180, 70, 150, 20), "Water: " + noWater.ToString());
-       // GUI.Label(new Rect(180, 90, 150, 20), "Grass: " + noGrass.ToString());
+        GUI.Label(new Rect(180, 30, 150, 20), "noStone: " + noStone.ToString());
+        GUI.Label(new Rect(180, 50, 150, 20), "noSand: " + noSand.ToString());
+        GUI.Label(new Rect(180, 70, 150, 20), "Water: " + noWater.ToString());
+        GUI.Label(new Rect(180, 90, 150, 20), "Grass: " + noGrass.ToString());
 
-        GUI.Label(new Rect(800, 25, 150, 20), "TotalMoney: " + totalMoney.ToString());
-        GUI.Label(new Rect(800, 40, 150, 20), "Maintenance: " + maintenance.ToString());
+       GUI.Label(new Rect(800, 25, 150, 20), "TotalMoney: " + totalMoney.ToString());
+       GUI.Label(new Rect(800, 40, 150, 20), "Maintenance: " + maintenance.ToString());
 
     }
 

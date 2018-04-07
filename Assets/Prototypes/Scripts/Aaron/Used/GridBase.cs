@@ -7,7 +7,6 @@ using UnityEngine;
 public class GridBase : MonoBehaviour {
 
     public GameObject nodePrefab;
-    public GameObject nodeTPrefab;
 
     public int sizeX;
     public int sizeZ;

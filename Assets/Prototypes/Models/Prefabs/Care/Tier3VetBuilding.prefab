@@ -9,77 +9,76 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1889304905460978}
+  m_RootGameObject: {fileID: 1937591560310602}
   m_IsPrefabParent: 1
---- !u!1 &1875804161557900
+--- !u!1 &1924668102560764
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4885084111165248}
-  - component: {fileID: 33392735724314658}
-  - component: {fileID: 23963022814392998}
-  - component: {fileID: 95130430445864260}
+  - component: {fileID: 4640541261161638}
+  - component: {fileID: 33277358855085900}
+  - component: {fileID: 23658919183399678}
+  - component: {fileID: 95093796317462492}
   m_Layer: 2
-  m_Name: Teir3VetBuilding
+  m_Name: Teir5VetBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1889304905460978
+--- !u!1 &1937591560310602
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4788583523796716}
-  - component: {fileID: 114543356819126586}
-  - component: {fileID: 114709011142006690}
-  - component: {fileID: 65034791024543226}
+  - component: {fileID: 4409391117765738}
+  - component: {fileID: 114769273107629802}
+  - component: {fileID: 65550799906511820}
   m_Layer: 2
   m_Name: Tier3VetBuilding
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4788583523796716
+--- !u!4 &4409391117765738
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889304905460978}
+  m_GameObject: {fileID: 1937591560310602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
-  - {fileID: 4885084111165248}
+  - {fileID: 4640541261161638}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4885084111165248
+--- !u!4 &4640541261161638
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1875804161557900}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.8}
+  m_GameObject: {fileID: 1924668102560764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4788583523796716}
+  m_Father: {fileID: 4409391117765738}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23963022814392998
+--- !u!23 &23658919183399678
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1875804161557900}
+  m_GameObject: {fileID: 1924668102560764}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -87,8 +86,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: e98ef58e6f3560e4f864150272dc9776, type: 2}
-  - {fileID: 2100000, guid: e98ef58e6f3560e4f864150272dc9776, type: 2}
+  - {fileID: 2100000, guid: 7fcb15677e0473f48bcb2fe2dffcc893, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,34 +105,34 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33392735724314658
+--- !u!33 &33277358855085900
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1875804161557900}
-  m_Mesh: {fileID: 4300000, guid: 8d6cf4cae69da8148a7ffa0857555627, type: 3}
---- !u!65 &65034791024543226
+  m_GameObject: {fileID: 1924668102560764}
+  m_Mesh: {fileID: 4300000, guid: 4064432fec6349e43bff5a157e17b41a, type: 3}
+--- !u!65 &65550799906511820
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889304905460978}
+  m_GameObject: {fileID: 1937591560310602}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 5, z: 6}
+  m_Size: {x: 8.5, y: 5, z: 8.5}
   m_Center: {x: 0, y: 2.5, z: 0}
---- !u!95 &95130430445864260
+--- !u!95 &95093796317462492
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1875804161557900}
+  m_GameObject: {fileID: 1924668102560764}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 8d6cf4cae69da8148a7ffa0857555627, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 4064432fec6349e43bff5a157e17b41a, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -143,38 +141,25 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114543356819126586
+--- !u!114 &114769273107629802
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889304905460978}
+  m_GameObject: {fileID: 1937591560310602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a97ef4bf8e33bc41b4a0effd8de20c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 132bd0f3a1bf5ed408191a91e2644340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj_Id: Tier3VetBuilding
+  build_Id: Tier3VetBuilding
   gridPosX: 0
   gridPosZ: 0
-  modelVisualization: {fileID: 1889304905460978}
+  center: 0
+  modelVisualization: {fileID: 1937591560310602}
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
   rotateDegrees: 0
-  price: 10000
-  maintenance: 400
-  objectType: 3
---- !u!114 &114709011142006690
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889304905460978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974c54abcd5d26241bec4c0d5e29ecbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  careType: 1
-  foodType: 2
-  noAnimalsPerShelter: 0
+  price: 0
+  maintenance: 0
+  buildingType: 1

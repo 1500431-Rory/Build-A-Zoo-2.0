@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd8420ba287fc94b8350071af75a0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toyType: 2
+  toyType: 1
   animalsKeptHappy: 5
   isWaterObject: 1
 --- !u!114 &114969160550692768

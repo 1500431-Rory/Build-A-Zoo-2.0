@@ -32,7 +32,7 @@ public class CostStarAw : MonoBehaviour {
     void Update()
     {
         // Call to CostCheck()
-        if (care.UIStar.fillAmount == 1.0f && fence.UIStar.fillAmount == 1.0f && foliage.UIStar.fillAmount == 1.0f && terrain.UIStar.fillAmount == 1.0f)
+        if (fence.UIStar.fillAmount == 1.0f && foliage.UIStar.fillAmount == 1.0f && terrain.UIStar.fillAmount == 1.0f)
         {
             CostCheck(anim);
         }
