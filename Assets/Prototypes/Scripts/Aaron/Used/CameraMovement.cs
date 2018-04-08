@@ -23,6 +23,8 @@ public class CameraMovement : MonoBehaviour
     public string cameraPointing = "N";
     public float mouseAxisCorrection = 10.5f;
 
+    public VirtualJoystick virtualJoystick;
+
     // Use this for initialization
     void Start()
     {
@@ -33,7 +35,7 @@ public class CameraMovement : MonoBehaviour
     {
         KeyboardControl(); // call Keyboard controls
         MouseControl(); // call Mouse controls
-        GamePadControl(); // call GamePad controls
+        JoyStickControl(); // call GamePad controls
                           //Check every frame if there is rotation to be done
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, 0.2f);
     }
@@ -192,8 +194,37 @@ public class CameraMovement : MonoBehaviour
             {
                 IsoCamera.orthographicSize = Mathf.Clamp(IsoCamera.orthographicSize - cameraZoomStep, 1f, 50f);
             }
-      
-
        
-    }
+
+
+    } 
+    // Keyboard input controls
+        void JoyStickControl()
+        {
+            // Left (screen-wise)
+            if ((virtualJoystick.inputVector.x < 0))
+            {
+            Debug.Log(virtualJoystick.inputVector.z);
+            TranslateLeft();
+            }
+            // Right (screen-wise)
+            if ((virtualJoystick.inputVector.x > 0))
+            {
+            Debug.Log(virtualJoystick.inputVector.z);
+            TranslateRight();
+            }
+            // Up
+            if ((virtualJoystick.inputVector.z > 0))
+            {
+            Debug.Log(virtualJoystick.inputVector.z);
+            TranslateUp();
+            }
+            // Down
+            if (virtualJoystick.inputVector.z < 0)
+            {
+            Debug.Log(virtualJoystick.inputVector.z);
+                TranslateDown();
+            }
+        }
+
 }

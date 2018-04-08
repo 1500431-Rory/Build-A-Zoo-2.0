@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StarTracking : MonoBehaviour {
 
@@ -8,30 +9,58 @@ public class StarTracking : MonoBehaviour {
     bool correctFood;
     bool haveShelter;
     bool haveAid;
-    public Animator animCare;
+    
 
     bool costStarAchieved;
     bool underBudget;
-    public Animator animCost;
+    
 
     bool enrichmentStarAchieved;
     bool containsRocks;
     bool containsPlants;
     bool containsToy;
     bool containsWaterToy;
-    public Animator animEnrichment;
-
+   
     bool fenceStarAchieved;
     bool containsFullFence;
     bool containsWindows;
-    public Animator animFence;
+ 
 
     bool terrainStarAchieved;
     bool correctHard;
     bool correctSoft;
     bool containsWater;
     bool incorrectLand;
-    public Animator animTerrain;
+
+    public Image careStarInfoPanelImage;
+    public Sprite careStarUnacheivedSprite;
+    public Sprite careStarAcheivedSprite;
+    public Image[] careCheckImage;
+    public Sprite[] careCheckSprite;
+
+    public Image costStarInfoPanelImage;
+    public Sprite costStarUnacheivedSprite;
+    public Sprite costStarAcheivedSprite;
+    public Image[] costCheckImage;
+    public Sprite[] costCheckSprite;
+
+    public Image enrichmentStarInfoPanelImage;
+    public Sprite enrichmentStarUnacheivedSprite;
+    public Sprite enrichmentStarAcheivedSprite;
+    public Image[] enrichmentCheckImage;
+    public Sprite[] enrichmentCheckSprite;
+
+    public Image fenceStarInfoPanelImage;
+    public Sprite fenceStarUnacheivedSprite;
+    public Sprite fenceStarAcheivedSprite;
+    public Image[] fenceCheckImage;
+    public Sprite[] fenceCheckSprite;
+
+    public Image terrainStarInfoPanelImage;
+    public Sprite terrainStarUnacheivedSprite;
+    public Sprite terrainStarAcheivedSprite;
+    public Image[] terrainCheckImage;
+    public Sprite[] terrainCheckSprite;
 
     private static StarTracking instance = null;
     public static StarTracking GetInstance()
@@ -83,6 +112,8 @@ public class StarTracking : MonoBehaviour {
             if (NumberTrackers.noCarnivorous > 0)
             {
                 correctFood = true;
+                careCheckImage[0].sprite = careCheckSprite[0];
+                careCheckImage[1].sprite = careCheckSprite[0];
             }
         }
         else if (NumberTrackers.noAnimalsH > 0)
@@ -91,6 +122,7 @@ public class StarTracking : MonoBehaviour {
             if (NumberTrackers.noHerbivorous > 0)
             {
                 correctFood = true;
+                careCheckImage[0].sprite = careCheckSprite[0];
             }
         }
         else if (NumberTrackers.noAnimalsO > 0)
@@ -99,28 +131,48 @@ public class StarTracking : MonoBehaviour {
             if (NumberTrackers.noCarnivorous > 0 || NumberTrackers.noHerbivorous > 0)
             {
                 correctFood = true;
+                careCheckImage[0].sprite = careCheckSprite[0];
             }
+        }
+        else
+        {
+            careCheckImage[0].sprite = careCheckSprite[1];
+            careCheckImage[1].sprite = careCheckSprite[1];
         }
 
         if (NumberTrackers.noShelter > 0)
         {
             haveShelter = true;
+            careCheckImage[2].sprite = careCheckSprite[0];
+        }
+        else
+        {
+            haveShelter = false;
+            careCheckImage[2].sprite = careCheckSprite[1];
         }
 
         if (NumberTrackers.noAid > 0)
         {
             haveAid = true;
+            careCheckImage[3].sprite = careCheckSprite[0];
+        }
+        else
+        {
+            haveAid = false;
+            careCheckImage[3].sprite = careCheckSprite[1];
         }
 
         if (correctFood == true && haveShelter == true && haveAid == true)
         {
             animCare.SetBool("StarAchieved", true);
             careStarAchieved = true;
+            careStarInfoPanelImage.sprite = careStarAcheivedSprite; 
         }
         else
         {
             animCare.SetBool("StarAchieved", false);
             careStarAchieved = false;
+            careStarInfoPanelImage.sprite = careStarUnacheivedSprite;
         }
 
     }
@@ -135,21 +187,25 @@ public class StarTracking : MonoBehaviour {
         if (NumberTrackers.totalMoney > 0)
         {
             underBudget = true;
+            costCheckImage[0].sprite = costCheckSprite[0];
         }
         else
         {
             underBudget = false;
+            costCheckImage[0].sprite = costCheckSprite[1];
         }
 
         if (careStarAchieved == true && fenceStarAchieved == true && enrichmentStarAchieved == true && terrainStarAchieved == true && underBudget == true)
         {
             animCost.SetBool("StarAchieved", true);
             costStarAchieved = true;
+            costStarInfoPanelImage.sprite = costStarAcheivedSprite;
         }
         else
         {
             animCost.SetBool("StarAchieved", false);
             costStarAchieved = false;
+            costStarInfoPanelImage.sprite = costStarUnacheivedSprite;
         }
     }
     #endregion
@@ -161,34 +217,42 @@ public class StarTracking : MonoBehaviour {
         if (NumberTrackers.noRock >= 3)
         {
             containsRocks = true;
+            enrichmentCheckImage[0].sprite = enrichmentCheckSprite[0];
         }
         else
         {
             containsRocks = false;
+            enrichmentCheckImage[0].sprite = enrichmentCheckSprite[1];
         }
         if (NumberTrackers.noBush > 0 || NumberTrackers.noOther > 0)
         {
             containsPlants = true;
+            enrichmentCheckImage[1].sprite = enrichmentCheckSprite[1];
         }
         else
         {
             containsPlants = false;
+            enrichmentCheckImage[1].sprite = enrichmentCheckSprite[0];
         }
         if (NumberTrackers.noToys > 0)
         {
             containsToy = true;
+            enrichmentCheckImage[2].sprite = enrichmentCheckSprite[0];
         }
         else
         {
             containsToy = false;
+            enrichmentCheckImage[2].sprite = enrichmentCheckSprite[1];
         }
         if (NumberTrackers.noWaterToys > 0)
         {
             containsWaterToy = true;
+            enrichmentCheckImage[3].sprite = enrichmentCheckSprite[0];
         }
         else
         {
             containsWaterToy = false;
+            enrichmentCheckImage[3].sprite = enrichmentCheckSprite[1];
         }
 
 
@@ -196,11 +260,13 @@ public class StarTracking : MonoBehaviour {
         {
             animEnrichment.SetBool("StarAchieved", true);
             enrichmentStarAchieved = true;
+            enrichmentStarInfoPanelImage.sprite = enrichmentStarAcheivedSprite;
         }
         else
         {
             animEnrichment.SetBool("StarAchieved", false);
             enrichmentStarAchieved = false;
+            enrichmentStarInfoPanelImage.sprite = enrichmentStarUnacheivedSprite;
         }
 
     }
@@ -213,25 +279,35 @@ public class StarTracking : MonoBehaviour {
         if (NumberTrackers.noConcrete + NumberTrackers.noConcreteW + NumberTrackers.noGlass + NumberTrackers.noWire + NumberTrackers.noWooden + NumberTrackers.noWoodenW == NumberTrackers.totalFences)
         {
             containsFullFence = true;
+            fenceCheckImage[0].sprite = fenceCheckSprite[0];
+        }
+        else
+        {
+            containsFullFence = false;
+            fenceCheckImage[0].sprite = fenceCheckSprite[1];
         }
         if (NumberTrackers.noConcrete + NumberTrackers.noWooden == NumberTrackers.totalFences)
          {      
             containsWindows = false;
-         }
+            fenceCheckImage[1].sprite = fenceCheckSprite[1];
+        }
          else if (NumberTrackers.noWoodenW + NumberTrackers.noConcreteW + NumberTrackers.noGlass + NumberTrackers.noGlass > NumberTrackers.totalFences / 4)
          {
              containsWindows = true;
-         }
+            fenceCheckImage[1].sprite = fenceCheckSprite[0];
+        }
 
         if (containsFullFence == true && containsWindows == true)
         {
             animFence.SetBool("StarAchieved", true);
             fenceStarAchieved = true;
+            fenceStarInfoPanelImage.sprite = fenceStarAcheivedSprite;
         }
         else
         {
             animFence.SetBool("StarAchieved", false);
             fenceStarAchieved = false;
+            fenceStarInfoPanelImage.sprite = fenceStarUnacheivedSprite;
         }
     }
     #endregion
@@ -244,28 +320,43 @@ public class StarTracking : MonoBehaviour {
         if (NumberTrackers.noStone>= NumberTrackers.totalTerrainSquares / 4)
         {
             correctHard= true;
+            terrainCheckImage[1].sprite = terrainCheckSprite[0];
         }
         else
         {
             correctHard = false;
+            terrainCheckImage[1].sprite = terrainCheckSprite[1];
         }
         if (NumberTrackers.noSand >= NumberTrackers.totalTerrainSquares / 4)
         {
             correctSoft = true;
+            terrainCheckImage[2].sprite = terrainCheckSprite[0];
         }
         else
         {
             correctSoft = false;
+            terrainCheckImage[2].sprite = terrainCheckSprite[1];
+        }
+
+        if(correctHard == true && correctSoft == true)
+        {
+            terrainCheckImage[0].sprite = terrainCheckSprite[0];
+        }
+        else
+        {
+            terrainCheckImage[0].sprite = terrainCheckSprite[1];
         }
 
         // Check terrain type is stone
         if (NumberTrackers.noWater >= NumberTrackers.totalTerrainSquares / 4)
         {
             containsWater = true;
+            terrainCheckImage[3].sprite = terrainCheckSprite[0];
         }
         else
         {
             containsWater = false;
+            terrainCheckImage[3].sprite = terrainCheckSprite[1];
         }
         // Check terrain type is Grass
         if (NumberTrackers.noGrass > NumberTrackers.totalTerrainSquares / 4)
@@ -281,11 +372,13 @@ public class StarTracking : MonoBehaviour {
         {
             animTerrain.SetBool("StarAchieved", true);
             terrainStarAchieved = true;
+            terrainStarInfoPanelImage.sprite = terrainStarAcheivedSprite;
         }
         else
         {
             animTerrain.SetBool("StarAchieved", false);
             terrainStarAchieved = false;
+            terrainStarInfoPanelImage.sprite = terrainStarUnacheivedSprite;
         }
     }
     #endregion

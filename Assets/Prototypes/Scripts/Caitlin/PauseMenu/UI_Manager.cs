@@ -98,4 +98,19 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
+    public void isSelectedObjectBtnsTrue(Animator anim)
+    {
+        if (anim.GetBool("isSelected") == false)
+        {
+            anim.SetBool("isSelected", true);
+        }
+    }
+    public void isSelectedObjectBtnsFalse(Animator anim)
+    {
+        if (anim.GetBool("isSelected") == true)
+        {
+            anim.SetBool("isSelected", false);
+        }
+    }
+
 }

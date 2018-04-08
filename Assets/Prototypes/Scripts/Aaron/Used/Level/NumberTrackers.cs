@@ -67,7 +67,7 @@ public class NumberTrackers : MonoBehaviour {
    
         //Care Numbers
         noAid = 0;
-        noShelter = 1;
+        noShelter = 0;
         noAnimalsSheltered = 0;
         noCarnivorous =0;
         noHerbivorous = 0;

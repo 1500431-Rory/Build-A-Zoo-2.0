@@ -161,8 +161,9 @@ MonoBehaviour:
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
   rotateDegrees: 0
-  price: 2000
+  price: 1600
   maintenance: 50
+  isWaterObject: 0
   objectType: 5
 --- !u!114 &114986952104568916
 MonoBehaviour:

@@ -161,6 +161,6 @@ MonoBehaviour:
   worldPositionOffset: {x: 0, y: 0, z: 0}
   worldRotation: {x: 0, y: 0, z: 0}
   rotateDegrees: 0
-  price: 0
+  price: 3000
   maintenance: 0
   buildingType: 1

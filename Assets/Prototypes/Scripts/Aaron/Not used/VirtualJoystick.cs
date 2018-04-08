@@ -12,7 +12,7 @@ public class VirtualJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPoi
 
     private Image bgImg;
     private Image joystickImg;
-    private Vector3 inputVector;
+    public Vector3 inputVector;
 
     private void Start()
     {
@@ -67,5 +67,6 @@ public class VirtualJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPoi
             return Input.GetAxis("Vertical");
         }
     }
-
 }
+
+
