@@ -93,7 +93,7 @@ public class NumberTrackers : MonoBehaviour {
 
     }
 
-    void OnGUI()
+   /* void OnGUI()
     {
         GUI.color = Color.black;
         GUI.Label(new Rect(800, 10, 150, 30), "Animals: " + noAnimals.ToString());
@@ -126,6 +126,6 @@ public class NumberTrackers : MonoBehaviour {
        GUI.Label(new Rect(800, 40, 150, 20), "Maintenance: " + maintenance.ToString());
 
     }
-
+    */
 
 }
