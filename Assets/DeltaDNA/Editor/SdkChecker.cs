@@ -30,7 +30,8 @@ namespace DeltaDNA.Editor {
         private static HashSet<SdkChecker> checkers = new HashSet<SdkChecker>();
 
         static SdkChecker() {
-            var timer = new Timer(1000);
+			
+			System.Timers.Timer timer = new System.Timers.Timer(1000);
             timer.Elapsed += (source, args) => {
                 if (GetProblems().Count > 0) {
                     Debug.LogWarning(
