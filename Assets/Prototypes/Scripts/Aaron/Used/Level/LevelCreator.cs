@@ -259,7 +259,7 @@ namespace LevelEditor
              r = buildingClone.GetComponentInChildren<Renderer>();
             }
 
-            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            
             r.material.color = Color.red;
             objectInWay = true;
             yield return new WaitForSeconds(0.3f);
@@ -281,7 +281,7 @@ namespace LevelEditor
                 r = buildingClone.GetComponentInChildren<Renderer>();
             }
 
-            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+            
             r.material.color = Color.red;
             waterInWay = true;
             yield return new WaitForSeconds(0.3f);
@@ -303,7 +303,7 @@ namespace LevelEditor
                 r = buildingClone.GetComponentInChildren<Renderer>();
             }
 
-            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+           
             r.material.color = Color.red;
             tooManyBuild = true;
             yield return new WaitForSeconds(0.3f);
@@ -323,7 +323,7 @@ namespace LevelEditor
             {
                 r = buildingClone.GetComponentInChildren<Renderer>();
             }
-            r.transform.localScale = new Vector3(1.01f, 1.01f, 1.01f);
+           
             r.material.color = Color.red;
             placeInWater = true;
             yield return new WaitForSeconds(0.3f);
