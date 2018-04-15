@@ -8,7 +8,7 @@ public class ChangeVolume : MonoBehaviour {
     public Slider MusicVolume;
     public AudioSource backGroundMusic;
     public Slider effectVolume;
-
+    public AudioSource[] sfxAudioSource;
     // Use this for initialization
     void Start () {
 		
@@ -18,5 +18,9 @@ public class ChangeVolume : MonoBehaviour {
 	void Update ()
     {
         backGroundMusic.volume = MusicVolume.value;
+        for (int i = 0; i < sfxAudioSource.Length; i++)
+        {
+            sfxAudioSource[i].volume = effectVolume.value;
+        }
 	}
 }

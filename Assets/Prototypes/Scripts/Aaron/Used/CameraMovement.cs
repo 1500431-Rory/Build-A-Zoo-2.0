@@ -40,7 +40,7 @@ public class CameraMovement : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, 0.2f);
     }
 
-    void RotateRight()
+    public void RotateRight()
     {
         //Keeping track of camera orientation to translate correctly
         if (cameraPointing == "N")
@@ -63,7 +63,7 @@ public class CameraMovement : MonoBehaviour
         newRotation = Quaternion.AngleAxis(cameraRotationQueued, Vector3.up);
     }
 
-    void RotateLeft()
+   public void RotateLeft()
     {
         //Keeping track of camera orientation to translate correctly
         if (cameraPointing == "N")
@@ -88,12 +88,22 @@ public class CameraMovement : MonoBehaviour
 
     void TranslateLeft()
     {
-        if (cameraPointing == "N" || cameraPointing == "E")
+        if (cameraPointing == "N")
         {
             transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
             transform.Translate((Vector3.up * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
         }
-        else
+        else if (cameraPointing == "E")
+        {
+            transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.down * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
+        }
+        else if (cameraPointing == "W")
+        {
+            transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.down * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
+        }
+        else if (cameraPointing == "S")
         {
             transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
             transform.Translate((Vector3.up * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
@@ -102,12 +112,22 @@ public class CameraMovement : MonoBehaviour
 
     void TranslateRight()
     {
-        if (cameraPointing == "N" || cameraPointing == "E")
+        if (cameraPointing == "N")
         {
             transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
             transform.Translate((Vector3.down * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
         }
-        else
+        else if (cameraPointing == "E")
+        {
+            transform.Translate((Vector3.right * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.up * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
+        }
+        else if (cameraPointing == "W")
+        {
+            transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
+            transform.Translate((Vector3.up * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
+        }
+        else if (cameraPointing == "S")
         {
             transform.Translate((Vector3.left * cameraVelocity) * Time.deltaTime, Space.World);
             transform.Translate((Vector3.down * 0.6f * cameraVelocity) * Time.deltaTime, Space.World);
@@ -188,11 +208,11 @@ public class CameraMovement : MonoBehaviour
   
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-                IsoCamera.orthographicSize = Mathf.Clamp(IsoCamera.orthographicSize + cameraZoomStep, 1f, 50f);
+                IsoCamera.orthographicSize = Mathf.Clamp(IsoCamera.orthographicSize + cameraZoomStep, 5f, 20f);
             }
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
-                IsoCamera.orthographicSize = Mathf.Clamp(IsoCamera.orthographicSize - cameraZoomStep, 1f, 50f);
+                IsoCamera.orthographicSize = Mathf.Clamp(IsoCamera.orthographicSize - cameraZoomStep, 5f, 20f);
             }
        
 

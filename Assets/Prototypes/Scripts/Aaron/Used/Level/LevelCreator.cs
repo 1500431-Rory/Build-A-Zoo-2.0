@@ -137,6 +137,8 @@ namespace LevelEditor
         public Image ErrorMessage2mny;
         public Image ErrorMessageIW;
 
+        public AudioSource errorAudioSource;
+
         bool objectInWay = false;
         bool waterInWay = false;
         bool tooManyBuild = false;
@@ -147,6 +149,7 @@ namespace LevelEditor
             if (objectInWay == true)
             {
                 ErrorMessageOIW.gameObject.SetActive(true);
+                errorAudioSource.Play();
             }
             else
             {
@@ -155,6 +158,7 @@ namespace LevelEditor
             if (waterInWay == true)
             {
                 ErrorMessageWIW.gameObject.SetActive(true);
+                errorAudioSource.Play();
             }
             else
             {
@@ -163,6 +167,7 @@ namespace LevelEditor
             if (tooManyBuild == true)
             {
                 ErrorMessage2mny.gameObject.SetActive(true);
+                errorAudioSource.Play();
             }
             else
             {
@@ -171,6 +176,7 @@ namespace LevelEditor
             if (placeInWater == true)
             {
                 ErrorMessageIW.gameObject.SetActive(true);
+                errorAudioSource.Play();
             }
             else
             {

@@ -9,28 +9,30 @@ public class StarTracking : MonoBehaviour {
     bool correctFood;
     bool haveShelter;
     bool haveAid;
-    
+    public AudioSource careAudio;
 
     bool costStarAchieved;
     bool underBudget;
-    
+    public AudioSource costAudio;
 
     bool enrichmentStarAchieved;
     bool containsRocks;
     bool containsPlants;
     bool containsToy;
     bool containsWaterToy;
-   
+    public AudioSource enrichmentAudio;
+
     bool fenceStarAchieved;
     bool containsFullFence;
     bool containsWindows;
- 
+    public AudioSource fenceAudio;
 
     bool terrainStarAchieved;
     bool correctHard;
     bool correctSoft;
     bool containsWater;
     bool incorrectLand;
+    public AudioSource terrainAudio;
 
     public Image careStarInfoPanelImage;
     public Sprite careStarUnacheivedSprite;
@@ -166,7 +168,8 @@ public class StarTracking : MonoBehaviour {
         {
             animCare.SetBool("StarAchieved", true);
             careStarAchieved = true;
-            careStarInfoPanelImage.sprite = careStarAcheivedSprite; 
+            careStarInfoPanelImage.sprite = careStarAcheivedSprite;
+            careAudio.PlayDelayed(0.5f);
         }
         else
         {
@@ -200,6 +203,7 @@ public class StarTracking : MonoBehaviour {
             animCost.SetBool("StarAchieved", true);
             costStarAchieved = true;
             costStarInfoPanelImage.sprite = costStarAcheivedSprite;
+            costAudio.PlayDelayed(0.5f);
         }
         else
         {
@@ -261,6 +265,7 @@ public class StarTracking : MonoBehaviour {
             animEnrichment.SetBool("StarAchieved", true);
             enrichmentStarAchieved = true;
             enrichmentStarInfoPanelImage.sprite = enrichmentStarAcheivedSprite;
+            enrichmentAudio.PlayDelayed(0.5f);
         }
         else
         {
@@ -302,6 +307,7 @@ public class StarTracking : MonoBehaviour {
             animFence.SetBool("StarAchieved", true);
             fenceStarAchieved = true;
             fenceStarInfoPanelImage.sprite = fenceStarAcheivedSprite;
+            fenceAudio.PlayDelayed(0.5f);
         }
         else
         {
@@ -373,6 +379,7 @@ public class StarTracking : MonoBehaviour {
             animTerrain.SetBool("StarAchieved", true);
             terrainStarAchieved = true;
             terrainStarInfoPanelImage.sprite = terrainStarAcheivedSprite;
+            terrainAudio.PlayDelayed(0.5f);
         }
         else
         {

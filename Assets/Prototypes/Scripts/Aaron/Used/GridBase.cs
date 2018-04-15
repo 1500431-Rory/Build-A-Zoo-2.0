@@ -57,6 +57,7 @@ public class GridBase : MonoBehaviour {
                 node.nodePosX = x;
                 node.nodePosZ = z;
                 grid[x, z] = node;
+                NumberTrackers.totalTerrainSquares++;
             }
         }
 
@@ -81,13 +82,12 @@ public class GridBase : MonoBehaviour {
                 node.nodePosX = x;
                 node.nodePosZ = z;
                 grid[x, z] = node;
+                NumberTrackers.totalTerrainSquares++;
             }
         }
-
-        for (int x = 16; x < 23; x++)
+        for (int x = 14; x < 23; x++)
         {
-            for (int z = 23; z < 26; z++)
-            {
+            int z = 23;
                 float posX = x * offset;
                 float posZ = z * offset;
 
@@ -105,10 +105,140 @@ public class GridBase : MonoBehaviour {
                 node.nodePosX = x;
                 node.nodePosZ = z;
                 grid[x, z] = node;
-            }
+            NumberTrackers.totalTerrainSquares++;
         }
+        for (int x = 15; x < 23; x++)
+        {
+            int z = 24;
+            float posX = x * offset;
+            float posZ = z * offset;
 
-       
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+            NumberTrackers.totalTerrainSquares++;
+        }
+        for (int x = 16; x < 23; x++)
+        {
+            int z = 25;
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+            NumberTrackers.totalTerrainSquares++;
+        }
+        for (int x = 17; x < 24; x++)
+        {
+            int z = 26;
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+            NumberTrackers.totalTerrainSquares++;
+        }
+        for (int x = 18; x < 25; x++)
+        {
+            int z = 27;
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+            NumberTrackers.totalTerrainSquares++;
+        }
+        for (int x = 19; x < 26; x++)
+        {
+            int z = 28;
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+            NumberTrackers.totalTerrainSquares++;
+        }
+        for (int x = 19; x < 25; x++)
+        {
+            int z = 29;
+            float posX = x * offset;
+            float posZ = z * offset;
+
+            GameObject go = Instantiate(nodePrefab, new Vector3(posX, 0, posZ), Quaternion.identity) as GameObject;
+            go.transform.parent = transform.GetChild(1).transform;
+
+            NodeObject nodeObj = go.GetComponent<NodeObject>();
+            nodeObj.posX = x;
+            nodeObj.posZ = z;
+
+            Node node = new Node();
+            node.vis = go;
+            node.tileRenderer = node.vis.GetComponentInChildren<MeshRenderer>();
+            node.isWalkable = true;
+            node.nodePosX = x;
+            node.nodePosZ = z;
+            grid[x, z] = node;
+            NumberTrackers.totalTerrainSquares++;
+        }
     }
 
    

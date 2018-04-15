@@ -42,8 +42,8 @@ public class NumberTrackers : MonoBehaviour {
 
 
     //totals
-    public static float totalFences = 58; //set to match number of marker places, can be adjusted to find number on awake for changing enclosure sizes
-    public static float totalTerrainSquares = 150;
+    public static float totalFences = 68; //set to match number of marker places, can be adjusted to find number on awake for changing enclosure sizes
+    public static float totalTerrainSquares = 0;
 
     //Money
     public static float totalMoney;
