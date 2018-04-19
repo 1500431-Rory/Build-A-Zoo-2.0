@@ -16,12 +16,34 @@ public class RoamingScript : MonoBehaviour
     public float direc = 0;
     CharacterController Pingu;
 
+	// Edit by Caitlin
+	public enum PenguinState
+	{
+		IDAL,
+		WALKING,
+		SQUAKING,
+		SWIMMING
+	}
+
+	PenguinState penguinState;
+
+	public bool isRoaming;
+	public Animation animate;
+
+
 	// Use this for initialization
 	void Awake ()
     {
         transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 0);
         Pingu = GetComponent<CharacterController>();
         Roam();
+
+		// Edit by Caitlin
+		// Set state to IDAL
+		penguinState = PenguinState.IDAL;
+		// Set isRoaming to false
+		isRoaming = false;
+
     }
 	
     void OnControllerColliderHit(ControllerColliderHit hit)
@@ -50,9 +72,50 @@ public class RoamingScript : MonoBehaviour
             }
         }
 
-        
-        
+		ChangeAnimationState();
+		PlayAnimation();
+
     }
+
+
+	IEnumerator ChangeAnimationState()
+	{
+		do 
+		{
+			penguinState = PenguinState.WALKING;
+			yield return new WaitForSeconds(30);
+			penguinState = PenguinState.IDAL;
+			penguinState = PenguinState.SQUAKING;
+			yield return new WaitForSeconds(20);
+
+		}while(isRoaming == true); 
+
+	}
+
+	void PlayAnimation()
+	{
+		animate = GetComponent<Animation>();
+
+		switch(penguinState)
+		{
+		case PenguinState.IDAL:
+			animate.Play("Exported idal animation"); 
+			break;
+		case PenguinState.WALKING:
+			animate.Play("Exported walking animation");
+			break;
+		case PenguinState.SQUAKING:
+			animate.Play("Eported sqauking animation");
+			break;
+		case PenguinState.SWIMMING:
+			animate.Play("Exported swimming animation"); 
+			break;
+		default:
+			//animate.Stop();
+			print ("NO ANIMATION");
+			break;
+		}
+	}
 
     void Roam()
     {
@@ -60,5 +123,7 @@ public class RoamingScript : MonoBehaviour
         var ceil = Mathf.Clamp(direc + maxDirChange, 0, 360);
         direc = Random.Range(floor, ceil);
         dest = new Vector3(0, direc, 0);
+		isRoaming = true;
+
     }
 }

@@ -1,0 +1,250 @@
+fileFormatVersion: 2
+guid: acd759e06181c3b479839fe210c854b8
+timeCreated: 1524130413
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: CTRL_Chest
+    100002: CTRL_Global
+    100004: CTRL_Head
+    100006: CTRL_L_Foot
+    100008: CTRL_Neck
+    100010: CTRL_R_Foot
+    100012: CTRL_Waist
+    100014: //RootNode
+    100016: group
+    100018: group1
+    100020: group10
+    100022: group11
+    100024: group12
+    100026: group13
+    100028: group14
+    100030: group15
+    100032: group16
+    100034: group17
+    100036: group18
+    100038: group19
+    100040: group2
+    100042: group20
+    100044: group21
+    100046: group3
+    100048: group4
+    100050: group5
+    100052: group6
+    100054: group7
+    100056: group8
+    100058: group9
+    100060: head
+    100062: L_angle
+    100064: L_foot
+    100066: L_hip
+    100068: L_knee
+    100070: L_lower_arm
+    100072: L_middle_arm
+    100074: L_shoulder
+    100076: L_shoulder_helper_joint
+    100078: L_upper_arm
+    100080: neck_base
+    100082: pasted__ambientLight1
+    100084: pasted__CTRL_Global
+    100086: pasted__group11
+    100088: pasted__group12
+    100090: pasted__group13
+    100092: pasted__group14
+    100094: pasted__group18
+    100096: pasted__group5
+    100098: pasted__group7
+    100100: pasted__pasted__group11
+    100102: pasted__pasted__group12
+    100104: pasted__pasted__group13
+    100106: pasted__pasted__pasted__group11
+    100108: pasted__pasted__pasted__group12
+    100110: pasted__pasted__pasted__pasted__group11
+    100112: pasted__pCylinder2
+    100114: pasted__transform3
+    100116: penguin_model1
+    100118: perlvis
+    100120: polySurface2
+    100122: polySurface3
+    100124: R_angle
+    100126: R_foot
+    100128: R_hip
+    100130: R_knee
+    100132: R_lower_arm
+    100134: R_middle_arm
+    100136: R_shoulder
+    100138: R_shoulder_helper_joint
+    100140: R_upper_arm
+    100142: spine_1
+    100144: spine_2
+    100146: spine_3
+    100148: tail_lower
+    100150: tail_middle
+    100152: tail_upper
+    100154: transform2
+    100156: transform3
+    400000: CTRL_Chest
+    400002: CTRL_Global
+    400004: CTRL_Head
+    400006: CTRL_L_Foot
+    400008: CTRL_Neck
+    400010: CTRL_R_Foot
+    400012: CTRL_Waist
+    400014: //RootNode
+    400016: group
+    400018: group1
+    400020: group10
+    400022: group11
+    400024: group12
+    400026: group13
+    400028: group14
+    400030: group15
+    400032: group16
+    400034: group17
+    400036: group18
+    400038: group19
+    400040: group2
+    400042: group20
+    400044: group21
+    400046: group3
+    400048: group4
+    400050: group5
+    400052: group6
+    400054: group7
+    400056: group8
+    400058: group9
+    400060: head
+    400062: L_angle
+    400064: L_foot
+    400066: L_hip
+    400068: L_knee
+    400070: L_lower_arm
+    400072: L_middle_arm
+    400074: L_shoulder
+    400076: L_shoulder_helper_joint
+    400078: L_upper_arm
+    400080: neck_base
+    400082: pasted__ambientLight1
+    400084: pasted__CTRL_Global
+    400086: pasted__group11
+    400088: pasted__group12
+    400090: pasted__group13
+    400092: pasted__group14
+    400094: pasted__group18
+    400096: pasted__group5
+    400098: pasted__group7
+    400100: pasted__pasted__group11
+    400102: pasted__pasted__group12
+    400104: pasted__pasted__group13
+    400106: pasted__pasted__pasted__group11
+    400108: pasted__pasted__pasted__group12
+    400110: pasted__pasted__pasted__pasted__group11
+    400112: pasted__pCylinder2
+    400114: pasted__transform3
+    400116: penguin_model1
+    400118: perlvis
+    400120: polySurface2
+    400122: polySurface3
+    400124: R_angle
+    400126: R_foot
+    400128: R_hip
+    400130: R_knee
+    400132: R_lower_arm
+    400134: R_middle_arm
+    400136: R_shoulder
+    400138: R_shoulder_helper_joint
+    400140: R_upper_arm
+    400142: spine_1
+    400144: spine_2
+    400146: spine_3
+    400148: tail_lower
+    400150: tail_middle
+    400152: tail_upper
+    400154: transform2
+    400156: transform3
+    2300000: pasted__pCylinder2
+    3300000: pasted__pCylinder2
+    4300000: penguin_model1
+    4300002: polySurface3
+    4300004: pasted__pCylinder2
+    7400000: Take 001
+    9500000: //RootNode
+    10800000: pasted__ambientLight1
+    13700000: penguin_model1
+    13700002: polySurface3
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
