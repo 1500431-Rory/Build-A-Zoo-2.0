@@ -28,7 +28,7 @@ public class RoamingScript : MonoBehaviour
 	PenguinState penguinState;
 
 	public bool isRoaming;
-	public Animation animate;
+	public Animator animate;
 
 
 	// Use this for initialization
@@ -94,7 +94,7 @@ public class RoamingScript : MonoBehaviour
 
 	void PlayAnimation()
 	{
-		animate = GetComponent<Animation>();
+		animate = GetComponentInChildren<Animator>();
 
 		switch(penguinState)
 		{
