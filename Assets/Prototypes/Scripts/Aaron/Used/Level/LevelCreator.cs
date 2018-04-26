@@ -360,7 +360,7 @@ namespace LevelEditor
                     worldPosition = curNode.vis.transform.position;
                 }
 
-                if (curNode != null && !ui.mouseOverUIElement)
+                /*if (curNode != null && !ui.mouseOverUIElement)
                 {
                     if (previousNode == null)
                     {
@@ -384,7 +384,7 @@ namespace LevelEditor
                         previousNode = curNode;
                         prevColor = curNode.tileRenderer.material.color;
                     }
-                }
+                }*/
                 if (objectClone == null)
                 {
                     objectClone = Instantiate(objectToPlace, worldPosition, Quaternion.identity) as GameObject;
