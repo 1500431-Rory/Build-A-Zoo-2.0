@@ -17170,7 +17170,7 @@ MonoBehaviour:
       type: 2}
   LevelAnimalObjects:
   - animal_id: Penguin
-    animalPrefab: {fileID: 1426960200586922, guid: 8df3c8112e451704bb9ec719938db590,
+    animalPrefab: {fileID: 1456931275638574, guid: 570716b6960d5bf4ebe43c1382cf6487,
       type: 2}
   LevelFenceObjects:
   - fence_id: WireFence1
