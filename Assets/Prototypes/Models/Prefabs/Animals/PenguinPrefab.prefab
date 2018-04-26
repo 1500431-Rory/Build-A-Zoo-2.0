@@ -457,6 +457,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4038618391907324}
   - component: {fileID: 114153696338353110}
+  - component: {fileID: 114708042263064130}
   m_Layer: 0
   m_Name: PenguinPrefab
   m_TagString: Untagged
@@ -1549,7 +1550,7 @@ Animator:
   m_GameObject: {fileID: 1630525810237210}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 48c045d4ca1786c41ac91cc643709524, type: 3}
-  m_Controller: {fileID: 9100000, guid: afac0d99a23613149842e8dac0ad8aa4, type: 2}
+  m_Controller: {fileID: 9100000, guid: c54d6d804d3c82342b48ce52976bfc3e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1598,6 +1599,19 @@ MonoBehaviour:
   diceMax: 6
   direc: 0
   isRoaming: 0
+--- !u!114 &114708042263064130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1456931275638574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8cc34247d1b5948a13a343ea960a75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animalType: 0
+  animalFoodType: 1
 --- !u!137 &137138846103198192
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

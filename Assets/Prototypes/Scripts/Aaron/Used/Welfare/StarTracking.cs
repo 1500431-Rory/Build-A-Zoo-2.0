@@ -108,8 +108,7 @@ public class StarTracking : MonoBehaviour {
     public void CareCheck(Animator animCare)
     {
 
-        if (NumberTrackers.noAnimalsC > 0)
-        {
+       
             // Check foodType is appropreate for penguins diet and have enough food
             if (NumberTrackers.noCarnivorous > 0)
             {
@@ -117,27 +116,10 @@ public class StarTracking : MonoBehaviour {
                 careCheckImage[0].sprite = careCheckSprite[0];
                 careCheckImage[1].sprite = careCheckSprite[0];
             }
-        }
-        else if (NumberTrackers.noAnimalsH > 0)
-        {
-            // Check foodType is appropreate for penguins diet and have enough food
-            if (NumberTrackers.noHerbivorous > 0)
-            {
-                correctFood = true;
-                careCheckImage[0].sprite = careCheckSprite[0];
-            }
-        }
-        else if (NumberTrackers.noAnimalsO > 0)
-        {
-            // Check foodType is appropreate for penguins diet and have enough food
-            if (NumberTrackers.noCarnivorous > 0 || NumberTrackers.noHerbivorous > 0)
-            {
-                correctFood = true;
-                careCheckImage[0].sprite = careCheckSprite[0];
-            }
-        }
+       
         else
         {
+            correctFood = false;
             careCheckImage[0].sprite = careCheckSprite[1];
             careCheckImage[1].sprite = careCheckSprite[1];
         }
@@ -166,16 +148,21 @@ public class StarTracking : MonoBehaviour {
 
         if (correctFood == true && haveShelter == true && haveAid == true)
         {
-            animCare.SetBool("StarAchieved", true);
-            careStarAchieved = true;
-            careStarInfoPanelImage.sprite = careStarAcheivedSprite;
-            careAudio.PlayDelayed(0.5f);
+            if (careStarAchieved == false)
+            {
+                animCare.SetBool("StarAchieved", true);
+                careStarAchieved = true;
+                careStarInfoPanelImage.sprite = careStarAcheivedSprite;
+                careAudio.PlayDelayed(0.5f);
+            }
         }
         else
         {
-            animCare.SetBool("StarAchieved", false);
-            careStarAchieved = false;
-            careStarInfoPanelImage.sprite = careStarUnacheivedSprite;
+            
+                animCare.SetBool("StarAchieved", false);
+                careStarAchieved = false;
+                careStarInfoPanelImage.sprite = careStarUnacheivedSprite;
+            
         }
 
     }
@@ -187,7 +174,7 @@ public class StarTracking : MonoBehaviour {
     {
 
         // Add costs to costLevel to be compared to the budget
-        if (NumberTrackers.totalMoney > 0)
+        if (NumberTrackers.totalMoney >= 0)
         {
             underBudget = true;
             costCheckImage[0].sprite = costCheckSprite[0];
@@ -200,10 +187,13 @@ public class StarTracking : MonoBehaviour {
 
         if (careStarAchieved == true && fenceStarAchieved == true && enrichmentStarAchieved == true && terrainStarAchieved == true && underBudget == true)
         {
-            animCost.SetBool("StarAchieved", true);
-            costStarAchieved = true;
-            costStarInfoPanelImage.sprite = costStarAcheivedSprite;
-            costAudio.PlayDelayed(0.5f);
+            if (costStarAchieved == false)
+            {
+                animCost.SetBool("StarAchieved", true);
+                costStarAchieved = true;
+                costStarInfoPanelImage.sprite = costStarAcheivedSprite;
+                costAudio.PlayDelayed(0.5f);
+            }
         }
         else
         {
@@ -262,10 +252,13 @@ public class StarTracking : MonoBehaviour {
 
         if (containsRocks == true && containsToy == true && containsWaterToy == true && containsPlants == false)
         {
-            animEnrichment.SetBool("StarAchieved", true);
-            enrichmentStarAchieved = true;
-            enrichmentStarInfoPanelImage.sprite = enrichmentStarAcheivedSprite;
-            enrichmentAudio.PlayDelayed(0.5f);
+            if (enrichmentStarAchieved == false)
+            {
+                animEnrichment.SetBool("StarAchieved", true);
+                enrichmentStarAchieved = true;
+                enrichmentStarInfoPanelImage.sprite = enrichmentStarAcheivedSprite;
+                enrichmentAudio.PlayDelayed(0.5f);
+            }
         }
         else
         {
@@ -304,10 +297,13 @@ public class StarTracking : MonoBehaviour {
 
         if (containsFullFence == true && containsWindows == true)
         {
-            animFence.SetBool("StarAchieved", true);
-            fenceStarAchieved = true;
-            fenceStarInfoPanelImage.sprite = fenceStarAcheivedSprite;
-            fenceAudio.PlayDelayed(0.5f);
+            if (fenceStarAchieved == false)
+            {
+                animFence.SetBool("StarAchieved", true);
+                fenceStarAchieved = true;
+                fenceStarInfoPanelImage.sprite = fenceStarAcheivedSprite;
+                fenceAudio.PlayDelayed(0.5f);
+            }
         }
         else
         {
@@ -376,10 +372,13 @@ public class StarTracking : MonoBehaviour {
 
         if (correctHard == true && correctSoft == true && containsWater == true)
         {
-            animTerrain.SetBool("StarAchieved", true);
-            terrainStarAchieved = true;
-            terrainStarInfoPanelImage.sprite = terrainStarAcheivedSprite;
-            terrainAudio.PlayDelayed(0.5f);
+            if (terrainStarAchieved == false)
+            {
+                animTerrain.SetBool("StarAchieved", true);
+                terrainStarAchieved = true;
+                terrainStarInfoPanelImage.sprite = terrainStarAcheivedSprite;
+                terrainAudio.PlayDelayed(0.5f);
+            }
         }
         else
         {

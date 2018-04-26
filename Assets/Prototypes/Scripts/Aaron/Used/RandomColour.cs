@@ -21,13 +21,13 @@ public class RandomColour : MonoBehaviour {
         {
             image.color = EZYellow;
             backGroundimage.color = RZSSblue;
-            stripe.color = EZYellow;
+            
         }
         else if (rand == 2)
         {
             image.color = RZSSblue;
             backGroundimage.color = EZYellow;
-            stripe.color = RZSSblue;
+       
         }
        
 

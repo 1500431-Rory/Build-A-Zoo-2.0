@@ -13,7 +13,8 @@ namespace LevelEditor
         GridBase gridBase;
         InterfaceManager ui;
         NumberTrackers numberTracker;
-        
+        RandomSound randomSound;
+
         public float totalMoney;
 
         Vector3 mousePosition;
@@ -37,8 +38,7 @@ namespace LevelEditor
 
         //place fence variables
         bool fenceHas;
-        GameObject fenceToPlace;
-        GameObject fenceToPlace2;
+        public GameObject fenceToPlace;
         GameObject fenceClone;
         Level_Object fenceProperties;
         FenceClass fenceFenceClass;
@@ -184,12 +184,13 @@ namespace LevelEditor
             }
         }
 
-        void Start()
+            void Start()
         {
             gridBase = GridBase.GetInstance();
             manager = LevelManager.GetInstance();
             ui = InterfaceManager.GetInstance();
             starTracking = StarTracking.GetInstance();
+            randomSound = RandomSound.GetInstance();
             inGameToggle = GameObject.Find("Toggle");
         }
 
@@ -677,6 +678,8 @@ namespace LevelEditor
             starTracking.CareCheck(animCare);
             starTracking.CostCheck(animCost);
             starTracking.EnrichmentCheck(animEnrichment);
+
+            randomSound.PlaceSoundPlay();
         }
 
 
@@ -764,6 +767,7 @@ namespace LevelEditor
                                 {
                                     placingBuildings();
                                     buildingHas = false;
+                                    buildingClone = null;
                                 }
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 || nodeN.vis.GetComponent<NodeObject>().textureid == 3 || nodeE.vis.GetComponent<NodeObject>().textureid == 3 || nodeW.vis.GetComponent<NodeObject>().textureid == 3 || nodeS.vis.GetComponent<NodeObject>().textureid == 3 || nodeNE.vis.GetComponent<NodeObject>().textureid == 3 || nodeNW.vis.GetComponent<NodeObject>().textureid == 3 || nodeSE.vis.GetComponent<NodeObject>().textureid == 3 || nodeSW.vis.GetComponent<NodeObject>().textureid == 3)
                                 {
@@ -1117,6 +1121,19 @@ namespace LevelEditor
             NumberTrackers.maintenance += buildingPlacedProperties.maintenance;
             starTracking.CareCheck(animCare);
             starTracking.CostCheck(animCost);
+
+            if(buildingActualPlaced.name.Contains("Tier1"))
+            {
+                randomSound.PlaceBuildSoundPlay(0);
+            }
+            else if (buildingActualPlaced.name.Contains("Tier2"))
+            {
+                randomSound.PlaceBuildSoundPlay(1);
+            }
+            else if (buildingActualPlaced.name.Contains("Tier3"))
+            {
+                randomSound.PlaceBuildSoundPlay(2);
+            }
         }
 
 
@@ -1177,6 +1194,22 @@ namespace LevelEditor
 
                                     starTracking.CostCheck(animCost);
                                     starTracking.FencesCheck(animFences);
+                                    if (fenceActualPlaced.name.Contains("Concrete"))
+                                    {
+                                        randomSound.PlaceConcreteSoundPlay();
+                                    }
+                                    else if (fenceActualPlaced.name.Contains("Glass"))
+                                    {
+                                        randomSound.PlaceGlassSoundPlay();
+                                    }
+                                    else if (fenceActualPlaced.name.Contains("Wire"))
+                                    {
+                                        randomSound.PlaceWireSoundPlay();
+                                    }
+                                    else if (fenceActualPlaced.name.Contains("Wooden"))
+                                    {
+                                        randomSound.PlaceWoodenSoundPlay();
+                                    }
                                 }
                             }
                         }
@@ -1222,7 +1255,23 @@ namespace LevelEditor
                                 }
 
                                 starTracking.FencesCheck(animFences);
-                                starTracking.CostCheck(animCost); 
+                                starTracking.CostCheck(animCost);
+                                if (fenceActualPlaced.name.Contains("Concrete"))
+                                {
+                                    randomSound.PlaceConcreteSoundPlay();
+                                }
+                                else if (fenceActualPlaced.name.Contains("Glass"))
+                                {
+                                    randomSound.PlaceGlassSoundPlay();
+                                }
+                                else if (fenceActualPlaced.name.Contains("Wire"))
+                                {
+                                    randomSound.PlaceWireSoundPlay();
+                                }
+                                else if (fenceActualPlaced.name.Contains("Wooden"))
+                                {
+                                    randomSound.PlaceWoodenSoundPlay();
+                                }
                             }
                         }
                     }
