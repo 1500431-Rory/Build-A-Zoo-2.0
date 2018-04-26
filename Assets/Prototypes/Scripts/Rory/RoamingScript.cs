@@ -84,25 +84,16 @@ public class RoamingScript : MonoBehaviour
 			animate.SetBool("isIdle", false);
 			animate.SetBool("isWalking", true);  // Set isWalking to true
 			animate.SetBool("isSquawking", false);
-			//animate.SetBool("isSwimming", false);
 			// Wait 10 seconds
 			yield return new WaitForSecondsRealtime(10); 
 			animate.SetBool("isIdle", true);  // Set isIdle to true 
 			animate.SetBool("isWalking", false);
 			animate.SetBool("isSquawking", false);
-			//animate.SetBool("isSwimming", false);
 			// Wait 10 seconds
 			yield return new WaitForSecondsRealtime(10);
 			animate.SetBool("isIdle", false); 
 			animate.SetBool("isWalking", false);
 			animate.SetBool("isSquawking", true);  // Set isSquawking to true
-			//animate.SetBool("isSwimming", false);
-			/*/ Wait 10 seconds
-			yield return new WaitForSecondsRealtime(10);
-			animate.SetBool("isIdle", false); 
-			animate.SetBool("isWalking", false);
-			animate.SetBool("isSquawking", false);
-			//animate.SetBool("isSwimming", true);  // Set isSwimming to true*/
 			// Wait 30 seconds
 			yield return new WaitForSecondsRealtime(30);
 
