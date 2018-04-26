@@ -16,19 +16,11 @@ public class RoamingScript : MonoBehaviour
     public float direc = 0;
     CharacterController Pingu;
 
-	// Edit by Caitlin
-	public enum PenguinState
-	{
-		IDAL,
-		WALKING,
-		SQUAKING,
-		SWIMMING
-	}
-
-	PenguinState penguinState;
-
+	// Add by Caitlin - variables
+	// For checking if they should be roaming
 	public bool isRoaming;
-	public Animator animate;
+	// For animator
+	private Animator animate;
 
 
 	// Use this for initialization
@@ -39,10 +31,8 @@ public class RoamingScript : MonoBehaviour
         Roam();
 
 		// Edit by Caitlin
-		// Set state to IDAL
-		penguinState = PenguinState.IDAL;
 		// Set isRoaming to false
-		isRoaming = false;
+		isRoaming = false; 
 
     }
 	
@@ -54,6 +44,7 @@ public class RoamingScript : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
+
         transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, dest, Time.deltaTime * dirChangeInt);
         transform.TransformDirection(Vector3.forward);
        
@@ -63,7 +54,7 @@ public class RoamingScript : MonoBehaviour
             diceRoll = (int)Random.Range(0, diceMax);
             if (diceRoll == 0)
             {
-                Roam();
+               Roam();
                 Pingu.SimpleMove((transform.TransformDirection(Vector3.forward)) * 0);
             }
             else
@@ -72,57 +63,53 @@ public class RoamingScript : MonoBehaviour
             }
         }
 
-		ChangeAnimationState();
-		PlayAnimation();
 
+		// Added by Caitlin
+		// Call to ChangeAnimationSate()
+		StartCoroutine(ChangeAnimationState());
     }
 
-
+	// Added by Caitlin
+	// Change state
 	IEnumerator ChangeAnimationState()
 	{
-		do 
-		{
-			penguinState = PenguinState.WALKING;
-			yield return new WaitForSeconds(30);
-			penguinState = PenguinState.IDAL;
-			penguinState = PenguinState.SQUAKING;
-			yield return new WaitForSeconds(20);
 
-		}while(isRoaming == true); 
-
-	}
-
-	void PlayAnimation()
-	{
+		// Get animator
 		animate = GetComponentInChildren<Animator>();
 
-		switch(penguinState)
+		// Do
+		do
 		{
-		case PenguinState.IDAL:
-			animate.Play("Exported idal animation"); 
-			break;
-		case PenguinState.WALKING:
-			animate.Play("Exported walking animation");
-			break;
-		case PenguinState.SQUAKING:
-			animate.Play("Eported sqauking animation");
-			break;
-		case PenguinState.SWIMMING:
-			animate.Play("Exported swimming animation"); 
-			break;
-		default:
-			//animate.Stop();
-			print ("NO ANIMATION");
-			break;
-		}
-	}
+			// Set animator varibles
+			animate.SetBool("isIdle", false);
+			animate.SetBool("isWalking", true);  // Set isWalking to true
+			animate.SetBool("isSquawking", false);
+			// Wait 10 seconds
+			yield return new WaitForSecondsRealtime(10); 
+			animate.SetBool("isIdle", true);  // Set isIdle to true 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", false);
+			// Wait 10 seconds
+			yield return new WaitForSecondsRealtime(10);
+			animate.SetBool("isIdle", false); 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", true);  // Set isSquawking to true
+			// Wait 30 seconds
+			yield return new WaitForSecondsRealtime(30);
 
+
+
+		}while(isRoaming == true); // While roaming is true
+	}
+		
     void Roam()
     {
         var floor = Mathf.Clamp(direc - maxDirChange, 0, 360);
         var ceil = Mathf.Clamp(direc + maxDirChange, 0, 360);
         direc = Random.Range(floor, ceil);
         dest = new Vector3(0, direc, 0);
+		// Added by Caitlin
+		// Set isRoaming to true
 		isRoaming = true;
 
     }
