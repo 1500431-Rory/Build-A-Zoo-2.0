@@ -19,16 +19,16 @@ public class RoamingScript : MonoBehaviour
 	// Edit by Caitlin
 	public enum PenguinState
 	{
-		IDAL,
+		IDLE,
 		WALKING,
-		SQUAKING,
+		SQAUWKING,
 		SWIMMING
 	}
 
 	PenguinState penguinState;
 
 	public bool isRoaming;
-	public Animator animate;
+	private Animator animate;
 
 
 	// Use this for initialization
@@ -39,10 +39,8 @@ public class RoamingScript : MonoBehaviour
         Roam();
 
 		// Edit by Caitlin
-		// Set state to IDAL
-		penguinState = PenguinState.IDAL;
 		// Set isRoaming to false
-		isRoaming = false;
+		isRoaming = false; 
 
     }
 	
@@ -54,6 +52,13 @@ public class RoamingScript : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
+
+		// Added by Caitlin
+		// Call to ChangeAnimationSate()
+		StartCoroutine(ChangeAnimationState());
+		// Call to PlayAnimation()
+		//PlayAnimation();
+
         transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, dest, Time.deltaTime * dirChangeInt);
         transform.TransformDirection(Vector3.forward);
        
@@ -63,7 +68,7 @@ public class RoamingScript : MonoBehaviour
             diceRoll = (int)Random.Range(0, diceMax);
             if (diceRoll == 0)
             {
-                Roam();
+               Roam();
                 Pingu.SimpleMove((transform.TransformDirection(Vector3.forward)) * 0);
             }
             else
@@ -71,47 +76,80 @@ public class RoamingScript : MonoBehaviour
                 Pingu.SimpleMove((transform.TransformDirection(Vector3.forward)) * speed);
             }
         }
-
-		ChangeAnimationState();
-		PlayAnimation();
-
     }
 
-
+	// Added by Caitlin
+	// Change state
 	IEnumerator ChangeAnimationState()
 	{
-		do 
+
+		animate = GetComponentInChildren<Animator>();
+
+		do
 		{
-			penguinState = PenguinState.WALKING;
-			yield return new WaitForSeconds(30);
-			penguinState = PenguinState.IDAL;
-			penguinState = PenguinState.SQUAKING;
-			yield return new WaitForSeconds(20);
 
-		}while(isRoaming == true); 
+			animate.SetBool("isIdle", false); 
+			animate.SetBool("isWalking", true);
+			animate.SetBool("isSquawking", false);
+			animate.SetBool("isSwimming", false);
+			yield return new WaitForSecondsRealtime(10); 
+			animate.SetBool("isIdle", true); 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", false);
+			animate.SetBool("isSwimming", false);
+			yield return new WaitForSecondsRealtime(10);
+			animate.SetBool("isIdle", false); 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", true);
+			animate.SetBool("isSwimming", false);
+			yield return new WaitForSecondsRealtime(10);
+			animate.SetBool("isIdle", false); 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", false);
+			animate.SetBool("isSwimming", true);
+			yield return new WaitForSecondsRealtime(30);
 
+
+
+		}while(isRoaming == true);
 	}
 
+	// Added by Caitlin
+	// Play animations
 	void PlayAnimation()
 	{
-		animate = GetComponentInChildren<Animator>();
+		// Get animator
+		animate = GetComponentInChildren<Animator>(); 
 
 		switch(penguinState)
 		{
-		case PenguinState.IDAL:
-			animate.Play("Exported idal animation"); 
+		// Check for idle state
+		case PenguinState.IDLE:
+			// Play idle animation
+			animate.SetBool("isIdle", true); 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", false);
 			break;
+		// Check for walking state
 		case PenguinState.WALKING:
-			animate.Play("Exported walking animation");
+			// Play walkign animation
+			animate.SetBool("isIdle", false); 
+			animate.SetBool("isWalking", true);
+			animate.SetBool("isSquawking", false);
 			break;
-		case PenguinState.SQUAKING:
-			animate.Play("Eported sqauking animation");
+		// Check for squawking state
+		case PenguinState.SQAUWKING:
+			// Play squawking animation
+			animate.SetBool("isIdle", false); 
+			animate.SetBool("isWalking", false);
+			animate.SetBool("isSquawking", true); 
 			break;
+		// Check for swimming state
 		case PenguinState.SWIMMING:
-			animate.Play("Exported swimming animation"); 
+			// Play swimming animation
+			animate.Play("Swimming"); 
 			break;
 		default:
-			//animate.Stop();
 			print ("NO ANIMATION");
 			break;
 		}
