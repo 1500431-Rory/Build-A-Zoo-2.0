@@ -296,7 +296,7 @@ public class StarTracking : MonoBehaviour {
             containsWindows = false;
             fenceCheckImage[1].sprite = fenceCheckSprite[1];
         }
-         else if (NumberTrackers.noWoodenW + NumberTrackers.noConcreteW + NumberTrackers.noGlass + NumberTrackers.noGlass > NumberTrackers.totalFences / 4)
+         else if (NumberTrackers.noWoodenW + NumberTrackers.noConcreteW + NumberTrackers.noGlass + NumberTrackers.noWire > NumberTrackers.totalFences / 4)
          {
              containsWindows = true;
             fenceCheckImage[1].sprite = fenceCheckSprite[0];
