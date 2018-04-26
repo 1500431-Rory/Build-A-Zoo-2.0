@@ -5,6 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 1
+    path: Assets/Prototypes/Scene/Aaron_s Scenes/MainMenu.unity
+    guid: 570c66f2a934071458b1a896d406b151
+  - enabled: 1
+    path: Assets/Prototypes/Scene/Aaron_s Scenes/Aarons Scene 1.unity
+    guid: 724765e587745c04ba83370e67fe1e2e
+  - enabled: 1
+    path: Assets/Prototypes/Scene/Aaron_s Scenes/LoadingScene.unity
+    guid: 718300cc0e28ea34c84316fef3c1f775
   - enabled: 0
     path: 
     guid: cad0b319ca3f20246a550085732dc690

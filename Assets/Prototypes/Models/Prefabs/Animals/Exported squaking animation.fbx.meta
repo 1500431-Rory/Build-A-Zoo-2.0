@@ -1,0 +1,213 @@
+fileFormatVersion: 2
+guid: f42d5c3c0b99f7141b2f7830f91dbd20
+timeCreated: 1524137497
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: ambientLight1
+    100002: CTRL_Chest
+    100004: CTRL_Global
+    100006: CTRL_Head
+    100008: CTRL_L_Foot
+    100010: CTRL_Neck
+    100012: CTRL_R_Foot
+    100014: CTRL_Waist
+    100016: //RootNode
+    100018: group
+    100020: group1
+    100022: group2
+    100024: group3
+    100026: group4
+    100028: head
+    100030: L_angle
+    100032: L_foot
+    100034: L_hip
+    100036: L_knee
+    100038: L_lower_arm
+    100040: L_middle_arm
+    100042: L_shoulder
+    100044: L_shoulder_helper_joint
+    100046: L_upper_arm
+    100048: neck_base
+    100050: pasted__CTRL_Global
+    100052: pasted__transform3
+    100054: penguin_model1
+    100056: perlvis
+    100058: polySurface2
+    100060: polySurface3
+    100062: R_angle
+    100064: R_foot
+    100066: R_hip
+    100068: R_knee
+    100070: R_lower_arm
+    100072: R_middle_arm
+    100074: R_shoulder
+    100076: R_shoulder_helper_joint
+    100078: R_upper_arm
+    100080: spine_1
+    100082: spine_2
+    100084: spine_3
+    100086: tail_lower
+    100088: tail_middle
+    100090: tail_upper
+    100092: transform2
+    100094: transform3
+    400000: ambientLight1
+    400002: CTRL_Chest
+    400004: CTRL_Global
+    400006: CTRL_Head
+    400008: CTRL_L_Foot
+    400010: CTRL_Neck
+    400012: CTRL_R_Foot
+    400014: CTRL_Waist
+    400016: //RootNode
+    400018: group
+    400020: group1
+    400022: group2
+    400024: group3
+    400026: group4
+    400028: head
+    400030: L_angle
+    400032: L_foot
+    400034: L_hip
+    400036: L_knee
+    400038: L_lower_arm
+    400040: L_middle_arm
+    400042: L_shoulder
+    400044: L_shoulder_helper_joint
+    400046: L_upper_arm
+    400048: neck_base
+    400050: pasted__CTRL_Global
+    400052: pasted__transform3
+    400054: penguin_model1
+    400056: perlvis
+    400058: polySurface2
+    400060: polySurface3
+    400062: R_angle
+    400064: R_foot
+    400066: R_hip
+    400068: R_knee
+    400070: R_lower_arm
+    400072: R_middle_arm
+    400074: R_shoulder
+    400076: R_shoulder_helper_joint
+    400078: R_upper_arm
+    400080: spine_1
+    400082: spine_2
+    400084: spine_3
+    400086: tail_lower
+    400088: tail_middle
+    400090: tail_upper
+    400092: transform2
+    400094: transform3
+    4300000: penguin_model1
+    4300002: polySurface3
+    7400000: Take 001
+    9500000: //RootNode
+    10800000: ambientLight1
+    13700000: penguin_model1
+    13700002: polySurface3
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 130
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
