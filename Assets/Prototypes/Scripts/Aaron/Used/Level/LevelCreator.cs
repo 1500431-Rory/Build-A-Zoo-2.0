@@ -208,7 +208,6 @@ namespace LevelEditor
    
             PaintTile();
 
-            ErrorMessage();
         }
 
         public void CloseAll()
@@ -267,11 +266,13 @@ namespace LevelEditor
 
             
             r.material.color = Color.red;
-            objectInWay = true;
-            yield return new WaitForSeconds(0.3f);
+            ErrorMessageOIW.gameObject.SetActive(true);
+            errorAudioSource.Play();
+            yield return new WaitForSeconds(0.7f);
             r.material.color = Color.white;
-            objectInWay = false;
+            ErrorMessageOIW.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.3f);
+
         }
 
         IEnumerator waterInWayFeedBack()
@@ -289,10 +290,11 @@ namespace LevelEditor
 
             
             r.material.color = Color.red;
-            waterInWay = true;
-            yield return new WaitForSeconds(0.3f);
+            ErrorMessageWIW.gameObject.SetActive(true);
+            errorAudioSource.Play();
+            yield return new WaitForSeconds(0.7f);
             r.material.color = Color.white;
-            waterInWay = false;
+            ErrorMessageWIW.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -311,10 +313,11 @@ namespace LevelEditor
 
            
             r.material.color = Color.red;
-            tooManyBuild = true;
-            yield return new WaitForSeconds(0.3f);
+            ErrorMessage2mny.gameObject.SetActive(true);
+            errorAudioSource.Play();
+            yield return new WaitForSeconds(0.7f);
             r.material.color = Color.white;
-            tooManyBuild = false;
+            ErrorMessage2mny.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -331,10 +334,11 @@ namespace LevelEditor
             }
            
             r.material.color = Color.red;
-            placeInWater = true;
-            yield return new WaitForSeconds(0.3f);
+            ErrorMessageIW.gameObject.SetActive(true);
+            errorAudioSource.Play();
+            yield return new WaitForSeconds(0.7f);
             r.material.color = Color.white;
-            placeInWater = false;
+            ErrorMessageIW.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -395,7 +399,8 @@ namespace LevelEditor
                         {
                             if (curNode.placedObj != null || curNode.placedBuild != null)
                             {
-                                StartCoroutine("objectInWayFeedBack");                          
+                                StartCoroutine("objectInWayFeedBack");
+                                
                             }
                             else
                             {
@@ -408,6 +413,7 @@ namespace LevelEditor
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 && objectProperties.isWaterObject == false)
                                 {
                                     StartCoroutine("waterInWayFeedBack");
+                                    
                                 }
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && objectProperties.isWaterObject == false)
                                 {
@@ -416,6 +422,7 @@ namespace LevelEditor
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid != 3 && objectProperties.isWaterObject == true)
                                 {
                                     StartCoroutine("placeInWaterFeedBack");
+                                    
                                 }
                             }
                         }
@@ -738,14 +745,17 @@ namespace LevelEditor
                              if(buildingProperties.buildingType == Building_Object.BuildingType.AID && NumberTrackers.noAid > 0)
                             {
                                 StartCoroutine("tooManyBuildsFeedBack");
+                                
                             }
                             else if (buildingProperties.buildingType == Building_Object.BuildingType.SHELTER && NumberTrackers.noShelter > 0)
                             {
                                 StartCoroutine("tooManyBuildsFeedBack");
+                                
                             }
                             else if (curNode.placedObj != null || nodeE.placedObj != null || nodeS.placedObj != null || nodeW.placedObj != null || nodeN.placedObj != null || nodeNE.placedObj != null || nodeNW.placedObj != null || nodeSE.placedObj != null || nodeSW.placedObj != null||curNode.placedBuild != null || nodeE.placedBuild != null || nodeS.placedBuild != null || nodeW.placedBuild != null || nodeN.placedBuild != null || nodeNE.placedBuild != null || nodeNW.placedBuild != null || nodeSE.placedBuild != null || nodeSW.placedBuild != null)
                             {
                                 StartCoroutine("objectInWayFeedBack");
+                               
                             }
                             else
                             {
@@ -758,6 +768,7 @@ namespace LevelEditor
                                 else if (curNode.vis.GetComponent<NodeObject>().textureid == 3 || nodeN.vis.GetComponent<NodeObject>().textureid == 3 || nodeE.vis.GetComponent<NodeObject>().textureid == 3 || nodeW.vis.GetComponent<NodeObject>().textureid == 3 || nodeS.vis.GetComponent<NodeObject>().textureid == 3 || nodeNE.vis.GetComponent<NodeObject>().textureid == 3 || nodeNW.vis.GetComponent<NodeObject>().textureid == 3 || nodeSE.vis.GetComponent<NodeObject>().textureid == 3 || nodeSW.vis.GetComponent<NodeObject>().textureid == 3)
                                 {
                                     StartCoroutine("waterInWayFeedBack");
+                                   
                                 }
                             }
                         }
