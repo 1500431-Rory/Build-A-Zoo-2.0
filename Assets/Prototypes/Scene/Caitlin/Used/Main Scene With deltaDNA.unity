@@ -3935,7 +3935,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &217869148
 GameObject:
@@ -15622,6 +15622,7 @@ MonoBehaviour:
   ErrorMessageWIW: {fileID: 167120810}
   ErrorMessage2mny: {fileID: 1233533204}
   ErrorMessageIW: {fileID: 1117562792}
+  errorAudioSource: {fileID: 0}
 --- !u!114 &639885575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24266,6 +24267,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b09f642001560f4a8dd011068ae4796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  careAudio: {fileID: 0}
+  costAudio: {fileID: 0}
+  enrichmentAudio: {fileID: 0}
+  fenceAudio: {fileID: 0}
+  terrainAudio: {fileID: 0}
   careStarInfoPanelImage: {fileID: 0}
   careStarUnacheivedSprite: {fileID: 0}
   careStarAcheivedSprite: {fileID: 0}
@@ -27282,7 +27288,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1340320855
 MonoBehaviour:
@@ -27298,6 +27304,7 @@ MonoBehaviour:
   MusicVolume: {fileID: 1042667571}
   backGroundMusic: {fileID: 1340320853}
   effectVolume: {fileID: 1846727135}
+  sfxAudioSource: []
 --- !u!1001 &1352081653
 Prefab:
   m_ObjectHideFlags: 0
@@ -40280,7 +40287,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2037345116
 Prefab:
